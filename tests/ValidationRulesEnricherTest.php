@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Yiisoft\Form\Field\Password;
 use Yiisoft\Form\Field\Select;
 use Yiisoft\Form\Field\Telephone;
 use Yiisoft\Form\Field\Textarea;
 use Yiisoft\Form\ThemeContainer;
 use Yiisoft\FormModel\Field;
 use Yiisoft\FormModel\FormModelInputData;
+use Yiisoft\FormModel\Tests\Support\Form\PasswordForm;
 use Yiisoft\FormModel\Tests\Support\Form\SelectForm;
 use Yiisoft\FormModel\Tests\Support\Form\TelephoneForm;
 use Yiisoft\FormModel\Tests\Support\Form\TextareaForm;
@@ -141,10 +143,10 @@ final class ValidationRulesEnricherTest extends TestCase
     }
 
     #[DataProvider('dataTextarea')]
-    public function testTextarea(string $expected, string $attribute): void
+    public function testTextarea(string $expected, string $property): void
     {
         $field = Textarea::widget()
-            ->inputData(new FormModelInputData(new TextareaForm(), $attribute))
+            ->inputData(new FormModelInputData(new TextareaForm(), $property))
             ->hideLabel()
             ->useContainer(false)
             ->enrichFromValidationRules(true);
@@ -179,10 +181,10 @@ final class ValidationRulesEnricherTest extends TestCase
     }
 
     #[DataProvider('dataTelephone')]
-    public function testTelephone(string $expected, string $attribute): void
+    public function testTelephone(string $expected, string $property): void
     {
         $field = Telephone::widget()
-            ->inputData(new FormModelInputData(new TelephoneForm(), $attribute))
+            ->inputData(new FormModelInputData(new TelephoneForm(), $property))
             ->hideLabel()
             ->enrichFromValidationRules(true)
             ->useContainer(false);
@@ -226,5 +228,43 @@ final class ValidationRulesEnricherTest extends TestCase
             HTML;
 
         $this->assertSame($expected, $result);
+    }
+
+    public static function dataPassword(): array
+    {
+        return [
+            'required' => [
+                '<input type="password" id="passwordform-entry1" name="PasswordForm[entry1]" required>',
+                'entry1',
+            ],
+            'has-length' => [
+                '<input type="password" id="passwordform-entry2" name="PasswordForm[entry2]" maxlength="199" minlength="10">',
+                'entry2',
+            ],
+            'regex' => [
+                '<input type="password" id="passwordform-code" name="PasswordForm[code]" pattern="\w+">',
+                'code',
+            ],
+            'regex-not' => [
+                '<input type="password" id="passwordform-nocode" name="PasswordForm[nocode]">',
+                'nocode',
+            ],
+            'required-with-when' => [
+                '<input type="password" id="passwordform-requiredwhen" name="PasswordForm[requiredWhen]">',
+                'requiredWhen',
+            ],
+        ];
+    }
+
+    #[DataProvider('dataPassword')]
+    public function testPassword(string $expected, string $property): void
+    {
+        $field = Password::widget()
+            ->inputData(new FormModelInputData(new PasswordForm(), $property))
+            ->hideLabel()
+            ->enrichFromValidationRules(true)
+            ->useContainer(false);
+
+        $this->assertSame($expected, $field->render());
     }
 }
