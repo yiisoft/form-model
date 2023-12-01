@@ -12,6 +12,7 @@ use Yiisoft\Form\Field\Textarea;
 use Yiisoft\Form\ThemeContainer;
 use Yiisoft\FormModel\Field;
 use Yiisoft\FormModel\FormModelInputData;
+use Yiisoft\FormModel\Tests\Support\Form\DateForm;
 use Yiisoft\FormModel\Tests\Support\Form\FileForm;
 use Yiisoft\FormModel\Tests\Support\Form\PasswordForm;
 use Yiisoft\FormModel\Tests\Support\Form\SelectForm;
@@ -19,6 +20,7 @@ use Yiisoft\FormModel\Tests\Support\Form\TelephoneForm;
 use Yiisoft\FormModel\Tests\Support\Form\TextareaForm;
 use Yiisoft\FormModel\Tests\Support\Form\TextForm;
 use Yiisoft\FormModel\Tests\Support\Form\UrlForm;
+use Yiisoft\FormModel\Tests\Support\StubDateTimeInputField;
 use Yiisoft\FormModel\ValidationRulesEnricher;
 use Yiisoft\Test\Support\Container\SimpleContainer;
 use Yiisoft\Widget\WidgetFactory;
@@ -298,6 +300,40 @@ final class ValidationRulesEnricherTest extends TestCase
         $expected = <<<HTML
             <div>
             <input type="file" id="fileform-photo" name="FileForm[photo]">
+            </div>
+            HTML;
+
+        $this->assertSame($expected, $result);
+    }
+
+    public function testDateTimeInputField(): void
+    {
+        $result = StubDateTimeInputField::widget()
+            ->inputData(new FormModelInputData(new DateForm(), 'main'))
+            ->hideLabel()
+            ->enrichFromValidationRules(true)
+            ->render();
+
+        $expected = <<<HTML
+            <div>
+            <input type="datetime" id="dateform-main" name="DateForm[main]" required>
+            </div>
+            HTML;
+
+        $this->assertSame($expected, $result);
+    }
+
+    public function testDateTimeInputFieldWithWhen(): void
+    {
+        $result = StubDateTimeInputField::widget()
+            ->inputData(new FormModelInputData(new DateForm(), 'second'))
+            ->hideLabel()
+            ->enrichFromValidationRules(true)
+            ->render();
+
+        $expected = <<<HTML
+            <div>
+            <input type="datetime" id="dateform-second" name="DateForm[second]">
             </div>
             HTML;
 
