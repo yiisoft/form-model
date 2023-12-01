@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Yiisoft\Form\Field\Telephone;
 use Yiisoft\Form\Field\Textarea;
 use Yiisoft\Form\ThemeContainer;
 use Yiisoft\FormModel\Field;
 use Yiisoft\FormModel\FormModelInputData;
+use Yiisoft\FormModel\Tests\Support\Form\TelephoneForm;
 use Yiisoft\FormModel\Tests\Support\Form\TextareaForm;
 use Yiisoft\FormModel\Tests\Support\Form\TextForm;
 use Yiisoft\FormModel\Tests\Support\Form\UrlForm;
@@ -144,6 +146,44 @@ final class ValidationRulesEnricherTest extends TestCase
             ->hideLabel()
             ->useContainer(false)
             ->enrichFromValidationRules(true);
+
+        $this->assertSame($expected, $field->render());
+    }
+
+    public static function dataTelephone(): array
+    {
+        return [
+            'required' => [
+                '<input type="tel" id="telephoneform-office1" name="TelephoneForm[office1]" required>',
+                'office1',
+            ],
+            'has-length' => [
+                '<input type="tel" id="telephoneform-office2" name="TelephoneForm[office2]" maxlength="199" minlength="10">',
+                'office2',
+            ],
+            'regex' => [
+                '<input type="tel" id="telephoneform-code" name="TelephoneForm[code]" pattern="\w+">',
+                'code',
+            ],
+            'regex-not' => [
+                '<input type="tel" id="telephoneform-nocode" name="TelephoneForm[nocode]">',
+                'nocode',
+            ],
+            'required-with-when' => [
+                '<input type="tel" id="telephoneform-requiredwhen" name="TelephoneForm[requiredWhen]">',
+                'requiredWhen',
+            ],
+        ];
+    }
+
+    #[DataProvider('dataTelephone')]
+    public function testTelephone(string $expected, string $attribute): void
+    {
+        $field = Telephone::widget()
+            ->inputData(new FormModelInputData(new TelephoneForm(), $attribute))
+            ->hideLabel()
+            ->enrichFromValidationRules(true)
+            ->useContainer(false);
 
         $this->assertSame($expected, $field->render());
     }
