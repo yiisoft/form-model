@@ -7,8 +7,8 @@ namespace Yiisoft\FormModel\Tests\Support\Dto;
 final class Coordinates
 {
     public function __construct(
-        private string $latitude = '',
-        private string $longitude = '',
+        private readonly string $latitude = '',
+        private readonly string $longitude = '',
     ) {
     }
 

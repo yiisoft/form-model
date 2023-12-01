@@ -15,7 +15,7 @@ use function is_array;
 final class FormHydrator
 {
     public function __construct(
-        private HydratorInterface $hydrator,
+        private readonly HydratorInterface $hydrator,
     ) {
     }
 
