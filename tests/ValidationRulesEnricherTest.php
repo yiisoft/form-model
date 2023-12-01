@@ -8,6 +8,7 @@ use Yiisoft\Form\Field\Email;
 use Yiisoft\Form\Field\File;
 use Yiisoft\Form\Field\Number;
 use Yiisoft\Form\Field\Password;
+use Yiisoft\Form\Field\Range;
 use Yiisoft\Form\Field\Select;
 use Yiisoft\Form\Field\Telephone;
 use Yiisoft\Form\Field\Textarea;
@@ -19,6 +20,7 @@ use Yiisoft\FormModel\Tests\Support\Form\EmailForm;
 use Yiisoft\FormModel\Tests\Support\Form\FileForm;
 use Yiisoft\FormModel\Tests\Support\Form\NumberForm;
 use Yiisoft\FormModel\Tests\Support\Form\PasswordForm;
+use Yiisoft\FormModel\Tests\Support\Form\RangeForm;
 use Yiisoft\FormModel\Tests\Support\Form\SelectForm;
 use Yiisoft\FormModel\Tests\Support\Form\TelephoneForm;
 use Yiisoft\FormModel\Tests\Support\Form\TextareaForm;
@@ -408,6 +410,36 @@ final class ValidationRulesEnricherTest extends TestCase
             ->hideLabel()
             ->enrichFromValidationRules(true)
             ->useContainer(false);
+
+        $this->assertSame($expected, $field->render());
+    }
+
+    public static function dataRange(): array
+    {
+        return [
+            'required' => [
+                '<input type="range" id="rangeform-volume" name="RangeForm[volume]" value="23" required>',
+                'volume',
+            ],
+            'number' => [
+                '<input type="range" id="rangeform-count" name="RangeForm[count]" min="1" max="9">',
+                'count',
+            ],
+            'required-with-when' => [
+                '<input type="range" id="rangeform-requiredwhen" name="RangeForm[requiredWhen]">',
+                'requiredWhen',
+            ],
+        ];
+    }
+
+    #[DataProvider('dataRange')]
+    public function testRange(string $expected, string $property): void
+    {
+        $field = Range::widget()
+            ->inputData(new FormModelInputData(new RangeForm(), $property))
+            ->hideLabel()
+            ->useContainer(false)
+            ->enrichFromValidationRules(true);
 
         $this->assertSame($expected, $field->render());
     }
