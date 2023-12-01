@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Yiisoft\Form\Field\Email;
 use Yiisoft\Form\Field\File;
 use Yiisoft\Form\Field\Password;
 use Yiisoft\Form\Field\Select;
@@ -13,6 +14,7 @@ use Yiisoft\Form\ThemeContainer;
 use Yiisoft\FormModel\Field;
 use Yiisoft\FormModel\FormModelInputData;
 use Yiisoft\FormModel\Tests\Support\Form\DateForm;
+use Yiisoft\FormModel\Tests\Support\Form\EmailForm;
 use Yiisoft\FormModel\Tests\Support\Form\FileForm;
 use Yiisoft\FormModel\Tests\Support\Form\PasswordForm;
 use Yiisoft\FormModel\Tests\Support\Form\SelectForm;
@@ -338,5 +340,43 @@ final class ValidationRulesEnricherTest extends TestCase
             HTML;
 
         $this->assertSame($expected, $result);
+    }
+
+    public static function dataEmail(): array
+    {
+        return [
+            'required' => [
+                '<input type="email" id="emailform-cto" name="EmailForm[cto]" required>',
+                'cto',
+            ],
+            'has-length' => [
+                '<input type="email" id="emailform-teamlead" name="EmailForm[teamlead]" maxlength="199" minlength="10">',
+                'teamlead',
+            ],
+            'regex' => [
+                '<input type="email" id="emailform-code" name="EmailForm[code]" pattern="\w+@\w+">',
+                'code',
+            ],
+            'regex-not' => [
+                '<input type="email" id="emailform-nocode" name="EmailForm[nocode]">',
+                'nocode',
+            ],
+            'required-with-when' => [
+                '<input type="email" id="emailform-requiredwhen" name="EmailForm[requiredWhen]">',
+                'requiredWhen',
+            ],
+        ];
+    }
+
+    #[DataProvider('dataEmail')]
+    public function testEmail(string $expected, string $attribute): void
+    {
+        $field = Email::widget()
+            ->inputData(new FormModelInputData(new EmailForm(), $attribute))
+            ->hideLabel()
+            ->enrichFromValidationRules(true)
+            ->useContainer(false);
+
+        $this->assertSame($expected, $field->render());
     }
 }
