@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Yiisoft\Form\Field\Select;
 use Yiisoft\Form\Field\Telephone;
 use Yiisoft\Form\Field\Textarea;
 use Yiisoft\Form\ThemeContainer;
 use Yiisoft\FormModel\Field;
 use Yiisoft\FormModel\FormModelInputData;
+use Yiisoft\FormModel\Tests\Support\Form\SelectForm;
 use Yiisoft\FormModel\Tests\Support\Form\TelephoneForm;
 use Yiisoft\FormModel\Tests\Support\Form\TextareaForm;
 use Yiisoft\FormModel\Tests\Support\Form\TextForm;
@@ -186,5 +188,43 @@ final class ValidationRulesEnricherTest extends TestCase
             ->useContainer(false);
 
         $this->assertSame($expected, $field->render());
+    }
+
+    public function testSelect(): void
+    {
+        $result = Select::widget()
+            ->inputData(new FormModelInputData(new SelectForm(), 'color'))
+            ->optionsData(['red' => 'Red'])
+            ->enrichFromValidationRules(true)
+            ->hideLabel()
+            ->useContainer(false)
+            ->render();
+
+        $expected = <<<HTML
+            <select id="selectform-color" name="SelectForm[color]" required>
+            <option value="red">Red</option>
+            </select>
+            HTML;
+
+        $this->assertSame($expected, $result);
+    }
+
+    public function testSelectWithWhen(): void
+    {
+        $result = Select::widget()
+            ->inputData(new FormModelInputData(new SelectForm(), 'requiredWhen'))
+            ->optionsData(['red' => 'Red'])
+            ->enrichFromValidationRules(true)
+            ->hideLabel()
+            ->useContainer(false)
+            ->render();
+
+        $expected = <<<HTML
+            <select id="selectform-requiredwhen" name="SelectForm[requiredWhen]">
+            <option value="red">Red</option>
+            </select>
+            HTML;
+
+        $this->assertSame($expected, $result);
     }
 }
