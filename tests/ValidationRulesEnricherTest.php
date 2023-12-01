@@ -6,6 +6,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Form\Field\Email;
 use Yiisoft\Form\Field\File;
+use Yiisoft\Form\Field\Number;
 use Yiisoft\Form\Field\Password;
 use Yiisoft\Form\Field\Select;
 use Yiisoft\Form\Field\Telephone;
@@ -16,6 +17,7 @@ use Yiisoft\FormModel\FormModelInputData;
 use Yiisoft\FormModel\Tests\Support\Form\DateForm;
 use Yiisoft\FormModel\Tests\Support\Form\EmailForm;
 use Yiisoft\FormModel\Tests\Support\Form\FileForm;
+use Yiisoft\FormModel\Tests\Support\Form\NumberForm;
 use Yiisoft\FormModel\Tests\Support\Form\PasswordForm;
 use Yiisoft\FormModel\Tests\Support\Form\SelectForm;
 use Yiisoft\FormModel\Tests\Support\Form\TelephoneForm;
@@ -373,6 +375,36 @@ final class ValidationRulesEnricherTest extends TestCase
     {
         $field = Email::widget()
             ->inputData(new FormModelInputData(new EmailForm(), $attribute))
+            ->hideLabel()
+            ->enrichFromValidationRules(true)
+            ->useContainer(false);
+
+        $this->assertSame($expected, $field->render());
+    }
+
+    public static function dataNumber(): array
+    {
+        return [
+            'required' => [
+                '<input type="number" id="numberform-weight" name="NumberForm[weight]" required>',
+                'weight',
+            ],
+            'number' => [
+                '<input type="number" id="numberform-step" name="NumberForm[step]" min="5" max="95">',
+                'step',
+            ],
+            'required-with-when' => [
+                '<input type="number" id="numberform-requiredwhen" name="NumberForm[requiredWhen]">',
+                'requiredWhen',
+            ],
+        ];
+    }
+
+    #[DataProvider('dataNumber')]
+    public function testNumber(string $expected, string $property): void
+    {
+        $field = Number::widget()
+            ->inputData(new FormModelInputData(new NumberForm(), $property))
             ->hideLabel()
             ->enrichFromValidationRules(true)
             ->useContainer(false);
