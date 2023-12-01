@@ -15,8 +15,8 @@ final class FormWithNestedProperty extends FormModel implements RulesProviderInt
     private ?int $id = null;
     private string $key = '';
     private array $meta = [];
-    private readonly Coordinates $coordinates;
-    private readonly LoginForm $user;
+    private Coordinates $coordinates;
+    private LoginForm $user;
 
     public function __construct()
     {
