@@ -6,7 +6,7 @@ namespace Yiisoft\FormModel\Exception;
 
 final class PropertyNotSupportNestedValuesException extends ValueNotFoundException
 {
-    public function __construct(string $property, private mixed $value)
+    public function __construct(string $property, private readonly mixed $value)
     {
         parent::__construct('Property "' . $property . '" not support nested values.');
     }

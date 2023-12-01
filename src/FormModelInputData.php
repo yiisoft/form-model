@@ -23,8 +23,8 @@ final class FormModelInputData implements InputDataInterface
     private ?iterable $validationRules = null;
 
     public function __construct(
-        private FormModelInterface $model,
-        private string $property,
+        private readonly FormModelInterface $model,
+        private readonly string $property,
     ) {
     }
 
