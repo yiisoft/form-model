@@ -1,5 +1,5 @@
 {
-    "name": "yiisoft/_____",
+    "name": "yiisoft/form-model",
     "type": "library",
     "description": "_____",
     "keywords": [
@@ -28,24 +28,32 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
-        "php": "^8.1"
+        "php": "^8.1",
+        "ext-mbstring": "*",
+        "yiisoft/form": "^1.0@dev",
+        "yiisoft/html": "^3.3",
+        "yiisoft/hydrator": "dev-master",
+        "yiisoft/hydrator-validator": "dev-master",
+        "yiisoft/strings": "^2.3",
+        "yiisoft/validator": "^1.1"
     },
     "require-dev": {
-        "maglnet/composer-require-checker": "^4.6",
-        "phpunit/phpunit": "^9.5",
-        "rector/rector": "^0.17.11",
-        "roave/infection-static-analysis-plugin": "^1.16",
+        "maglnet/composer-require-checker": "^4.7",
+        "phpunit/phpunit": "^10.5",
+        "rector/rector": "^0.18.11",
+        "roave/infection-static-analysis-plugin": "^1.34",
         "spatie/phpunit-watcher": "^1.23",
-        "vimeo/psalm": "^4.30|^5.7"
+        "vimeo/psalm": "^5.16",
+        "yiisoft/test-support": "^3.0"
     },
     "autoload": {
         "psr-4": {
-            "Yiisoft\\_____\\": "src"
+            "Yiisoft\\FormModel\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Yiisoft\\_____\\Tests\\": "tests"
+            "Yiisoft\\FormModel\\Tests\\": "tests"
         }
     },
     "config": {

@@ -2,7 +2,7 @@
     <a href="https://github.com/yiisoft" target="_blank">
         <img src="https://yiisoft.github.io/docs/images/yii_logo.svg" height="100px">
     </a>
-    <h1 align="center">Yii _____</h1>
+    <h1 align="center">Yii Form Model</h1>
     <br>
 </p>
 
@@ -26,7 +26,7 @@ The package ...
 The package could be installed with composer:
 
 ```shell
-composer require yiisoft/_____
+composer require yiisoft/form-model
 ```
 
 ## General usage
@@ -74,7 +74,7 @@ Use [ComposerRequireChecker](https://github.com/maglnet/ComposerRequireChecker) 
 
 ## License
 
-The Yii _____ is free software. It is released under the terms of the BSD License.
+The Yii Form Model is free software. It is released under the terms of the BSD License.
 Please see [`LICENSE`](./LICENSE.md) for more information.
 
 Maintained by [Yii Software](https://www.yiiframework.com/).
