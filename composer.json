@@ -29,6 +29,7 @@
     "prefer-stable": true,
     "require": {
         "php": "^8.1",
+        "ext-mbstring": "*",
         "yiisoft/form": "^1.0@dev",
         "yiisoft/html": "^3.3",
         "yiisoft/hydrator": "dev-master",
