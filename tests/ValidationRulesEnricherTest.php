@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Yiisoft\Form\Field\File;
 use Yiisoft\Form\Field\Password;
 use Yiisoft\Form\Field\Select;
 use Yiisoft\Form\Field\Telephone;
@@ -11,6 +12,7 @@ use Yiisoft\Form\Field\Textarea;
 use Yiisoft\Form\ThemeContainer;
 use Yiisoft\FormModel\Field;
 use Yiisoft\FormModel\FormModelInputData;
+use Yiisoft\FormModel\Tests\Support\Form\FileForm;
 use Yiisoft\FormModel\Tests\Support\Form\PasswordForm;
 use Yiisoft\FormModel\Tests\Support\Form\SelectForm;
 use Yiisoft\FormModel\Tests\Support\Form\TelephoneForm;
@@ -266,5 +268,39 @@ final class ValidationRulesEnricherTest extends TestCase
             ->useContainer(false);
 
         $this->assertSame($expected, $field->render());
+    }
+
+    public function testFile(): void
+    {
+        $result = File::widget()
+            ->inputData(new FormModelInputData(new FileForm(), 'image'))
+            ->hideLabel()
+            ->enrichFromValidationRules(true)
+            ->render();
+
+        $expected = <<<HTML
+            <div>
+            <input type="file" id="fileform-image" name="FileForm[image]" required>
+            </div>
+            HTML;
+
+        $this->assertSame($expected, $result);
+    }
+
+    public function testFileWithWhen(): void
+    {
+        $result = File::widget()
+            ->inputData(new FormModelInputData(new FileForm(), 'photo'))
+            ->hideLabel()
+            ->enrichFromValidationRules(true)
+            ->render();
+
+        $expected = <<<HTML
+            <div>
+            <input type="file" id="fileform-photo" name="FileForm[photo]">
+            </div>
+            HTML;
+
+        $this->assertSame($expected, $result);
     }
 }
