@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Yiisoft\Form\Field\Textarea;
 use Yiisoft\Form\ThemeContainer;
 use Yiisoft\FormModel\Field;
+use Yiisoft\FormModel\FormModelInputData;
+use Yiisoft\FormModel\Tests\Support\Form\TextareaForm;
 use Yiisoft\FormModel\Tests\Support\Form\TextForm;
 use Yiisoft\FormModel\Tests\Support\Form\UrlForm;
 use Yiisoft\FormModel\ValidationRulesEnricher;
@@ -111,6 +114,36 @@ final class ValidationRulesEnricherTest extends TestCase
             ->hideLabel()
             ->enrichFromValidationRules(true)
             ->useContainer(false);
+
+        $this->assertSame($expected, $field->render());
+    }
+
+    public static function dataTextarea(): array
+    {
+        return [
+            'required' => [
+                '<textarea id="textareaform-bio" name="TextareaForm[bio]" required></textarea>',
+                'bio',
+            ],
+            'has-length' => [
+                '<textarea id="textareaform-shortdesc" name="TextareaForm[shortdesc]" maxlength="199" minlength="10"></textarea>',
+                'shortdesc',
+            ],
+            'required-with-when' => [
+                '<textarea id="textareaform-requiredwhen" name="TextareaForm[requiredWhen]"></textarea>',
+                'requiredWhen',
+            ],
+        ];
+    }
+
+    #[DataProvider('dataTextarea')]
+    public function testTextarea(string $expected, string $attribute): void
+    {
+        $field = Textarea::widget()
+            ->inputData(new FormModelInputData(new TextareaForm(), $attribute))
+            ->hideLabel()
+            ->useContainer(false)
+            ->enrichFromValidationRules(true);
 
         $this->assertSame($expected, $field->render());
     }
