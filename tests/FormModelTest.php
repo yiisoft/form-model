@@ -18,6 +18,7 @@ use Yiisoft\FormModel\Tests\Support\Form\FormWithNestedProperty;
 use Yiisoft\FormModel\Tests\Support\Form\FormWithNestedStructures;
 use Yiisoft\FormModel\Tests\Support\Form\LoginForm;
 use Yiisoft\FormModel\Tests\Support\Form\NestedForm;
+use Yiisoft\FormModel\Tests\Support\Form\NestedMixedForm\NestedMixedForm;
 use Yiisoft\FormModel\Tests\Support\Form\NestedRuleForm\MainForm;
 use Yiisoft\FormModel\Tests\Support\StubInputField;
 use Yiisoft\FormModel\Tests\Support\TestHelper;
@@ -438,6 +439,36 @@ final class FormModelTest extends TestCase
         $this->assertSame(
             [
                 'firstLevelForm.secondLevelForm.float' => ['Value must be no less than 0.']
+            ],
+            $result->getErrorMessagesIndexedByPath()
+        );
+    }
+
+    /**
+     * @see https://github.com/yiisoft/form-model/issues/6
+     */
+    public function testNestedRuleInForm(): void
+    {
+        $form = new NestedMixedForm();
+
+        TestHelper::createFormHydrator()->populate(
+            $form,
+            [
+                'body' => [
+                    'shipping' => [
+                        'phone' => '+790012345678'
+                    ],
+                ],
+            ],
+            scope: ''
+        );
+
+        $result = $form->getValidationResult();
+
+        $this->assertFalse($result->isValid());
+        $this->assertSame(
+            [
+                'body.shipping.phone' => ['Invalid phone.'],
             ],
             $result->getErrorMessagesIndexedByPath()
         );
