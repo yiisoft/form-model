@@ -152,14 +152,14 @@ final class FieldTest extends TestCase
             ->onlyProperties('name')
             ->render();
 
-        $expected = <<<'HTML'
-        <div>
-        <p>Please fix the following errors:</p>
-        <ul>
-        <li>Value cannot be blank.</li>
-        </ul>
-        </div>
-        HTML;
+        $expected = <<<HTML
+            <div>
+            <ul>
+            <li>Value cannot be blank.</li>
+            <li>This value must contain at least 4 characters.</li>
+            </ul>
+            </div>
+            HTML;
 
         $this->assertSame($expected, $result);
     }
@@ -428,6 +428,15 @@ final class FieldTest extends TestCase
     public function testError(): void
     {
         $result = Field::error(TestForm::validated(), 'name')->render();
-        $this->assertSame('<div>Value cannot be blank.</div>', $result);
+
+        $expected = <<<HTML
+            <div>
+            Value cannot be blank.
+            <br>
+            This value must contain at least 4 characters.
+            </div>
+            HTML;
+
+        $this->assertSame($expected, $result);
     }
 }

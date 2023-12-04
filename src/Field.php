@@ -12,6 +12,7 @@ use Yiisoft\Form\Field\Date;
 use Yiisoft\Form\Field\DateTime;
 use Yiisoft\Form\Field\DateTimeLocal;
 use Yiisoft\Form\Field\Email;
+use Yiisoft\Form\Field\ErrorSummary;
 use Yiisoft\Form\Field\Time;
 use Yiisoft\Form\Field\Fieldset;
 use Yiisoft\Form\Field\File;
@@ -31,7 +32,6 @@ use Yiisoft\Form\Field\Telephone;
 use Yiisoft\Form\Field\Text;
 use Yiisoft\Form\Field\Textarea;
 use Yiisoft\Form\Field\Url;
-use Yiisoft\FormModel\Field\ErrorSummary;
 
 class Field
 {
@@ -117,12 +117,15 @@ class Field
     }
 
     final public static function errorSummary(
-        FormModelInterface $formModel,
+        ?FormModelInterface $formModel = null,
         array $config = [],
         ?string $theme = null,
     ): ErrorSummary {
-        return ErrorSummary::widget(config: $config, theme: $theme ?? static::DEFAULT_THEME)
-            ->validationResult($formModel->getValidationResult());
+        $widget = ErrorSummary::widget(config: $config, theme: $theme ?? static::DEFAULT_THEME);
+        if ($formModel !== null) {
+            $widget = $widget->errors($formModel->getValidationResult()->getErrorMessagesIndexedByAttribute());
+        }
+        return $widget;
     }
 
     final public static function fieldset(array $config = [], ?string $theme = null): Fieldset
