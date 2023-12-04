@@ -18,6 +18,7 @@ use Yiisoft\FormModel\Tests\Support\Form\FormWithNestedProperty;
 use Yiisoft\FormModel\Tests\Support\Form\FormWithNestedStructures;
 use Yiisoft\FormModel\Tests\Support\Form\LoginForm;
 use Yiisoft\FormModel\Tests\Support\Form\NestedForm;
+use Yiisoft\FormModel\Tests\Support\Form\NestedRuleForm\MainForm;
 use Yiisoft\FormModel\Tests\Support\StubInputField;
 use Yiisoft\FormModel\Tests\Support\TestHelper;
 use Yiisoft\Test\Support\Container\SimpleContainer;
@@ -413,5 +414,32 @@ final class FormModelTest extends TestCase
         $this->assertInstanceOf(Coordinates::class, $coordinates);
         $this->assertSame('12.24', $coordinates->getLatitude());
         $this->assertSame('56.78', $coordinates->getLongitude());
+    }
+
+    /**
+     * @see https://github.com/yiisoft/form-model/issues/7
+     */
+    public function testNestedRuleWithFormModels(): void
+    {
+        $form = new MainForm();
+
+        TestHelper::createFormHydrator()->populate(
+            $form,
+            [
+                'value' => 'main-form',
+                'firstLevelForm.secondLevelForm.float' => '-7.1',
+            ],
+            scope: ''
+        );
+
+        $result = $form->getValidationResult();
+
+        $this->assertFalse($result->isValid());
+        $this->assertSame(
+            [
+                'firstLevelForm.secondLevelForm.float' => ['Value must be no less than 0.']
+            ],
+            $result->getErrorMessagesIndexedByPath()
+        );
     }
 }
