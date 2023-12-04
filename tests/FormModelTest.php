@@ -419,7 +419,7 @@ final class FormModelTest extends TestCase
     /**
      * @see https://github.com/yiisoft/form-model/issues/7
      */
-    public function testNestedRule(): void
+    public function testNestedRuleWithFormModels(): void
     {
         $form = new MainForm();
 
