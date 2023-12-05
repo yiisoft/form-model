@@ -23,7 +23,7 @@ final class Safe implements RuleInterface, RuleHandlerInterface
         return self::class;
     }
 
-    public function getHandler(): string|RuleHandlerInterface
+    public function getHandler(): RuleHandlerInterface
     {
         return $this;
     }
