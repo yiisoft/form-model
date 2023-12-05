@@ -11,6 +11,7 @@ use Yiisoft\FormModel\Exception\PropertyNotSupportNestedValuesException;
 use Yiisoft\FormModel\Exception\UndefinedObjectPropertyException;
 use Yiisoft\FormModel\FormModel;
 use Yiisoft\FormModel\FormModelInputData;
+use Yiisoft\FormModel\Safe;
 use Yiisoft\FormModel\Tests\Support\Dto\Coordinates;
 use Yiisoft\FormModel\Tests\Support\Form\CustomFormNameForm;
 use Yiisoft\FormModel\Tests\Support\Form\DefaultFormNameForm;
@@ -318,9 +319,13 @@ final class FormModelTest extends TestCase
     public function testLoadWithEmptyScope(): void
     {
         $form = new class () extends FormModel {
+            #[Safe]
             private int $int = 1;
+            #[Safe]
             private string $string = 'string';
+            #[Safe]
             private float $float = 3.14;
+            #[Safe]
             private bool $bool = true;
         };
         TestHelper::createFormHydrator()->populate(
@@ -390,6 +395,7 @@ final class FormModelTest extends TestCase
     public function testPublicAttributes(): void
     {
         $form = new class () extends FormModel {
+            #[Safe]
             public int $int = 1;
         };
 
