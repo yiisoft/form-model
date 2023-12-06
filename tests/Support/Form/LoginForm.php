@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\FormModel\Tests\Support\Form;
 
 use Yiisoft\FormModel\FormModel;
+use Yiisoft\FormModel\Safe;
 use Yiisoft\Validator\Rule\Email;
 use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\Rule\Required;
@@ -77,6 +78,8 @@ final class LoginForm extends FormModel implements RulesProviderInterface
         return [
             'login' => $this->loginRules(),
             'password' => $this->passwordRules(),
+            'rememberMe' => new Safe(),
+            'extraField' => new Safe(),
         ];
     }
 

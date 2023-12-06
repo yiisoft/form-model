@@ -6,6 +6,8 @@ namespace Yiisoft\FormModel;
 
 use Yiisoft\Hydrator\ArrayData;
 use Yiisoft\Hydrator\HydratorInterface;
+use Yiisoft\Validator\Helper\ObjectParser;
+use Yiisoft\Validator\RulesProviderInterface;
 
 use function is_array;
 
@@ -20,13 +22,25 @@ final class FormHydrator
     }
 
     /**
+     * By fact hydration parameters (`map` and `strict`) based on passed parameters `map` and `strict`:
+     *
+     * - strict is null, user map is null — generated map, strict
+     * - strict is true, user map is null — generated map, strict
+     * - strict is false, user map is null — without map, not strict
+     * - strict is null, user map is array — user map + generated map, strict
+     * - strict is true, user map is array — user map, strict
+     * - strict is false, user map is array — user map, not strict
+     *
+     * User map - map that passed to method.
+     * Generated map - map based on presence of property rules.
+     *
      * @psalm-param MapType $map
      */
     public function populate(
         FormModelInterface $model,
         mixed $data,
-        array $map = [],
-        bool $strict = false,
+        ?array $map = null,
+        ?bool $strict = null,
         ?string $scope = null
     ): bool {
         if (!is_array($data)) {
@@ -43,8 +57,65 @@ final class FormHydrator
             $hydrateData = $data[$scope];
         }
 
-        $this->hydrator->hydrate($model, new ArrayData($hydrateData, $map, $strict));
+        $this->hydrator->hydrate(
+            $model,
+            new ArrayData(
+                $hydrateData,
+                $this->createMap($model, $map, $strict),
+                $strict ?? true
+            )
+        );
 
         return true;
+    }
+
+    /**
+     * @psalm-param MapType|null $userMap
+     */
+    private function createMap(FormModelInterface $model, ?array $userMap, ?bool $strict): array
+    {
+        if ($strict === false) {
+            return $userMap ?? [];
+        }
+
+        if ($strict && $userMap !== null) {
+            return $userMap;
+        }
+
+        $properties = $this->getPropertiesWithRules($model);
+        $generatedMap = array_combine($properties, $properties);
+
+        if ($userMap === null) {
+            return $generatedMap;
+        }
+
+        return array_merge($generatedMap, $userMap);
+    }
+
+    /**
+     * @psalm-return list<string>
+     */
+    private function getPropertiesWithRules(FormModelInterface $model): array
+    {
+        if ($model instanceof RulesProviderInterface) {
+            return $this->extractStringKeys($model->getRules());
+        }
+
+        $parser = new ObjectParser($model, skipStaticProperties: true);
+        return $this->extractStringKeys($parser->getRules());
+    }
+
+    /**
+     * @psalm-return list<string>
+     */
+    private function extractStringKeys(iterable $array): array
+    {
+        $result = [];
+        foreach ($array as $key => $_value) {
+            if (is_string($key)) {
+                $result[] = $key;
+            }
+        }
+        return $result;
     }
 }

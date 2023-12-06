@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace Yiisoft\FormModel\Tests;
 
 use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 use Yiisoft\FormModel\Exception\PropertyNotSupportNestedValuesException;
 use Yiisoft\FormModel\Exception\UndefinedObjectPropertyException;
 use Yiisoft\FormModel\FormModel;
 use Yiisoft\FormModel\FormModelInputData;
+use Yiisoft\FormModel\Safe;
 use Yiisoft\FormModel\Tests\Support\Dto\Coordinates;
 use Yiisoft\FormModel\Tests\Support\Form\CustomFormNameForm;
 use Yiisoft\FormModel\Tests\Support\Form\DefaultFormNameForm;
@@ -23,6 +25,7 @@ use Yiisoft\FormModel\Tests\Support\Form\NestedRuleForm\MainForm;
 use Yiisoft\FormModel\Tests\Support\StubInputField;
 use Yiisoft\FormModel\Tests\Support\TestHelper;
 use Yiisoft\Test\Support\Container\SimpleContainer;
+use Yiisoft\Validator\RulesProviderInterface;
 use Yiisoft\Widget\WidgetFactory;
 
 require __DIR__ . '/Support/Form/NonNamespacedForm.php';
@@ -318,9 +321,13 @@ final class FormModelTest extends TestCase
     public function testLoadWithEmptyScope(): void
     {
         $form = new class () extends FormModel {
+            #[Safe]
             private int $int = 1;
+            #[Safe]
             private string $string = 'string';
+            #[Safe]
             private float $float = 3.14;
+            #[Safe]
             private bool $bool = true;
         };
         TestHelper::createFormHydrator()->populate(
@@ -390,6 +397,7 @@ final class FormModelTest extends TestCase
     public function testPublicAttributes(): void
     {
         $form = new class () extends FormModel {
+            #[Safe]
             public int $int = 1;
         };
 
@@ -472,5 +480,94 @@ final class FormModelTest extends TestCase
             ],
             $result->getErrorMessagesIndexedByPath()
         );
+    }
+
+    public static function dataMapping(): array
+    {
+        return [
+            'without-rules' => [
+                ['a' => null, 'b' => null, 'c' => null],
+                ['a' => 1, 'b' => 2, 'c' => 3],
+                [],
+                null,
+                null,
+            ],
+            'map-null-strict-null' => [
+                ['a' => 1, 'b' => 2, 'c' => 3],
+                ['a' => 1, 'b' => 2, 'c' => 3],
+                ['a' => new Safe(), 'b' => new Safe(), 'c' => new Safe(),],
+                null,
+                null,
+            ],
+            'map-array-strict-null' => [
+                ['a' => 1, 'b' => 2, 'c' => 4],
+                ['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4],
+                ['a' => new Safe(), 'b' => new Safe(), 'c' => new Safe()],
+                ['c' => 'd'],
+                null,
+            ],
+            'map-null-strict-true' => [
+                ['a' => 1, 'b' => 2, 'c' => 3],
+                ['a' => 1, 'b' => 2, 'c' => 3],
+                ['a' => new Safe(), 'b' => new Safe(), 'c' => new Safe()],
+                null,
+                true,
+            ],
+            'map-array-strict-true' => [
+                ['a' => null, 'b' => null, 'c' => 4],
+                ['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4],
+                ['a' => new Safe()],
+                ['c' => 'd'],
+                true,
+            ],
+            'map-null-strict-false' => [
+                ['a' => 1, 'b' => 2, 'c' => 3],
+                ['a' => 1, 'b' => 2, 'c' => 3],
+                ['a' => new Safe()],
+                null,
+                false,
+            ],
+            'map-array-strict-false' => [
+                ['a' => 1, 'b' => 2, 'c' => 4],
+                ['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4],
+                ['a' => new Safe()],
+                ['c' => 'd'],
+                false,
+            ],
+        ];
+    }
+
+    #[DataProvider('dataMapping')]
+    public function testMapping(array $expected, array $data, array $rules, ?array $map, ?bool $strict): void
+    {
+        $form = new class ($rules) extends FormModel implements RulesProviderInterface {
+            public ?int $a = null;
+            public ?int $b = null;
+            public ?int $c = null;
+
+            public function __construct(
+                private array $rules,
+            ) {
+            }
+
+            public function getRules(): array
+            {
+                return $this->rules;
+            }
+        };
+
+        TestHelper::createFormHydrator()->populate(
+            $form,
+            $data,
+            $map,
+            $strict,
+            '',
+        );
+
+        $this->assertSame($expected, [
+            'a' => $form->a,
+            'b' => $form->b,
+            'c' => $form->c,
+        ]);
     }
 }
