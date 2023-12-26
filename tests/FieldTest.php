@@ -220,6 +220,19 @@ final class FieldTest extends TestCase
         );
     }
 
+    public function testImageWithUrl(): void
+    {
+        $html = PureField::image('image.png')->render();
+
+        $expected = <<<HTML
+            <div>
+            <input type="image" src="image.png">
+            </div>
+            HTML;
+
+        $this->assertSame($expected, $html);
+    }
+
     public function testNumber(): void
     {
         $result = Field::number(new TestForm(), 'age')->render();
