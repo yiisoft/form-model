@@ -222,7 +222,7 @@ final class FieldTest extends TestCase
 
     public function testImageWithUrl(): void
     {
-        $html = PureField::image('image.png')->render();
+        $html = Field::image('image.png')->render();
 
         $expected = <<<HTML
             <div>
