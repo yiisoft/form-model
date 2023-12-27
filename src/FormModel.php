@@ -315,7 +315,7 @@ abstract class FormModel implements FormModelInterface
         foreach ($keys as $key) {
             if ($path !== '') {
                 if (is_object($key[1])) {
-                    $path .= '::' . $key[0];
+                    $path .= '::$' . $key[0];
                 } elseif (is_array($key[1])) {
                     $path .= '[' . $key[0] . ']';
                 }

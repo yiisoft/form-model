@@ -9,6 +9,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 use Yiisoft\FormModel\Exception\PropertyNotSupportNestedValuesException;
+use Yiisoft\FormModel\Exception\StaticObjectPropertyException;
 use Yiisoft\FormModel\Exception\UndefinedObjectPropertyException;
 use Yiisoft\FormModel\FormModel;
 use Yiisoft\FormModel\FormModelInputData;
@@ -155,7 +156,7 @@ final class FormModelTest extends TestCase
 
         $this->expectException(PropertyNotSupportNestedValuesException::class);
         $this->expectExceptionMessage(
-            'Property "' . FormWithNestedProperty::class . '::key" not support nested values.'
+            'Property "' . FormWithNestedProperty::class . '::$key" not support nested values.'
         );
         $form->getPropertyValue('key.profile');
     }
@@ -168,7 +169,7 @@ final class FormModelTest extends TestCase
 
         $this->expectException(UndefinedObjectPropertyException::class);
         $this->expectExceptionMessage(
-            'Undefined object property: "' . FormWithNestedProperty::class . '::coordinates::profile".'
+            'Undefined object property: "' . FormWithNestedProperty::class . '::$coordinates::$profile".'
         );
         $form->getPropertyValue('coordinates.profile');
     }
@@ -223,7 +224,7 @@ final class FormModelTest extends TestCase
 
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage(
-            'Undefined object property: "Yiisoft\FormModel\Tests\Support\Form\LoginForm::noExist".'
+            'Undefined object property: "Yiisoft\FormModel\Tests\Support\Form\LoginForm::$noExist".'
         );
         $form->getPropertyValue('noExist');
     }
@@ -602,5 +603,14 @@ final class FormModelTest extends TestCase
     public function testIsValid(bool $expected, FormModelInterface $form): void
     {
         $this->assertSame($expected, $form->isValid());
+    }
+
+    public function testGetStaticPropertyValue(): void
+    {
+        $form = new LoginForm();
+
+        $this->expectException(StaticObjectPropertyException::class);
+        $this->expectExceptionMessage('Object property is static: "' . LoginForm::class . '::$extraField".');
+        $form->getPropertyValue('extraField');
     }
 }
