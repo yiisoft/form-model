@@ -60,6 +60,16 @@ final class FormModelInputDataTest extends TestCase
         $inputData->getName();
     }
 
+    public function testUnicodePropertyName(): void
+    {
+        $form = new class() extends FormModel {
+            public array $возраст = [];
+        };
+        $inputData = new FormModelInputData($form, 'возраст');
+
+        $this->assertSame('Возраст', $inputData->getLabel());
+    }
+
     public function testNotExistProperty(): void
     {
         $form = new class() extends FormModel {
