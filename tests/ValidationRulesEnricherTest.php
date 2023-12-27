@@ -28,15 +28,12 @@ use Yiisoft\FormModel\Tests\Support\Form\TextForm;
 use Yiisoft\FormModel\Tests\Support\Form\UrlForm;
 use Yiisoft\FormModel\Tests\Support\StubDateTimeInputField;
 use Yiisoft\FormModel\ValidationRulesEnricher;
-use Yiisoft\Test\Support\Container\SimpleContainer;
-use Yiisoft\Widget\WidgetFactory;
 
 final class ValidationRulesEnricherTest extends TestCase
 {
     protected function setUp(): void
     {
         parent::setUp();
-        WidgetFactory::initialize(new SimpleContainer());
         ThemeContainer::initialize(
             validationRulesEnricher: new ValidationRulesEnricher()
         );

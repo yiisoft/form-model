@@ -24,20 +24,12 @@ use Yiisoft\FormModel\Tests\Support\Form\NestedMixedForm\NestedMixedForm;
 use Yiisoft\FormModel\Tests\Support\Form\NestedRuleForm\MainForm;
 use Yiisoft\FormModel\Tests\Support\StubInputField;
 use Yiisoft\FormModel\Tests\Support\TestHelper;
-use Yiisoft\Test\Support\Container\SimpleContainer;
 use Yiisoft\Validator\RulesProviderInterface;
-use Yiisoft\Widget\WidgetFactory;
 
 require __DIR__ . '/Support/Form/NonNamespacedForm.php';
 
 final class FormModelTest extends TestCase
 {
-    protected function setUp(): void
-    {
-        parent::setUp();
-        WidgetFactory::initialize(new SimpleContainer());
-    }
-
     public function testAnonymousFormName(): void
     {
         $form = new class () extends FormModel {
