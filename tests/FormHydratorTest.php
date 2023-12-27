@@ -6,11 +6,27 @@ namespace Yiisoft\FormModel\Tests;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Yiisoft\FormModel\FormModel;
 use Yiisoft\FormModel\Tests\Support\Form\CarForm;
 use Yiisoft\FormModel\Tests\Support\TestHelper;
 
 final class FormHydratorTest extends TestCase
 {
+    public function testPopulateWithStrictMap(): void
+    {
+        $form = new class() extends FormModel {
+            public int $a = 0;
+            public int $b = 0;
+        };
+        $data = ['x' => 1, 'y' => 2];
+        $map = ['a' => 'x', 'b' => 'y'];
+
+        TestHelper::createFormHydrator()->populate($form, $data, $map, true);
+
+        $this->assertSame(1, $form->a);
+        $this->assertSame(2, $form->b);
+    }
+
     public static function dataPopulateAndValidate(): array
     {
         return [
