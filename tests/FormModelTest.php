@@ -12,6 +12,7 @@ use Yiisoft\FormModel\Exception\PropertyNotSupportNestedValuesException;
 use Yiisoft\FormModel\Exception\UndefinedObjectPropertyException;
 use Yiisoft\FormModel\FormModel;
 use Yiisoft\FormModel\FormModelInputData;
+use Yiisoft\FormModel\FormModelInterface;
 use Yiisoft\FormModel\Safe;
 use Yiisoft\FormModel\Tests\Support\Dto\Coordinates;
 use Yiisoft\FormModel\Tests\Support\Form\CustomFormNameForm;
@@ -24,7 +25,9 @@ use Yiisoft\FormModel\Tests\Support\Form\NestedMixedForm\NestedMixedForm;
 use Yiisoft\FormModel\Tests\Support\Form\NestedRuleForm\MainForm;
 use Yiisoft\FormModel\Tests\Support\StubInputField;
 use Yiisoft\FormModel\Tests\Support\TestHelper;
+use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\RulesProviderInterface;
+use Yiisoft\Validator\Validator;
 
 require __DIR__ . '/Support/Form/NonNamespacedForm.php';
 
@@ -561,5 +564,34 @@ final class FormModelTest extends TestCase
             'b' => $form->b,
             'c' => $form->c,
         ]);
+    }
+
+    public static function dataIsValid(): array
+    {
+        $validator = new Validator();
+
+        $form = new class() extends FormModel {
+            #[Required]
+            public ?string $name = null;
+        };
+
+        $validForm = clone $form;
+        $validForm->name = 'test';
+        $validator->validate($validForm);
+
+        $invalidForm = clone $form;
+        $validator->validate($invalidForm);
+
+        return [
+            'non-validated' => [false, $form],
+            'valid' => [true, $validForm],
+            'invalid' => [false, $invalidForm],
+        ];
+    }
+
+    #[DataProvider('dataIsValid')]
+    public function testIsValid(bool $expected, FormModelInterface $form): void
+    {
+        $this->assertSame($expected, $form->isValid());
     }
 }
