@@ -6,14 +6,14 @@
     <br>
 </p>
 
-[![Latest Stable Version](https://poser.pugx.org/yiisoft/_____/v/stable.png)](https://packagist.org/packages/yiisoft/_____)
-[![Total Downloads](https://poser.pugx.org/yiisoft/_____/downloads.png)](https://packagist.org/packages/yiisoft/_____)
-[![Build status](https://github.com/yiisoft/_____/workflows/build/badge.svg)](https://github.com/yiisoft/_____/actions?query=workflow%3Abuild)
-[![Code Coverage](https://codecov.io/gh/yiisoft/_____/branch/master/graph/badge.svg)](https://codecov.io/gh/yiisoft/_____)
-[![Mutation testing badge](https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2Fyiisoft%2F_____%2Fmaster)](https://dashboard.stryker-mutator.io/reports/github.com/yiisoft/_____/master)
-[![static analysis](https://github.com/yiisoft/_____/workflows/static%20analysis/badge.svg)](https://github.com/yiisoft/_____/actions?query=workflow%3A%22static+analysis%22)
-[![type-coverage](https://shepherd.dev/github/yiisoft/_____/coverage.svg)](https://shepherd.dev/github/yiisoft/_____)
-[![psalm-level](https://shepherd.dev/github/yiisoft/_____/level.svg)](https://shepherd.dev/github/yiisoft/_____)
+[![Latest Stable Version](https://poser.pugx.org/yiisoft/form-model/v/stable.png)](https://packagist.org/packages/yiisoft/form-model)
+[![Total Downloads](https://poser.pugx.org/yiisoft/form-model/downloads.png)](https://packagist.org/packages/yiisoft/form-model)
+[![Build status](https://github.com/yiisoft/form-model/workflows/build/badge.svg)](https://github.com/yiisoft/form-model/actions?query=workflow%3Abuild)
+[![Code Coverage](https://codecov.io/gh/yiisoft/form-model/branch/master/graph/badge.svg)](https://codecov.io/gh/yiisoft/form-model)
+[![Mutation testing badge](https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2Fyiisoft%2Fform-model%2Fmaster)](https://dashboard.stryker-mutator.io/reports/github.com/yiisoft/form-model/master)
+[![static analysis](https://github.com/yiisoft/form-model/workflows/static%20analysis/badge.svg)](https://github.com/yiisoft/form-model/actions?query=workflow%3A%22static+analysis%22)
+[![type-coverage](https://shepherd.dev/github/yiisoft/form-model/coverage.svg)](https://shepherd.dev/github/yiisoft/form-model)
+[![psalm-level](https://shepherd.dev/github/yiisoft/form-model/level.svg)](https://shepherd.dev/github/yiisoft/form-model)
 
 The package ...
 
