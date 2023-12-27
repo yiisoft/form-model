@@ -69,6 +69,15 @@ final class FormModelTest extends TestCase
         $this->assertSame($expected, $result);
     }
 
+    public function testPropertyNotSupportNestedValues(): void
+    {
+        $form = new NestedForm();
+
+        $this->expectException(PropertyNotSupportNestedValuesException::class);
+        $this->expectExceptionMessage('Property "' . NestedForm::class . '::$letters[0]" not support nested values.');
+        $form->getPropertyValue('letters[0][title]');
+    }
+
     public function testNonExistArrayValue(): void
     {
         $widget = StubInputField::widget()->inputData(new FormModelInputData(new NestedForm(), 'letters[1]'));
