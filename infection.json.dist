@@ -16,6 +16,11 @@
             "ignoreSourceCodeByRegex": [
                 "array_pop\\(\\$keys\\);"
             ]
+        },
+        "TrueValue": {
+            "ignoreSourceCodeByRegex": [
+                "\\$parser = new ObjectParser\\(\\$model, skipStaticProperties: true\\);"
+            ]
         }
     }
 }
