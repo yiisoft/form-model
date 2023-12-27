@@ -27,6 +27,7 @@ use Yiisoft\FormModel\Tests\Support\Form\TextareaForm;
 use Yiisoft\FormModel\Tests\Support\Form\TextForm;
 use Yiisoft\FormModel\Tests\Support\Form\UrlForm;
 use Yiisoft\FormModel\Tests\Support\StubDateTimeInputField;
+use Yiisoft\FormModel\Tests\Support\StubField;
 use Yiisoft\FormModel\ValidationRulesEnricher;
 use Yiisoft\Validator\Rule\Required;
 
@@ -46,6 +47,10 @@ final class ValidationRulesEnricherTest extends TestCase
             'required' => [
                 '<input type="url" id="urlform-company" name="UrlForm[company]" value required>',
                 'company',
+            ],
+            'required-with-when' => [
+                '<input type="url" id="urlform-requiredwhen" name="UrlForm[requiredWhen]">',
+                'requiredWhen',
             ],
             'has-length' => [
                 '<input type="url" id="urlform-home" name="UrlForm[home]" value maxlength="199" minlength="50">',
@@ -449,6 +454,16 @@ final class ValidationRulesEnricherTest extends TestCase
 
         $this->assertNull(
             $enricher->process($field, new Required())
+        );
+    }
+
+    public function testNotSupportedWidget(): void
+    {
+        $field = StubField::widget();
+        $enricher = new ValidationRulesEnricher();
+
+        $this->assertNull(
+            $enricher->process($field, [])
         );
     }
 }
