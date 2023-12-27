@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Yiisoft\FormModel;
 
-use InvalidArgumentException;
 use ReflectionClass;
 use ReflectionException;
 use Yiisoft\FormModel\Exception\PropertyNotSupportNestedValuesException;
@@ -243,15 +242,15 @@ abstract class FormModel implements FormModelInterface
         $value = $this;
         $n = 0;
         foreach ($path as $key) {
-            if ($value instanceof self) {
-                $nestedAttribute = implode('.', array_slice($path, $n));
+            if ($value instanceof FormModelInterface) {
+                $nestedProperty = implode('.', array_slice($path, $n));
                 $data = match ($metaKey) {
                     self::META_LABEL => $value->getPropertyLabels(),
                     self::META_HINT => $value->getPropertyHints(),
                     self::META_PLACEHOLDER => $value->getPropertyPlaceholders(),
                 };
-                if (array_key_exists($nestedAttribute, $data)) {
-                    return $data[$nestedAttribute];
+                if (array_key_exists($nestedProperty, $data)) {
+                    return $data[$nestedProperty];
                 }
             }
 
