@@ -8,6 +8,7 @@ use Yiisoft\Hydrator\ArrayData;
 use Yiisoft\Hydrator\HydratorInterface;
 use Yiisoft\Validator\Helper\ObjectParser;
 use Yiisoft\Validator\RulesProviderInterface;
+use Yiisoft\Validator\ValidatorInterface;
 
 use function is_array;
 
@@ -18,6 +19,7 @@ final class FormHydrator
 {
     public function __construct(
         private readonly HydratorInterface $hydrator,
+        private readonly ValidatorInterface $validator,
     ) {
     }
 
@@ -67,6 +69,23 @@ final class FormHydrator
         );
 
         return true;
+    }
+
+    /**
+     * @psalm-param MapType $map
+     */
+    public function populateAndValidate(
+        FormModelInterface $model,
+        mixed $data,
+        ?array $map = null,
+        ?bool $strict = null,
+        ?string $scope = null
+    ): bool {
+        if (!$this->populate($model, $data, $map, $strict, $scope)) {
+            return false;
+        }
+
+        return $this->validator->validate($model)->isValid();
     }
 
     /**

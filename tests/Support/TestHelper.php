@@ -14,16 +14,14 @@ final class TestHelper
 {
     public static function createFormHydrator(): FormHydrator
     {
-        return new FormHydrator(self::createValidatingHydrator());
-    }
-
-    public static function createValidatingHydrator(): ValidatingHydrator
-    {
         $validator = new Validator();
-        return new ValidatingHydrator(
-            new Hydrator(),
+        return new FormHydrator(
+            new ValidatingHydrator(
+                new Hydrator(),
+                $validator,
+                new ValidateResolver($validator),
+            ),
             $validator,
-            new ValidateResolver($validator),
         );
     }
 }
