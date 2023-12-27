@@ -38,7 +38,15 @@ final class FormModelInputDataTest extends TestCase
                     public int $age = 21;
                 },
                 'age',
-            ]
+            ],
+            'unicode-property' => [
+                'ВОЗРАСТ',
+                'возраст',
+                new class() extends FormModel {
+                    public int $ВОЗРАСТ= 21;
+                },
+                'ВОЗРАСТ',
+            ],
         ];
     }
 
