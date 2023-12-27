@@ -9,7 +9,10 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\FormModel\FormModel;
 use Yiisoft\FormModel\FormModelInputData;
+use Yiisoft\FormModel\FormModelInterface;
 use Yiisoft\FormModel\Tests\Support\Form\FormWithNestedStructures;
+use Yiisoft\Validator\Rule\Required;
+use Yiisoft\Validator\Validator;
 
 final class FormModelInputDataTest extends TestCase
 {
@@ -90,5 +93,35 @@ final class FormModelInputDataTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Property name must contain word characters only.');
         $inputData->getLabel();
+    }
+
+    public static function dataIsValid(): array
+    {
+        $validator = new Validator();
+
+        $form = new class() extends FormModel {
+            #[Required]
+            public ?string $name = null;
+        };
+
+        $validForm = clone $form;
+        $validForm->name = 'test';
+        $validator->validate($validForm);
+
+        $invalidForm = clone $form;
+        $validator->validate($invalidForm);
+
+        return [
+            'non-validated' => [false, $form],
+            'valid' => [true, $validForm],
+            'invalid' => [true, $invalidForm],
+        ];
+    }
+
+    #[DataProvider('dataIsValid')]
+    public function testIsValidated(bool $expected, FormModelInterface $form): void
+    {
+        $inputData = new FormModelInputData($form, 'name');
+        $this->assertSame($expected, $inputData->isValidated());
     }
 }
