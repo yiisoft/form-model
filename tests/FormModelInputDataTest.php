@@ -27,6 +27,14 @@ final class FormModelInputDataTest extends TestCase
                 new FormWithNestedStructures(),
                 'array[nested][value]',
             ],
+            'anonymous-form' => [
+                'age',
+                'age',
+                new class() extends FormModel {
+                    public int $age = 21;
+                },
+                'age',
+            ]
         ];
     }
 
