@@ -101,7 +101,7 @@ final class FormModelTest extends TestCase
         $this->assertSame($expected, $result);
     }
 
-    public function testGetAttributeHint(): void
+    public function testGetPropertyHint(): void
     {
         $form = new LoginForm();
 
@@ -110,7 +110,7 @@ final class FormModelTest extends TestCase
         $this->assertEmpty($form->getPropertyHint('noExist'));
     }
 
-    public function testGetAttributeLabel(): void
+    public function testGetPropertyLabel(): void
     {
         $form = new LoginForm();
 
@@ -118,7 +118,7 @@ final class FormModelTest extends TestCase
         $this->assertSame('Testme', $form->getPropertyLabel('testme'));
     }
 
-    public function testGetAttributesLabels(): void
+    public function testGetPropertiesLabels(): void
     {
         $form = new LoginForm();
 
@@ -173,28 +173,28 @@ final class FormModelTest extends TestCase
         $form->getPropertyValue('coordinates.profile');
     }
 
-    public function testGetNestedAttributeHint(): void
+    public function testGetNestedPropertyHint(): void
     {
         $form = new FormWithNestedProperty();
 
         $this->assertSame('Write your id or email.', $form->getPropertyHint('user.login'));
     }
 
-    public function testGetNestedAttributeLabel(): void
+    public function testGetNestedPropertyLabel(): void
     {
         $form = new FormWithNestedProperty();
 
         $this->assertSame('Login:', $form->getPropertyLabel('user.login'));
     }
 
-    public function testGetNestedAttributePlaceHolder(): void
+    public function testGetNestedPropertyPlaceHolder(): void
     {
         $form = new FormWithNestedProperty();
 
         $this->assertSame('Type Username or Email.', $form->getPropertyPlaceholder('user.login'));
     }
 
-    public function testGetAttributePlaceHolder(): void
+    public function testGetPropertyPlaceHolder(): void
     {
         $form = new LoginForm();
 
@@ -203,7 +203,7 @@ final class FormModelTest extends TestCase
         $this->assertEmpty($form->getPropertyPlaceholder('noExist'));
     }
 
-    public function testGetAttributeValue(): void
+    public function testGetPropertyValue(): void
     {
         $form = new LoginForm();
 
@@ -217,7 +217,7 @@ final class FormModelTest extends TestCase
         $this->assertSame(true, $form->getPropertyValue('rememberMe'));
     }
 
-    public function testGetAttributeValueException(): void
+    public function testGetPropertyValueException(): void
     {
         $form = new LoginForm();
 
@@ -228,7 +228,7 @@ final class FormModelTest extends TestCase
         $form->getPropertyValue('noExist');
     }
 
-    public function testGetAttributeValueWithNestedAttribute(): void
+    public function testGetPropertyValueWithNestedProperty(): void
     {
         $form = new FormWithNestedProperty();
 
@@ -236,7 +236,7 @@ final class FormModelTest extends TestCase
         $this->assertSame('admin', $form->getPropertyValue('user.login'));
     }
 
-    public function testHasAttribute(): void
+    public function testHasProperty(): void
     {
         $form = new LoginForm();
 
@@ -247,7 +247,7 @@ final class FormModelTest extends TestCase
         $this->assertFalse($form->hasProperty('extraField'));
     }
 
-    public function testHasNestedAttribute(): void
+    public function testHasNestedProperty(): void
     {
         $form = new FormWithNestedProperty();
 
@@ -257,7 +257,7 @@ final class FormModelTest extends TestCase
         $this->assertFalse($form->hasProperty('noexist'));
     }
 
-    public function testHasNestedAttributeException(): void
+    public function testHasNestedPropertyException(): void
     {
         $form = new FormWithNestedProperty();
 
@@ -389,7 +389,7 @@ final class FormModelTest extends TestCase
         $this->assertSame('NonNamespacedForm', $form->getFormName());
     }
 
-    public function testPublicAttributes(): void
+    public function testPublicProperties(): void
     {
         $form = new class () extends FormModel {
             #[Safe]
