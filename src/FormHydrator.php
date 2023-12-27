@@ -89,7 +89,8 @@ final class FormHydrator
     }
 
     /**
-     * @psalm-param MapType|null $userMap
+     * @psalm-param MapType $userMap
+     * @psalm-return MapType
      */
     private function createMap(FormModelInterface $model, ?array $userMap, ?bool $strict): array
     {

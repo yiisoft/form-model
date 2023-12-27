@@ -9,9 +9,11 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 use Yiisoft\FormModel\Exception\PropertyNotSupportNestedValuesException;
+use Yiisoft\FormModel\Exception\StaticObjectPropertyException;
 use Yiisoft\FormModel\Exception\UndefinedObjectPropertyException;
 use Yiisoft\FormModel\FormModel;
 use Yiisoft\FormModel\FormModelInputData;
+use Yiisoft\FormModel\FormModelInterface;
 use Yiisoft\FormModel\Safe;
 use Yiisoft\FormModel\Tests\Support\Dto\Coordinates;
 use Yiisoft\FormModel\Tests\Support\Form\CustomFormNameForm;
@@ -24,20 +26,14 @@ use Yiisoft\FormModel\Tests\Support\Form\NestedMixedForm\NestedMixedForm;
 use Yiisoft\FormModel\Tests\Support\Form\NestedRuleForm\MainForm;
 use Yiisoft\FormModel\Tests\Support\StubInputField;
 use Yiisoft\FormModel\Tests\Support\TestHelper;
-use Yiisoft\Test\Support\Container\SimpleContainer;
+use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\RulesProviderInterface;
-use Yiisoft\Widget\WidgetFactory;
+use Yiisoft\Validator\Validator;
 
 require __DIR__ . '/Support/Form/NonNamespacedForm.php';
 
 final class FormModelTest extends TestCase
 {
-    protected function setUp(): void
-    {
-        parent::setUp();
-        WidgetFactory::initialize(new SimpleContainer());
-    }
-
     public function testAnonymousFormName(): void
     {
         $form = new class () extends FormModel {
@@ -73,6 +69,15 @@ final class FormModelTest extends TestCase
         $this->assertSame($expected, $result);
     }
 
+    public function testPropertyNotSupportNestedValues(): void
+    {
+        $form = new NestedForm();
+
+        $this->expectException(PropertyNotSupportNestedValuesException::class);
+        $this->expectExceptionMessage('Property "' . NestedForm::class . '::$letters[0]" not support nested values.');
+        $form->getPropertyValue('letters[0][title]');
+    }
+
     public function testNonExistArrayValue(): void
     {
         $widget = StubInputField::widget()->inputData(new FormModelInputData(new NestedForm(), 'letters[1]'));
@@ -106,7 +111,7 @@ final class FormModelTest extends TestCase
         $this->assertSame($expected, $result);
     }
 
-    public function testGetAttributeHint(): void
+    public function testGetPropertyHint(): void
     {
         $form = new LoginForm();
 
@@ -115,7 +120,7 @@ final class FormModelTest extends TestCase
         $this->assertEmpty($form->getPropertyHint('noExist'));
     }
 
-    public function testGetAttributeLabel(): void
+    public function testGetPropertyLabel(): void
     {
         $form = new LoginForm();
 
@@ -123,7 +128,7 @@ final class FormModelTest extends TestCase
         $this->assertSame('Testme', $form->getPropertyLabel('testme'));
     }
 
-    public function testGetAttributesLabels(): void
+    public function testGetPropertiesLabels(): void
     {
         $form = new LoginForm();
 
@@ -160,7 +165,7 @@ final class FormModelTest extends TestCase
 
         $this->expectException(PropertyNotSupportNestedValuesException::class);
         $this->expectExceptionMessage(
-            'Property "' . FormWithNestedProperty::class . '::key" not support nested values.'
+            'Property "' . FormWithNestedProperty::class . '::$key" not support nested values.'
         );
         $form->getPropertyValue('key.profile');
     }
@@ -173,33 +178,33 @@ final class FormModelTest extends TestCase
 
         $this->expectException(UndefinedObjectPropertyException::class);
         $this->expectExceptionMessage(
-            'Undefined object property: "' . FormWithNestedProperty::class . '::coordinates::profile".'
+            'Undefined object property: "' . FormWithNestedProperty::class . '::$coordinates::$profile".'
         );
         $form->getPropertyValue('coordinates.profile');
     }
 
-    public function testGetNestedAttributeHint(): void
+    public function testGetNestedPropertyHint(): void
     {
         $form = new FormWithNestedProperty();
 
         $this->assertSame('Write your id or email.', $form->getPropertyHint('user.login'));
     }
 
-    public function testGetNestedAttributeLabel(): void
+    public function testGetNestedPropertyLabel(): void
     {
         $form = new FormWithNestedProperty();
 
         $this->assertSame('Login:', $form->getPropertyLabel('user.login'));
     }
 
-    public function testGetNestedAttributePlaceHolder(): void
+    public function testGetNestedPropertyPlaceHolder(): void
     {
         $form = new FormWithNestedProperty();
 
         $this->assertSame('Type Username or Email.', $form->getPropertyPlaceholder('user.login'));
     }
 
-    public function testGetAttributePlaceHolder(): void
+    public function testGetPropertyPlaceHolder(): void
     {
         $form = new LoginForm();
 
@@ -208,7 +213,7 @@ final class FormModelTest extends TestCase
         $this->assertEmpty($form->getPropertyPlaceholder('noExist'));
     }
 
-    public function testGetAttributeValue(): void
+    public function testGetPropertyValue(): void
     {
         $form = new LoginForm();
 
@@ -222,18 +227,18 @@ final class FormModelTest extends TestCase
         $this->assertSame(true, $form->getPropertyValue('rememberMe'));
     }
 
-    public function testGetAttributeValueException(): void
+    public function testGetPropertyValueException(): void
     {
         $form = new LoginForm();
 
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage(
-            'Undefined object property: "Yiisoft\FormModel\Tests\Support\Form\LoginForm::noExist".'
+            'Undefined object property: "Yiisoft\FormModel\Tests\Support\Form\LoginForm::$noExist".'
         );
         $form->getPropertyValue('noExist');
     }
 
-    public function testGetAttributeValueWithNestedAttribute(): void
+    public function testGetPropertyValueWithNestedProperty(): void
     {
         $form = new FormWithNestedProperty();
 
@@ -241,7 +246,7 @@ final class FormModelTest extends TestCase
         $this->assertSame('admin', $form->getPropertyValue('user.login'));
     }
 
-    public function testHasAttribute(): void
+    public function testHasProperty(): void
     {
         $form = new LoginForm();
 
@@ -252,7 +257,7 @@ final class FormModelTest extends TestCase
         $this->assertFalse($form->hasProperty('extraField'));
     }
 
-    public function testHasNestedAttribute(): void
+    public function testHasNestedProperty(): void
     {
         $form = new FormWithNestedProperty();
 
@@ -262,7 +267,7 @@ final class FormModelTest extends TestCase
         $this->assertFalse($form->hasProperty('noexist'));
     }
 
-    public function testHasNestedAttributeException(): void
+    public function testHasNestedPropertyException(): void
     {
         $form = new FormWithNestedProperty();
 
@@ -394,7 +399,7 @@ final class FormModelTest extends TestCase
         $this->assertSame('NonNamespacedForm', $form->getFormName());
     }
 
-    public function testPublicAttributes(): void
+    public function testPublicProperties(): void
     {
         $form = new class () extends FormModel {
             #[Safe]
@@ -404,6 +409,15 @@ final class FormModelTest extends TestCase
         // check row data value.
         TestHelper::createFormHydrator()->populate($form, ['int' => '2']);
         $this->assertSame(2, $form->getPropertyValue('int'));
+    }
+
+    public function testHintForStaticProperty(): void
+    {
+        $form = new class () extends FormModel {
+            public static int $number;
+        };
+
+        $this->assertSame('', $form->getPropertyHint('number'));
     }
 
     public function testFormWithNestedStructures(): void
@@ -569,5 +583,43 @@ final class FormModelTest extends TestCase
             'b' => $form->b,
             'c' => $form->c,
         ]);
+    }
+
+    public static function dataIsValid(): array
+    {
+        $validator = new Validator();
+
+        $form = new class() extends FormModel {
+            #[Required]
+            public ?string $name = null;
+        };
+
+        $validForm = clone $form;
+        $validForm->name = 'test';
+        $validator->validate($validForm);
+
+        $invalidForm = clone $form;
+        $validator->validate($invalidForm);
+
+        return [
+            'non-validated' => [false, $form],
+            'valid' => [true, $validForm],
+            'invalid' => [false, $invalidForm],
+        ];
+    }
+
+    #[DataProvider('dataIsValid')]
+    public function testIsValid(bool $expected, FormModelInterface $form): void
+    {
+        $this->assertSame($expected, $form->isValid());
+    }
+
+    public function testGetStaticPropertyValue(): void
+    {
+        $form = new LoginForm();
+
+        $this->expectException(StaticObjectPropertyException::class);
+        $this->expectExceptionMessage('Object property is static: "' . LoginForm::class . '::$extraField".');
+        $form->getPropertyValue('extraField');
     }
 }

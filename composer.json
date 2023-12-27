@@ -44,8 +44,7 @@
         "roave/infection-static-analysis-plugin": "^1.34",
         "spatie/phpunit-watcher": "^1.23",
         "vimeo/psalm": "^5.16",
-        "yiisoft/di": "^1.2",
-        "yiisoft/test-support": "^3.0"
+        "yiisoft/di": "^1.2"
     },
     "autoload": {
         "psr-4": {

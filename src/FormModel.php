@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Yiisoft\FormModel;
 
-use InvalidArgumentException;
 use ReflectionClass;
 use ReflectionException;
 use Yiisoft\FormModel\Exception\PropertyNotSupportNestedValuesException;
@@ -233,6 +232,9 @@ abstract class FormModel implements FormModelInterface
         return $value;
     }
 
+    /**
+     * @psalm-param self::META_* $metaKey
+     */
     private function readPropertyMetaValue(int $metaKey, string $path): ?string
     {
         $path = $this->normalizePath($path);
@@ -240,16 +242,15 @@ abstract class FormModel implements FormModelInterface
         $value = $this;
         $n = 0;
         foreach ($path as $key) {
-            if ($value instanceof self) {
-                $nestedAttribute = implode('.', array_slice($path, $n));
+            if ($value instanceof FormModelInterface) {
+                $nestedProperty = implode('.', array_slice($path, $n));
                 $data = match ($metaKey) {
                     self::META_LABEL => $value->getPropertyLabels(),
                     self::META_HINT => $value->getPropertyHints(),
                     self::META_PLACEHOLDER => $value->getPropertyPlaceholders(),
-                    default => throw new InvalidArgumentException('Invalid meta key.'),
                 };
-                if (array_key_exists($nestedAttribute, $data)) {
-                    return $data[$nestedAttribute];
+                if (array_key_exists($nestedProperty, $data)) {
+                    return $data[$nestedProperty];
                 }
             }
 
@@ -315,7 +316,7 @@ abstract class FormModel implements FormModelInterface
         foreach ($keys as $key) {
             if ($path !== '') {
                 if (is_object($key[1])) {
-                    $path .= '::' . $key[0];
+                    $path .= '::$' . $key[0];
                 } elseif (is_array($key[1])) {
                     $path .= '[' . $key[0] . ']';
                 }
