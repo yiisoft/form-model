@@ -28,6 +28,7 @@ use Yiisoft\FormModel\Tests\Support\Form\TextForm;
 use Yiisoft\FormModel\Tests\Support\Form\UrlForm;
 use Yiisoft\FormModel\Tests\Support\StubDateTimeInputField;
 use Yiisoft\FormModel\ValidationRulesEnricher;
+use Yiisoft\Validator\Rule\Required;
 
 final class ValidationRulesEnricherTest extends TestCase
 {
@@ -439,5 +440,15 @@ final class ValidationRulesEnricherTest extends TestCase
             ->enrichFromValidationRules();
 
         $this->assertSame($expected, $field->render());
+    }
+
+    public function testNonIterableRules(): void
+    {
+        $field = Range::widget();
+        $enricher = new ValidationRulesEnricher();
+
+        $this->assertNull(
+            $enricher->process($field, new Required())
+        );
     }
 }
