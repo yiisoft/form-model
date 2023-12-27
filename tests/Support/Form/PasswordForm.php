@@ -28,7 +28,10 @@ final class PasswordForm extends FormModel implements RulesProviderInterface
             'entry2' => [new Length(min: 10, max: 199)],
             'code' => [new Regex(pattern: '~\w+~')],
             'nocode' => [new Regex(pattern: '~\w+~', not: true)],
-            'requiredWhen' => [new Required(when: static fn () => false)],
+            'requiredWhen' => [
+                new Required(when: static fn() => false),
+                new Length(min: 7)
+            ],
         ];
     }
 
