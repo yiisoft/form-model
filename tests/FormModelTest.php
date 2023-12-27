@@ -401,6 +401,15 @@ final class FormModelTest extends TestCase
         $this->assertSame(2, $form->getPropertyValue('int'));
     }
 
+    public function testHintForStaticProperty(): void
+    {
+        $form = new class () extends FormModel {
+            public static int $number;
+        };
+
+        $this->assertSame('', $form->getPropertyHint('number'));
+    }
+
     public function testFormWithNestedStructures(): void
     {
         $form = new FormWithNestedStructures();
