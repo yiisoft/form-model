@@ -38,11 +38,7 @@ final class ValidationRulesEnricher implements ValidationRulesEnricherInterface
         if ($field instanceof DateTimeInputField) {
             $enrichment = [];
             foreach ($rules as $rule) {
-                if ($rule instanceof WhenInterface && $rule->getWhen() !== null) {
-                    continue;
-                }
-
-                if ($rule instanceof Required) {
+                if ($rule instanceof Required && $rule->getWhen() == null) {
                     $enrichment['inputAttributes']['required'] = true;
                 }
             }
@@ -83,11 +79,7 @@ final class ValidationRulesEnricher implements ValidationRulesEnricherInterface
         if ($field instanceof File) {
             $enrichment = [];
             foreach ($rules as $rule) {
-                if ($rule instanceof WhenInterface && $rule->getWhen() !== null) {
-                    continue;
-                }
-
-                if ($rule instanceof Required) {
+                if ($rule instanceof Required && $rule->getWhen() == null) {
                     $enrichment['inputAttributes']['required'] = true;
                 }
             }
@@ -174,11 +166,7 @@ final class ValidationRulesEnricher implements ValidationRulesEnricherInterface
         if ($field instanceof Select) {
             $enrichment = [];
             foreach ($rules as $rule) {
-                if ($rule instanceof WhenInterface && $rule->getWhen() !== null) {
-                    continue;
-                }
-
-                if ($rule instanceof Required) {
+                if ($rule instanceof Required && $rule->getWhen() == null) {
                     $enrichment['inputAttributes']['required'] = true;
                 }
             }

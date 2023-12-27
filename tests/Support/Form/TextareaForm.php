@@ -22,7 +22,10 @@ final class TextareaForm extends FormModel implements RulesProviderInterface
         return [
             'bio' => [new Required()],
             'shortdesc' => [new Length(min: 10, max: 199)],
-            'requiredWhen' => [new Required(when: static fn () => false)],
+            'requiredWhen' => [
+                new Required(when: static fn() => false),
+                new Length(min: 7)
+            ],
         ];
     }
 

@@ -49,7 +49,7 @@ final class ValidationRulesEnricherTest extends TestCase
                 'company',
             ],
             'required-with-when' => [
-                '<input type="url" id="urlform-requiredwhen" name="UrlForm[requiredWhen]">',
+                '<input type="url" id="urlform-requiredwhen" name="UrlForm[requiredWhen]" minlength="7">',
                 'requiredWhen',
             ],
             'has-length' => [
@@ -118,7 +118,7 @@ final class ValidationRulesEnricherTest extends TestCase
                 'nocode',
             ],
             'required-with-when' => [
-                '<input type="text" id="textform-requiredwhen" name="TextForm[requiredWhen]">',
+                '<input type="text" id="textform-requiredwhen" name="TextForm[requiredWhen]" minlength="7">',
                 'requiredWhen',
             ],
         ];
@@ -149,7 +149,7 @@ final class ValidationRulesEnricherTest extends TestCase
                 'shortdesc',
             ],
             'required-with-when' => [
-                '<textarea id="textareaform-requiredwhen" name="TextareaForm[requiredWhen]"></textarea>',
+                '<textarea id="textareaform-requiredwhen" name="TextareaForm[requiredWhen]" minlength="7"></textarea>',
                 'requiredWhen',
             ],
         ];
@@ -187,7 +187,7 @@ final class ValidationRulesEnricherTest extends TestCase
                 'nocode',
             ],
             'required-with-when' => [
-                '<input type="tel" id="telephoneform-requiredwhen" name="TelephoneForm[requiredWhen]">',
+                '<input type="tel" id="telephoneform-requiredwhen" name="TelephoneForm[requiredWhen]" minlength="7">',
                 'requiredWhen',
             ],
         ];
@@ -263,7 +263,7 @@ final class ValidationRulesEnricherTest extends TestCase
                 'nocode',
             ],
             'required-with-when' => [
-                '<input type="password" id="passwordform-requiredwhen" name="PasswordForm[requiredWhen]">',
+                '<input type="password" id="passwordform-requiredwhen" name="PasswordForm[requiredWhen]" minlength="7">',
                 'requiredWhen',
             ],
         ];
@@ -369,7 +369,7 @@ final class ValidationRulesEnricherTest extends TestCase
                 'nocode',
             ],
             'required-with-when' => [
-                '<input type="email" id="emailform-requiredwhen" name="EmailForm[requiredWhen]">',
+                '<input type="email" id="emailform-requiredwhen" name="EmailForm[requiredWhen]" minlength="7">',
                 'requiredWhen',
             ],
         ];
@@ -399,7 +399,7 @@ final class ValidationRulesEnricherTest extends TestCase
                 'step',
             ],
             'required-with-when' => [
-                '<input type="number" id="numberform-requiredwhen" name="NumberForm[requiredWhen]">',
+                '<input type="number" id="numberform-requiredwhen" name="NumberForm[requiredWhen]" min="5">',
                 'requiredWhen',
             ],
         ];
@@ -429,7 +429,7 @@ final class ValidationRulesEnricherTest extends TestCase
                 'count',
             ],
             'required-with-when' => [
-                '<input type="range" id="rangeform-requiredwhen" name="RangeForm[requiredWhen]">',
+                '<input type="range" id="rangeform-requiredwhen" name="RangeForm[requiredWhen]" min="1">',
                 'requiredWhen',
             ],
         ];

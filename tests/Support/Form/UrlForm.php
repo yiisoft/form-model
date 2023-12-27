@@ -44,7 +44,10 @@ final class UrlForm extends FormModel implements RulesProviderInterface
             'shop' => [new Url()],
             'beach' => [new Url(), new Regex(pattern: '~\w+~')],
             'beach2' => [new Regex(pattern: '~\w+~'), new Url()],
-            'requiredWhen' => [new Required(when: static fn() => false)],
+            'requiredWhen' => [
+                new Required(when: static fn() => false),
+                new Length(min: 7)
+            ],
             'urlWithIdn' => [new Url(enableIdn: true)],
             'regexAndUrlWithIdn' => [new Url(enableIdn: true), new Regex(pattern: '~\w+~')],
         ];

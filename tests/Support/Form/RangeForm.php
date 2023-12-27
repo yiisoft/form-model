@@ -20,7 +20,10 @@ final class RangeForm extends FormModel implements RulesProviderInterface
         return [
             'volume' => [new Required()],
             'count' => [new Number(min: 1, max: 9)],
-            'requiredWhen' => [new Required(when: static fn () => false)],
+            'requiredWhen' => [
+                new Required(when: static fn () => false),
+                new Number(min: 1),
+            ],
         ];
     }
 

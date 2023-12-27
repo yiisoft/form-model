@@ -622,4 +622,31 @@ final class FormModelTest extends TestCase
         $this->expectExceptionMessage('Object property is static: "' . LoginForm::class . '::$extraField".');
         $form->getPropertyValue('extraField');
     }
+
+    public function testOverrideNestedPropertyLabel(): void
+    {
+        $object = new class() extends FormModel {
+            public string $name = '';
+
+            public function getPropertyLabels(): array
+            {
+                return ['name' => 'The Name'];
+            }
+        };
+        $nestedForm = new class() extends FormModel {
+            public object $object;
+
+            public function getPropertyLabels(): array
+            {
+                return ['object.name' => 'My Name'];
+            }
+        };
+        $nestedForm->object = $object;
+        $form = new class() extends FormModel {
+            public FormModel $nested;
+        };
+        $form->nested = $nestedForm;
+
+        $this->assertSame('My Name', $form->getPropertyLabel('nested.object.name'));
+    }
 }
