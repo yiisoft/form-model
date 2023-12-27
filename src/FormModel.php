@@ -233,6 +233,9 @@ abstract class FormModel implements FormModelInterface
         return $value;
     }
 
+    /**
+     * @psalm-param self::META_* $metaKey
+     */
     private function readPropertyMetaValue(int $metaKey, string $path): ?string
     {
         $path = $this->normalizePath($path);
@@ -246,7 +249,6 @@ abstract class FormModel implements FormModelInterface
                     self::META_LABEL => $value->getPropertyLabels(),
                     self::META_HINT => $value->getPropertyHints(),
                     self::META_PLACEHOLDER => $value->getPropertyPlaceholders(),
-                    default => throw new InvalidArgumentException('Invalid meta key.'),
                 };
                 if (array_key_exists($nestedAttribute, $data)) {
                     return $data[$nestedAttribute];
