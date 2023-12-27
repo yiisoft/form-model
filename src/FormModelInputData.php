@@ -51,9 +51,9 @@ final class FormModelInputData implements InputDataInterface
      *
      * @throws InvalidArgumentException If the property name contains non-word characters or empty form name for
      * tabular inputs.
-     * @return string|null The generated input name.
+     * @return string The generated input name.
      */
-    public function getName(): ?string
+    public function getName(): string
     {
         $data = $this->parseProperty($this->property);
         $formName = $this->model->getFormName();
@@ -66,7 +66,7 @@ final class FormModelInputData implements InputDataInterface
             return "$formName{$data['prefix']}[{$data['name']}]{$data['suffix']}";
         }
 
-        throw new InvalidArgumentException('formName() cannot be empty for tabular inputs.');
+        throw new InvalidArgumentException('Form name cannot be empty for tabular inputs.');
     }
 
     /**
@@ -105,15 +105,11 @@ final class FormModelInputData implements InputDataInterface
      * For example, if {@see getInputName()} returns `Post[content]`, this method will return `post-content`.
      *
      * @throws InvalidArgumentException If the property name contains non-word characters.
-     * @return string|null The generated input ID.
+     * @return string The generated input ID.
      */
-    public function getId(): ?string
+    public function getId(): string
     {
         $name = $this->getName();
-        if ($name === null) {
-            return null;
-        }
-
         $name = mb_strtolower($name, 'UTF-8');
         return str_replace(['[]', '][', '[', ']', ' ', '.'], ['', '-', '-', '', '-', '-'], $name);
     }
