@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\FormModel;
 
+use Psr\Http\Message\ServerRequestInterface;
 use Yiisoft\Hydrator\ArrayData;
 use Yiisoft\Hydrator\HydratorInterface;
 use Yiisoft\Validator\Helper\ObjectParser;
@@ -86,6 +87,41 @@ final class FormHydrator
         }
 
         return $this->validator->validate($model)->isValid();
+    }
+
+    /**
+     * @psalm-param MapType $map
+     */
+    public function populateFromPost(
+        FormModelInterface $model,
+        ServerRequestInterface $request,
+        ?array $map = null,
+        ?bool $strict = null,
+        ?string $scope = null
+    ): bool {
+        if ($request->getMethod() !== 'POST') {
+            return false;
+        }
+
+        return $this->populate($model, $request->getParsedBody(), $map, $strict, $scope);
+    }
+
+    /**
+     * @psalm-param MapType $map
+     */
+    public function populateFromPostAndValidate(
+        FormModelInterface $model,
+        ServerRequestInterface $request,
+        ?array $map = null,
+        ?bool $strict = null,
+        ?string $scope = null
+    ): bool
+    {
+        if ($request->getMethod() !== 'POST') {
+            return false;
+        }
+
+        return $this->populateAndValidate($model, $request->getParsedBody(), $map, $strict, $scope);
     }
 
     /**
