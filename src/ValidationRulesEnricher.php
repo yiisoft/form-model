@@ -18,6 +18,7 @@ use Yiisoft\Form\Field\Textarea;
 use Yiisoft\Form\Field\Url;
 use Yiisoft\Form\ValidationRulesEnricherInterface;
 use Yiisoft\Html\Html;
+use Yiisoft\Validator\Rule\Integer;
 use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\Rule\Number as NumberRule;
 use Yiisoft\Validator\Rule\Regex;
@@ -97,7 +98,7 @@ final class ValidationRulesEnricher implements ValidationRulesEnricherInterface
                     $enrichment['inputAttributes']['required'] = true;
                 }
 
-                if ($rule instanceof NumberRule) {
+                if ($rule instanceof NumberRule || $rule instanceof Integer) {
                     if (null !== $min = $rule->getMin()) {
                         $enrichment['inputAttributes']['min'] = $min;
                     }
