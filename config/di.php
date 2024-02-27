@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use Yiisoft\Definitions\DynamicReference;
 use Yiisoft\FormModel\FormHydrator;
+use Yiisoft\FormModel\NonArrayTypeCaster;
 use Yiisoft\Hydrator\Hydrator;
 use Yiisoft\Hydrator\TypeCaster\CompositeTypeCaster;
 use Yiisoft\Hydrator\TypeCaster\HydratorTypeCaster;
@@ -23,6 +24,7 @@ return [
                             'typeCaster' => new CompositeTypeCaster(
                                 new NullTypeCaster(emptyString: true),
                                 new PhpNativeTypeCaster(),
+                                new NonArrayTypeCaster(),
                                 new HydratorTypeCaster(),
                             ),
                         ],
