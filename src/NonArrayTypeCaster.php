@@ -25,7 +25,6 @@ final class NonArrayTypeCaster implements TypeCasterInterface
         return Result::fail();
     }
 
-
     private function isArray(?ReflectionType $type): bool
     {
         return $type instanceof ReflectionNamedType && $type->isBuiltin() && $type->getName() === 'array';
