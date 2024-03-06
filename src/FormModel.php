@@ -184,7 +184,12 @@ abstract class FormModel implements FormModelInterface
 
     public function isValid(): bool
     {
-        return (bool) $this->getValidationResult()?->isValid();
+        return $this->isValidated() && $this->getValidationResult()->isValid();
+    }
+
+    public function isValidated(): bool
+    {
+        return $this->validationResult !== null;
     }
 
     /**

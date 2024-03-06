@@ -116,16 +116,15 @@ final class FormModelInputData implements InputDataInterface
 
     public function isValidated(): bool
     {
-        return $this->model->getValidationResult() !== null;
+        return $this->model->isValidated();
     }
 
     public function getValidationErrors(): array
     {
         /** @psalm-var list<string> */
-        return $this->model
-            ->getValidationResult()
-            ?->getAttributeErrorMessages($this->getPropertyName())
-            ?? [];
+        return $this->model->isValidated()
+            ? $this->model->getValidationResult()->getAttributeErrorMessages($this->getPropertyName())
+            : [];
     }
 
     private function getPropertyName(): string
