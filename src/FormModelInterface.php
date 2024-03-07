@@ -111,4 +111,6 @@ interface FormModelInterface extends ValidatedInputInterface
     public function hasProperty(string $property): bool;
 
     public function isValid(): bool;
+
+    public function isValidated(): bool;
 }

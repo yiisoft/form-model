@@ -123,7 +123,11 @@ class Field
     ): ErrorSummary {
         $widget = ErrorSummary::widget(config: $config, theme: $theme ?? static::DEFAULT_THEME);
         if ($formModel !== null) {
-            $widget = $widget->errors($formModel->getValidationResult()?->getErrorMessagesIndexedByAttribute() ?? []);
+            $widget = $widget->errors(
+                $formModel->isValidated()
+                    ? $formModel->getValidationResult()->getErrorMessagesIndexedByAttribute()
+                    : []
+            );
         }
         return $widget;
     }

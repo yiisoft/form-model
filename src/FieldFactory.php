@@ -126,7 +126,11 @@ class FieldFactory
     ): ErrorSummary {
         $widget = ErrorSummary::widget(config: $config, theme: $theme ?? $this->defaultTheme);
         if ($formModel !== null) {
-            $widget = $widget->errors($formModel->getValidationResult()?->getErrorMessagesIndexedByAttribute() ?? []);
+            $widget = $widget->errors(
+                $formModel->isValidated()
+                    ? $formModel->getValidationResult()->getErrorMessagesIndexedByAttribute()
+                    : []
+            );
         }
         return $widget;
     }

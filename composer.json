@@ -8,12 +8,12 @@
     "homepage": "https://www.yiiframework.com/",
     "license": "BSD-3-Clause",
     "support": {
-        "issues": "https://github.com/yiisoft/_____/issues?state=open",
+        "issues": "https://github.com/yiisoft/form-model/issues?state=open",
         "forum": "https://www.yiiframework.com/forum/",
         "wiki": "https://www.yiiframework.com/wiki/",
         "irc": "ircs://irc.libera.chat:6697/yii",
         "chat": "https://t.me/yii3en",
-        "source": "https://github.com/yiisoft/_____"
+        "source": "https://github.com/yiisoft/form-model"
     },
     "funding": [
         {
@@ -34,7 +34,7 @@
         "yiisoft/form": "^1.0@dev",
         "yiisoft/html": "^3.3",
         "yiisoft/hydrator": "^1.1",
-        "yiisoft/hydrator-validator": "^1.0",
+        "yiisoft/hydrator-validator": "^2.0",
         "yiisoft/strings": "^2.3",
         "yiisoft/validator": "^1.1"
     },
