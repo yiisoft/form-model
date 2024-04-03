@@ -28,9 +28,9 @@ return [
                                 new HydratorTypeCaster(),
                             ),
                         ],
-                    ])
+                    ]),
                 ],
-            ])
+            ]),
         ],
     ],
 ];

@@ -16,7 +16,7 @@ final class FormHydratorTest extends TestCase
 {
     public function testPopulateWithStrictMap(): void
     {
-        $form = new class() extends FormModel {
+        $form = new class () extends FormModel {
             public int $a = 0;
             public int $b = 0;
         };
@@ -55,7 +55,7 @@ final class FormHydratorTest extends TestCase
         return [
             'non-post' => [
                 false,
-                $factory->createServerRequest('GET', '/')
+                $factory->createServerRequest('GET', '/'),
             ],
             'empty-data' => [
                 false,
@@ -89,7 +89,7 @@ final class FormHydratorTest extends TestCase
         return [
             'non-post' => [
                 false,
-                $factory->createServerRequest('GET', '/')
+                $factory->createServerRequest('GET', '/'),
             ],
             'empty-data' => [
                 false,

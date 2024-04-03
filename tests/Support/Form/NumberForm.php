@@ -22,7 +22,7 @@ final class NumberForm extends FormModel implements RulesProviderInterface
             'step' => [new Number(min: 5, max: 95)],
             'requiredWhen' => [
                 new Required(when: static fn() => false),
-                new Number(min: 5)
+                new Number(min: 5),
             ],
         ];
     }

@@ -24,7 +24,7 @@ final class TextareaForm extends FormModel implements RulesProviderInterface
             'shortdesc' => [new Length(min: 10, max: 199)],
             'requiredWhen' => [
                 new Required(when: static fn() => false),
-                new Length(min: 7)
+                new Length(min: 7),
             ],
         ];
     }

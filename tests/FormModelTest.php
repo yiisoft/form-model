@@ -460,7 +460,7 @@ final class FormModelTest extends TestCase
         $this->assertFalse($result->isValid());
         $this->assertSame(
             [
-                'firstLevelForm.secondLevelForm.float' => ['Value must be no less than 0.']
+                'firstLevelForm.secondLevelForm.float' => ['Value must be no less than 0.'],
             ],
             $result->getErrorMessagesIndexedByPath()
         );
@@ -478,7 +478,7 @@ final class FormModelTest extends TestCase
             [
                 'body' => [
                     'shipping' => [
-                        'phone' => '+790012345678'
+                        'phone' => '+790012345678',
                     ],
                 ],
             ],
@@ -589,7 +589,7 @@ final class FormModelTest extends TestCase
     {
         $validator = new Validator();
 
-        $form = new class() extends FormModel {
+        $form = new class () extends FormModel {
             #[Required]
             public ?string $name = null;
         };
@@ -625,7 +625,7 @@ final class FormModelTest extends TestCase
 
     public function testOverrideNestedPropertyLabel(): void
     {
-        $object = new class() extends FormModel {
+        $object = new class () extends FormModel {
             public string $name = '';
 
             public function getPropertyLabels(): array
@@ -633,7 +633,7 @@ final class FormModelTest extends TestCase
                 return ['name' => 'The Name'];
             }
         };
-        $nestedForm = new class() extends FormModel {
+        $nestedForm = new class () extends FormModel {
             public object $object;
 
             public function getPropertyLabels(): array
@@ -642,7 +642,7 @@ final class FormModelTest extends TestCase
             }
         };
         $nestedForm->object = $object;
-        $form = new class() extends FormModel {
+        $form = new class () extends FormModel {
             public FormModel $nested;
         };
         $form->nested = $nestedForm;

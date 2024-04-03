@@ -33,7 +33,7 @@ final class TextForm extends FormModel implements RulesProviderInterface
             'nocode' => [new Regex(pattern: '~\w+~', not: true)],
             'requiredWhen' => [
                 new Required(when: static fn() => false),
-                new Length(min: 7)
+                new Length(min: 7),
             ],
         ];
     }
@@ -69,4 +69,3 @@ final class TextForm extends FormModel implements RulesProviderInterface
         return $form;
     }
 }
-

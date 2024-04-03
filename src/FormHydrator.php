@@ -115,8 +115,7 @@ final class FormHydrator
         ?array $map = null,
         ?bool $strict = null,
         ?string $scope = null
-    ): bool
-    {
+    ): bool {
         if ($request->getMethod() !== 'POST') {
             return false;
         }

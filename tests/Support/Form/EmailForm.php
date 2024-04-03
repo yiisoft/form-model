@@ -27,7 +27,7 @@ final class EmailForm extends FormModel implements RulesProviderInterface
             'nocode' => [new Regex(pattern: '~\w+@\w+~', not: true)],
             'requiredWhen' => [
                 new Required(when: static fn() => false),
-                new Length(min: 7)
+                new Length(min: 7),
             ],
         ];
     }
