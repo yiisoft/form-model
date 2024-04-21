@@ -33,9 +33,7 @@ composer require yiisoft/form-model
 
 ## Documentation
 
-Testing:
-
-- More information can be found in the [Internals.](docs/internals.md)
+- [Internals](docs/internals.md)
 
 ## Support
 
