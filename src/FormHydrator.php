@@ -88,9 +88,6 @@ final class FormHydrator
      *
      * @param FormModelInterface $model Model to fill.
      * @param mixed $data Data to fill model with.
-     * @param ?array $map
-     * @param ?bool $strict
-     * @param ?string $scope
      * @psalm-param MapType $map
      * @return bool Whether model is filled with data and is valid.
      */
