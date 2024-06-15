@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+namespace Yiisoft\FormModel\Tests;
+
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Form\Field\Email;
@@ -12,7 +14,7 @@ use Yiisoft\Form\Field\Range;
 use Yiisoft\Form\Field\Select;
 use Yiisoft\Form\Field\Telephone;
 use Yiisoft\Form\Field\Textarea;
-use Yiisoft\Form\ThemeContainer;
+use Yiisoft\Form\Theme\ThemeContainer;
 use Yiisoft\FormModel\Field;
 use Yiisoft\FormModel\FormModelInputData;
 use Yiisoft\FormModel\Tests\Support\Form\DateForm;
