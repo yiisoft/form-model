@@ -11,7 +11,6 @@ final class PropertyNotSupportNestedValuesException extends ValueNotFoundExcepti
 {
     /**
      * @param string $property Name of the property.
-     * @param mixed $value Value.
      */
     public function __construct(
         string $property,
