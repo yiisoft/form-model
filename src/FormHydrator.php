@@ -34,6 +34,7 @@ final class FormHydrator
      * Fill the model with the data.
      *
      * @param FormModelInterface $model Model to fill.
+     * @param mixed $data Data to fill model with.
      * @param ?array $map Map of object property names to keys in the data array to use for hydration.
      * If not provided, it is generated automatically based on presence of property validation rules.
      * @psalm-param MapType $map
@@ -86,6 +87,7 @@ final class FormHydrator
      * Fill the model with the data and validate it.
      *
      * @param FormModelInterface $model Model to fill.
+     * @param mixed $data Data to fill model with.
      * @param ?array $map
      * @param ?bool $strict
      * @param ?string $scope
