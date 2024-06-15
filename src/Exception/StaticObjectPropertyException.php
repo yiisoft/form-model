@@ -9,6 +9,9 @@ namespace Yiisoft\FormModel\Exception;
  */
 final class StaticObjectPropertyException extends ValueNotFoundException
 {
+    /**
+     * @param string $property Name of the property.
+     */
     public function __construct(string $property)
     {
         parent::__construct('Object property is static: "' . $property . '".');

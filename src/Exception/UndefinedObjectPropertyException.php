@@ -9,6 +9,9 @@ namespace Yiisoft\FormModel\Exception;
  */
 final class UndefinedObjectPropertyException extends ValueNotFoundException
 {
+    /**
+     * @param string $property Name of the property.
+     */
     public function __construct(string $property)
     {
         parent::__construct('Undefined object property: "' . $property . '".');

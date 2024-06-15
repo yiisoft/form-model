@@ -35,7 +35,7 @@ TODO:
 
 1. Define a model.
 2. Fill it with data and validate.
-3. Display it.
+3. Display it (show both Field and FieldFactory!).
 
 ## Documentation
 

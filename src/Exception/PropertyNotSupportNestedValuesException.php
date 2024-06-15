@@ -9,6 +9,10 @@ namespace Yiisoft\FormModel\Exception;
  */
 final class PropertyNotSupportNestedValuesException extends ValueNotFoundException
 {
+    /**
+     * @param string $property Name of the property.
+     * @param mixed $value Value.
+     */
     public function __construct(
         string $property,
         private readonly mixed $value,
