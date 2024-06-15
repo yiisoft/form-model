@@ -41,7 +41,6 @@ final class FormHydrator
      * @param ?bool $strict TODO: document better!
      * @param ?string $scope Hydration scope. TODO: more!
      *
-     *
      * By fact hydration parameters (`map` and `strict`) are based on passed parameters `map` and `strict`:
      *
      * - strict is null, user map is null — generated map, strict

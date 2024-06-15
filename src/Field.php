@@ -419,7 +419,6 @@ class Field
             ->inputData(new FormModelInputData($formModel, $property));
     }
 
-
     /**
      * Create a text field.
      *
