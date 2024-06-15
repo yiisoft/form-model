@@ -39,7 +39,7 @@ final class FormHydratorTest extends TestCase
     }
 
     #[DataProvider('dataPopulateAndValidate')]
-    public function testPopulateAndValidate(bool $expected, mixed $data)
+    public function testPopulateAndValidate(bool $expected, mixed $data): void
     {
         $form = new CarForm();
 
@@ -73,7 +73,7 @@ final class FormHydratorTest extends TestCase
     }
 
     #[DataProvider('dataPopulateFromPost')]
-    public function testPopulateFromPost(bool $expected, ServerRequestInterface $request)
+    public function testPopulateFromPost(bool $expected, ServerRequestInterface $request): void
     {
         $form = new CarForm();
 
@@ -107,7 +107,7 @@ final class FormHydratorTest extends TestCase
     }
 
     #[DataProvider('dataPopulateFromPostAndValidate')]
-    public function testPopulateFromPostAndValidate(bool $expected, ServerRequestInterface $request)
+    public function testPopulateFromPostAndValidate(bool $expected, ServerRequestInterface $request): void
     {
         $form = new CarForm();
 
