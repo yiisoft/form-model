@@ -14,10 +14,16 @@ use Yiisoft\Validator\ValidatorInterface;
 use function is_array;
 
 /**
+ * Form hydrator fills model with the data and optionally checks the data validity.
+ *
  * @psalm-import-type MapType from ArrayData
  */
 final class FormHydrator
 {
+    /**
+     * @param HydratorInterface $hydrator Hydrator to use to fill model with data.
+     * @param ValidatorInterface $validator Validator to use to check data before filling a model.
+     */
     public function __construct(
         private readonly HydratorInterface $hydrator,
         private readonly ValidatorInterface $validator,
@@ -25,7 +31,18 @@ final class FormHydrator
     }
 
     /**
-     * By fact hydration parameters (`map` and `strict`) based on passed parameters `map` and `strict`:
+     * Fill the model with the data.
+     *
+     * @param FormModelInterface $model Model to fill.
+     * @param mixed $data Data to fill model with.
+     * @param ?array $map Map of object property names to keys in the data array to use for hydration.
+     * If not provided, it is generated automatically based on presence of property validation rules.
+     * @psalm-param MapType $map
+     * @param ?bool $strict TODO: document better!
+     * @param ?string $scope Hydration scope. TODO: more!
+     *
+     *
+     * By fact hydration parameters (`map` and `strict`) are based on passed parameters `map` and `strict`:
      *
      * - strict is null, user map is null — generated map, strict
      * - strict is true, user map is null — generated map, strict
@@ -33,11 +50,6 @@ final class FormHydrator
      * - strict is null, user map is array — user map + generated map, strict
      * - strict is true, user map is array — user map, strict
      * - strict is false, user map is array — user map, not strict
-     *
-     * User map - map that passed to method.
-     * Generated map - map based on presence of property rules.
-     *
-     * @psalm-param MapType $map
      */
     public function populate(
         FormModelInterface $model,
@@ -73,7 +85,16 @@ final class FormHydrator
     }
 
     /**
+     * Fill the model with the data and validate it.
+     *
+     * @param FormModelInterface $model Model to fill.
+     * @param mixed $data Data to fill model with.
+     * @param ?array $map
+     * @param ?bool $strict
+     * @param ?string $scope
      * @psalm-param MapType $map
+     *
+     * @return bool Whether model is filled with data and is valid.
      */
     public function populateAndValidate(
         FormModelInterface $model,

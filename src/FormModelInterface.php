@@ -10,8 +10,18 @@ use Yiisoft\FormModel\Exception\UndefinedObjectPropertyException;
 use Yiisoft\FormModel\Exception\ValueNotFoundException;
 use Yiisoft\Hydrator\Validator\ValidatedInputInterface;
 
+/**
+ * Form model represents an HTML form: its data, validation and presentation.
+ */
 interface FormModelInterface extends ValidatedInputInterface
 {
+    /**
+     * Returns the text hint for the specified property.
+     *
+     * @param string $property The property name.
+     *
+     * @return string The property hint.
+     */
     public function getPropertyHint(string $property): string;
 
     /**
@@ -110,7 +120,13 @@ interface FormModelInterface extends ValidatedInputInterface
      */
     public function hasProperty(string $property): bool;
 
+    /**
+     * @return bool Whether form data is valid.
+     */
     public function isValid(): bool;
 
+    /**
+     * @return bool Whether form was validated.
+     */
     public function isValidated(): bool;
 }

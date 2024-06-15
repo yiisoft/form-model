@@ -36,13 +36,7 @@ abstract class FormModel implements FormModelInterface
 
     private static ?Inflector $inflector = null;
 
-    /**
-     * Returns the text hint for the specified property.
-     *
-     * @param string $property The property name.
-     *
-     * @return string The property hint.
-     */
+
     public function getPropertyHint(string $property): string
     {
         return $this->readPropertyMetaValue(self::META_HINT, $property) ?? '';

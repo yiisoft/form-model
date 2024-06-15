@@ -9,7 +9,6 @@ use Yiisoft\Form\Field\ButtonGroup;
 use Yiisoft\Form\Field\Checkbox;
 use Yiisoft\Form\Field\CheckboxList;
 use Yiisoft\Form\Field\Date;
-use Yiisoft\Form\Field\DateTime;
 use Yiisoft\Form\Field\DateTimeLocal;
 use Yiisoft\Form\Field\Email;
 use Yiisoft\Form\Field\ErrorSummary;
@@ -86,16 +85,6 @@ class FieldFactory
         ?string $theme = null,
     ): Date {
         return Date::widget(config: $config, theme: $theme ?? $this->defaultTheme)
-            ->inputData(new FormModelInputData($formModel, $property));
-    }
-
-    final public function dateTime(
-        FormModelInterface $formModel,
-        string $property,
-        array $config = [],
-        ?string $theme = null,
-    ): DateTime {
-        return DateTime::widget(config: $config, theme: $theme ?? $this->defaultTheme)
             ->inputData(new FormModelInputData($formModel, $property));
     }
 

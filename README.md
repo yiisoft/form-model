@@ -15,7 +15,7 @@
 [![type-coverage](https://shepherd.dev/github/yiisoft/form-model/coverage.svg)](https://shepherd.dev/github/yiisoft/form-model)
 [![psalm-level](https://shepherd.dev/github/yiisoft/form-model/level.svg)](https://shepherd.dev/github/yiisoft/form-model)
 
-The package ...
+The package provides a base for form models and helps to fill them with data, validate them and display them.
 
 ## Requirements
 
@@ -30,6 +30,12 @@ composer require yiisoft/form-model
 ```
 
 ## General usage
+
+TODO: 
+
+1. Define a model.
+2. Fill it with data and validate.
+3. Display it.
 
 ## Documentation
 

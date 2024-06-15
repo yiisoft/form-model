@@ -10,6 +10,11 @@ use Yiisoft\Validator\RuleHandlerInterface;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\ValidationContext;
 
+/**
+ * Safe validation rule marks a model property as safe for filling with {@see FormHydrator::populate()},
+ * {@see FormHydrator::populateAndValidate()}, {@see FormHydrator::populateFromPost()},
+ * and {@see FormHydrator::populateFromPostAndValidate()}.
+ */
 #[Attribute(Attribute::TARGET_PROPERTY)]
 final class Safe implements RuleInterface, RuleHandlerInterface
 {
