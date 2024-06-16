@@ -11,7 +11,7 @@ use Yiisoft\Hydrator\TypeCaster\TypeCastContext;
 use Yiisoft\Hydrator\TypeCaster\TypeCasterInterface;
 
 /**
- * Ensures that non-array value is converted to an empty array.
+ * Ensures that non-array value for property of array type is converted to an empty array.
  */
 final class NonArrayTypeCaster implements TypeCasterInterface
 {
