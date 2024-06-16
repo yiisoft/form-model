@@ -24,7 +24,7 @@ use function strrchr;
 use function substr;
 
 /**
- * Form model represents an HTML form: its data, validation and presentation.
+ * A base class for form models that represent HTML forms: their data, validation and presentation.
  */
 abstract class FormModel implements FormModelInterface
 {
@@ -41,67 +41,21 @@ abstract class FormModel implements FormModelInterface
         return $this->readPropertyMetaValue(self::META_HINT, $property) ?? '';
     }
 
-    /**
-     * Returns the property hints.
-     *
-     * Property hints are mainly used for display purpose. For example, given a property `isPublic`, we can declare
-     * a hint `Whether the post should be visible for not logged-in users`, which provides user-friendly description of
-     * the property meaning and can be displayed to end users.
-     *
-     * Unlike label hint will not be generated, if its explicit declaration is omitted.
-     *
-     * Note, in order to inherit hints defined in the parent class, a child class needs to merge the parent hints with
-     * child hints using functions such as `array_merge()`.
-     *
-     * @return array Property hints (name => hint)
-     *
-     * @psalm-return array<string,string>
-     */
     public function getPropertyHints(): array
     {
         return [];
     }
 
-    /**
-     * Returns the text label for the specified property.
-     *
-     * @param string $property The property name.
-     *
-     * @return string The property label.
-     */
     public function getPropertyLabel(string $property): string
     {
         return $this->readPropertyMetaValue(self::META_LABEL, $property) ?? $this->generatePropertyLabel($property);
     }
 
-    /**
-     * Returns the property labels.
-     *
-     * Attribute labels are mainly used for display purpose. For example, given a property `firstName`, we can
-     * declare a label `First Name` which is more user-friendly and can be displayed to end users.
-     *
-     * By default, a property label is generated automatically. This method allows you to
-     * explicitly specify property labels.
-     *
-     * Note, in order to inherit labels defined in the parent class, a child class needs to merge the parent labels
-     * with child labels using functions such as `array_merge()`.
-     *
-     * @return array Property labels (name => label)
-     *
-     * @psalm-return array<string,string>
-     */
     public function getPropertyLabels(): array
     {
         return [];
     }
 
-    /**
-     * Returns the text placeholder for the specified property.
-     *
-     * @param string $property The property name.
-     *
-     * @return string The property placeholder.
-     */
     public function getPropertyPlaceholder(string $property): string
     {
         return $this->readPropertyMetaValue(self::META_PLACEHOLDER, $property) ?? '';
@@ -120,34 +74,11 @@ abstract class FormModel implements FormModelInterface
         }
     }
 
-    /**
-     * Returns the property placeholders.
-     *
-     * @return array Property placeholders (name => placeholder)
-     *
-     * @psalm-return array<string,string>
-     */
     public function getPropertyPlaceholders(): array
     {
         return [];
     }
 
-    /**
-     * Returns the form name that this model class should use.
-     *
-     * The form name is mainly used by {@see \Yiisoft\Form\InputData\HtmlForm} to determine how to name the input
-     * fields for the properties in a model.
-     * If the form name is "A" and a property name is "b", then the corresponding input name would be "A[b]".
-     * If the form name is an empty string, then the input name would be "b".
-     *
-     * The purpose of the above naming schema is that for forms which contain multiple different models, the properties
-     * of each model are grouped in sub-arrays of the POST-data, and it is easier to differentiate between them.
-     *
-     * By default, this method returns the model class name (without the namespace part) as the form name. You may
-     * override it when the model is used in different forms.
-     *
-     * @return string The form name of this model class.
-     */
     public function getFormName(): string
     {
         if (str_contains(static::class, '@anonymous')) {
@@ -162,9 +93,6 @@ abstract class FormModel implements FormModelInterface
         return substr($className, 1);
     }
 
-    /**
-     * If there is such property in the set.
-     */
     public function hasProperty(string $property): bool
     {
         try {
@@ -186,6 +114,11 @@ abstract class FormModel implements FormModelInterface
     }
 
     /**
+     * Returns model property value given a path.
+     *
+     * @param string $path Property path.
+     * @return mixed Property value.
+     *
      * @throws UndefinedArrayElementException
      * @throws UndefinedObjectPropertyException
      * @throws StaticObjectPropertyException
@@ -194,11 +127,11 @@ abstract class FormModel implements FormModelInterface
      */
     private function readPropertyValue(string $path): mixed
     {
-        $path = $this->normalizePath($path);
+        $normalizedPath = $this->normalizePath($path);
 
         $value = $this;
         $keys = [[static::class, $this]];
-        foreach ($path as $key) {
+        foreach ($normalizedPath as $key) {
             $keys[] = [$key, $value];
 
             if (is_array($value)) {
@@ -231,17 +164,23 @@ abstract class FormModel implements FormModelInterface
     }
 
     /**
+     * Return a meta information for a property at a given path.
+     *
+     * @param int $metaKey Determines which meta information to return. One of `FormModel::META_*` constants.
+     * @param string $path Property path.
+     * @return ?string Meta information for a property.
+     *
      * @psalm-param self::META_* $metaKey
      */
     private function readPropertyMetaValue(int $metaKey, string $path): ?string
     {
-        $path = $this->normalizePath($path);
+        $normalizedPath = $this->normalizePath($path);
 
         $value = $this;
         $n = 0;
-        foreach ($path as $key) {
+        foreach ($normalizedPath as $key) {
             if ($value instanceof FormModelInterface) {
-                $nestedProperty = implode('.', array_slice($path, $n));
+                $nestedProperty = implode('.', array_slice($normalizedPath, $n));
                 $data = match ($metaKey) {
                     self::META_LABEL => $value->getPropertyLabels(),
                     self::META_HINT => $value->getPropertyHints(),
@@ -274,7 +213,7 @@ abstract class FormModel implements FormModelInterface
     }
 
     /**
-     * Generates a user-friendly property label based on the give property name.
+     * Generates a user-friendly property label based on the given property name.
      *
      * This is done by replacing underscores, dashes and dots with blanks and changing the first letter of each word to
      * upper case.
@@ -297,7 +236,9 @@ abstract class FormModel implements FormModelInterface
     }
 
     /**
-     * @return string[]
+     * Normalize property path and return it as an array.
+     *
+     * @return string[] Normalized property path as an array.
      */
     private function normalizePath(string $path): array
     {
@@ -306,7 +247,11 @@ abstract class FormModel implements FormModelInterface
     }
 
     /**
+     * Convert array property path to its string representation.
+     *
+     * @param array $keys Property path as an array.     *
      * @psalm-param array<array-key, array{0:int|string, 1:mixed}> $keys
+     * @return string Property path as string.
      */
     private function makePropertyPathString(array $keys): string
     {

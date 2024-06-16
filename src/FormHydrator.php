@@ -139,6 +139,39 @@ final class FormHydrator
     }
 
     /**
+     * Get a map of object property names mapped to keys in the data array.
+     *
+     * @param FormModelInterface $model Model to read validation rules from.
+     * @param ?array $userMap Explicit map defined by user.
+     * @psalm-param MapType $userMap
+     * @param ?bool $strict If `false`, fills everything that is in the data. If `null`, fills data that is either
+     * defined in a map explicitly or allowed via validation rules. If `false`, fills only data defined explicitly
+     * in a map or only data allowed via validation rules but not both.
+     *
+     * @return array A map of object property names mapped to keys in the data array.
+     * @psalm-return MapType
+     */
+    private function createMap(FormModelInterface $model, ?array $userMap, ?bool $strict): array
+    {
+        if ($strict === false) {
+            return $userMap ?? [];
+        }
+
+        if ($strict && $userMap !== null) {
+            return $userMap;
+        }
+
+        $properties = $this->getPropertiesWithRules($model);
+        $generatedMap = array_combine($properties, $properties);
+
+        if ($userMap === null) {
+            return $generatedMap;
+        }
+
+        return array_merge($generatedMap, $userMap);
+    }
+
+    /**
      * Fill the model with the data parsed from request body and validate it.
      *
      * @param FormModelInterface $model Model to fill.
@@ -170,30 +203,9 @@ final class FormHydrator
     }
 
     /**
-     * @psalm-param MapType $userMap
-     * @psalm-return MapType
-     */
-    private function createMap(FormModelInterface $model, ?array $userMap, ?bool $strict): array
-    {
-        if ($strict === false) {
-            return $userMap ?? [];
-        }
-
-        if ($strict && $userMap !== null) {
-            return $userMap;
-        }
-
-        $properties = $this->getPropertiesWithRules($model);
-        $generatedMap = array_combine($properties, $properties);
-
-        if ($userMap === null) {
-            return $generatedMap;
-        }
-
-        return array_merge($generatedMap, $userMap);
-    }
-
-    /**
+     * Extract object property names mapped to keys in the data array based on model validation rules.
+     *
+     * @return array Object property names mapped to keys in the data array.
      * @psalm-return list<string>
      */
     private function getPropertiesWithRules(FormModelInterface $model): array
@@ -207,6 +219,9 @@ final class FormHydrator
     }
 
     /**
+     * Get only string keys from an array.
+     *
+     * @return array String keys.
      * @psalm-return list<string>
      */
     private function extractStringKeys(iterable $array): array

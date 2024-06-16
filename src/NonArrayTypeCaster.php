@@ -10,6 +10,9 @@ use Yiisoft\Hydrator\Result;
 use Yiisoft\Hydrator\TypeCaster\TypeCastContext;
 use Yiisoft\Hydrator\TypeCaster\TypeCasterInterface;
 
+/**
+ *
+ */
 final class NonArrayTypeCaster implements TypeCasterInterface
 {
     public function cast(mixed $value, TypeCastContext $context): Result
