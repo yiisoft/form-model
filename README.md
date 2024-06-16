@@ -33,9 +33,10 @@ composer require yiisoft/form-model
 
 TODO: 
 
-1. Define a model.
-2. Fill it with data and validate.
+1. Define a model (FormModelInterface, FormModel, Safe)
+2. Fill it with data and validate (FormHydrator)
 3. Display it (show both Field and FieldFactory!).
+4. ValidationRulesEnricher
 
 ## Documentation
 
