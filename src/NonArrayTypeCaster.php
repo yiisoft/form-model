@@ -10,6 +10,9 @@ use Yiisoft\Hydrator\Result;
 use Yiisoft\Hydrator\TypeCaster\TypeCastContext;
 use Yiisoft\Hydrator\TypeCaster\TypeCasterInterface;
 
+/**
+ * Ensures that non-array value for property of array type is converted to an empty array.
+ */
 final class NonArrayTypeCaster implements TypeCasterInterface
 {
     public function cast(mixed $value, TypeCastContext $context): Result
@@ -25,6 +28,12 @@ final class NonArrayTypeCaster implements TypeCasterInterface
         return Result::fail();
     }
 
+    /**
+     * Checks if the type provided is an array.
+     *
+     * @param ReflectionType|null $type Type to check.
+     * @return bool If the type is an array.
+     */
     private function isArray(?ReflectionType $type): bool
     {
         return $type instanceof ReflectionNamedType && $type->isBuiltin() && $type->getName() === 'array';

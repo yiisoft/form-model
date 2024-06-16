@@ -74,7 +74,7 @@ final class FormModelTest extends TestCase
         $form = new NestedForm();
 
         $this->expectException(PropertyNotSupportNestedValuesException::class);
-        $this->expectExceptionMessage('Property "' . NestedForm::class . '::$letters[0]" not support nested values.');
+        $this->expectExceptionMessage('Property "' . NestedForm::class . '::$letters[0]" doesn\'t support nested values.');
         $form->getPropertyValue('letters[0][title]');
     }
 
@@ -165,7 +165,7 @@ final class FormModelTest extends TestCase
 
         $this->expectException(PropertyNotSupportNestedValuesException::class);
         $this->expectExceptionMessage(
-            'Property "' . FormWithNestedProperty::class . '::$key" not support nested values.'
+            'Property "' . FormWithNestedProperty::class . '::$key" doesn\'t support nested values.'
         );
         $form->getPropertyValue('key.profile');
     }
@@ -224,7 +224,7 @@ final class FormModelTest extends TestCase
         $this->assertSame('123456', $form->getPropertyValue('password'));
 
         $form->rememberMe(true);
-        $this->assertSame(true, $form->getPropertyValue('rememberMe'));
+        $this->assertTrue($form->getPropertyValue('rememberMe'));
     }
 
     public function testGetPropertyValueException(): void
@@ -295,7 +295,7 @@ final class FormModelTest extends TestCase
 
         $this->assertSame('admin', $form->getLogin());
         $this->assertSame('123456', $form->getPassword());
-        $this->assertSame(true, $form->getRememberMe());
+        $this->assertTrue($form->getRememberMe());
     }
 
     public function testLoadFailedForm(): void
@@ -348,7 +348,7 @@ final class FormModelTest extends TestCase
 
         $this->assertSame(2, $form->getPropertyValue('int'));
         $this->assertSame(3.15, $form->getPropertyValue('float'));
-        $this->assertSame(false, $form->getPropertyValue('bool'));
+        $this->assertFalse($form->getPropertyValue('bool'));
         $this->assertSame('555', $form->getPropertyValue('string'));
     }
 

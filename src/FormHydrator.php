@@ -14,10 +14,16 @@ use Yiisoft\Validator\ValidatorInterface;
 use function is_array;
 
 /**
+ * Form hydrator fills model with the data and optionally checks the data validity.
+ *
  * @psalm-import-type MapType from ArrayData
  */
 final class FormHydrator
 {
+    /**
+     * @param HydratorInterface $hydrator Hydrator to use to fill model with data.
+     * @param ValidatorInterface $validator Validator to use to check data before filling a model.
+     */
     public function __construct(
         private readonly HydratorInterface $hydrator,
         private readonly ValidatorInterface $validator,
@@ -25,19 +31,19 @@ final class FormHydrator
     }
 
     /**
-     * By fact hydration parameters (`map` and `strict`) based on passed parameters `map` and `strict`:
+     * Fill the model with the data.
      *
-     * - strict is null, user map is null — generated map, strict
-     * - strict is true, user map is null — generated map, strict
-     * - strict is false, user map is null — without map, not strict
-     * - strict is null, user map is array — user map + generated map, strict
-     * - strict is true, user map is array — user map, strict
-     * - strict is false, user map is array — user map, not strict
-     *
-     * User map - map that passed to method.
-     * Generated map - map based on presence of property rules.
-     *
+     * @param FormModelInterface $model Model to fill.
+     * @param mixed $data Data to fill model with.
+     * @param ?array $map Map of object property names to keys in the data array to use for hydration.
+     * If not provided, it may be generated automatically based on presence of property validation rules and a `strict`
+     * setting.
      * @psalm-param MapType $map
+     * @param ?bool $strict If `false`, fills everything that is in the data. If `null`, fills data that is either
+     * defined in a map explicitly or allowed via validation rules. If `false`, fills only data defined explicitly
+     * in a map or only data allowed via validation rules but not both.
+     * @param ?string $scope Key to use in the data array as a source of data. Usually used when there are multiple
+     * forms at the same page. If not set, it equals to {@see FormModelInterface::getFormName()}.
      */
     public function populate(
         FormModelInterface $model,
@@ -73,7 +79,21 @@ final class FormHydrator
     }
 
     /**
+     * Fill the model with the data and validate it.
+     *
+     * @param FormModelInterface $model Model to fill.
+     * @param mixed $data Data to fill model with.
+     * @param ?array $map Map of object property names to keys in the data array to use for hydration.
+     * If not provided, it may be generated automatically based on presence of property validation rules and a `strict`
+     * setting.
      * @psalm-param MapType $map
+     * @param ?bool $strict If `false`, fills everything that is in the data. If `null`, fills data that is either
+     * defined in a map explicitly or allowed via validation rules. If `false`, fills only data defined explicitly
+     * in a map or only data allowed via validation rules but not both.
+     * @param ?string $scope Key to use in the data array as a source of data. Usually used when there are multiple
+     * forms at the same page. If not set, it equals to {@see FormModelInterface::getFormName()}.
+     *
+     * @return bool Whether model is filled with data and is valid.
      */
     public function populateAndValidate(
         FormModelInterface $model,
@@ -90,7 +110,19 @@ final class FormHydrator
     }
 
     /**
+     * Fill the model with the data parsed from request body.
+     *
+     * @param FormModelInterface $model Model to fill.
+     * @param ServerRequestInterface $request Request to get parsed data from.
+     * @param ?array $map Map of object property names to keys in the data array to use for hydration.
+     * If not provided, it may be generated automatically based on presence of property validation rules and a `strict`
+     * setting.
      * @psalm-param MapType $map
+     * @param ?bool $strict If `false`, fills everything that is in the data. If `null`, fills data that is either
+     * defined in a map explicitly or allowed via validation rules. If `false`, fills only data defined explicitly
+     * in a map or only data allowed via validation rules but not both.
+     * @param ?string $scope Key to use in the data array as a source of data. Usually used when there are multiple
+     * forms at the same page. If not set, it equals to {@see FormModelInterface::getFormName()}.
      */
     public function populateFromPost(
         FormModelInterface $model,
@@ -107,24 +139,16 @@ final class FormHydrator
     }
 
     /**
-     * @psalm-param MapType $map
-     */
-    public function populateFromPostAndValidate(
-        FormModelInterface $model,
-        ServerRequestInterface $request,
-        ?array $map = null,
-        ?bool $strict = null,
-        ?string $scope = null
-    ): bool {
-        if ($request->getMethod() !== 'POST') {
-            return false;
-        }
-
-        return $this->populateAndValidate($model, $request->getParsedBody(), $map, $strict, $scope);
-    }
-
-    /**
+     * Get a map of object property names mapped to keys in the data array.
+     *
+     * @param FormModelInterface $model Model to read validation rules from.
+     * @param ?array $userMap Explicit map defined by user.
      * @psalm-param MapType $userMap
+     * @param ?bool $strict If `false`, fills everything that is in the data. If `null`, fills data that is either
+     * defined in a map explicitly or allowed via validation rules. If `false`, fills only data defined explicitly
+     * in a map or only data allowed via validation rules but not both.
+     *
+     * @return array A map of object property names mapped to keys in the data array.
      * @psalm-return MapType
      */
     private function createMap(FormModelInterface $model, ?array $userMap, ?bool $strict): array
@@ -148,6 +172,40 @@ final class FormHydrator
     }
 
     /**
+     * Fill the model with the data parsed from request body and validate it.
+     *
+     * @param FormModelInterface $model Model to fill.
+     * @param ServerRequestInterface $request Request to get parsed data from.
+     * @param ?array $map Map of object property names to keys in the data array to use for hydration.
+     * If not provided, it may be generated automatically based on presence of property validation rules and a `strict`
+     * setting.
+     * @psalm-param MapType $map
+     * @param ?bool $strict If `false`, fills everything that is in the data. If `null`, fills data that is either
+     * defined in a map explicitly or allowed via validation rules. If `false`, fills only data defined explicitly
+     * in a map or only data allowed via validation rules but not both.
+     * @param ?string $scope Key to use in the data array as a source of data. Usually used when there are multiple
+     * forms at the same page. If not set, it equals to {@see FormModelInterface::getFormName()}.
+     *
+     * @return bool Whether model is filled with data and is valid.
+     */
+    public function populateFromPostAndValidate(
+        FormModelInterface $model,
+        ServerRequestInterface $request,
+        ?array $map = null,
+        ?bool $strict = null,
+        ?string $scope = null
+    ): bool {
+        if ($request->getMethod() !== 'POST') {
+            return false;
+        }
+
+        return $this->populateAndValidate($model, $request->getParsedBody(), $map, $strict, $scope);
+    }
+
+    /**
+     * Extract object property names mapped to keys in the data array based on model validation rules.
+     *
+     * @return array Object property names mapped to keys in the data array.
      * @psalm-return list<string>
      */
     private function getPropertiesWithRules(FormModelInterface $model): array
@@ -161,6 +219,9 @@ final class FormHydrator
     }
 
     /**
+     * Get only string keys from an array.
+     *
+     * @return array String keys.
      * @psalm-return list<string>
      */
     private function extractStringKeys(iterable $array): array

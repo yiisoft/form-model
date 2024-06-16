@@ -65,12 +65,10 @@ final class ValidationRulesEnricher implements ValidationRulesEnricherInterface
                     }
                 }
 
-                if ($rule instanceof Regex) {
-                    if (!$rule->isNot()) {
-                        $enrichment['inputAttributes']['pattern'] = Html::normalizeRegexpPattern(
-                            $rule->getPattern()
-                        );
-                    }
+                if (($rule instanceof Regex) && !$rule->isNot()) {
+                    $enrichment['inputAttributes']['pattern'] = Html::normalizeRegexpPattern(
+                        $rule->getPattern()
+                    );
                 }
             }
             return $enrichment;

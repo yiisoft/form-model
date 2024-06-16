@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\FormModel\Tests;
 
 use PHPUnit\Framework\TestCase;
-use Yiisoft\Form\ThemeContainer;
+use Yiisoft\Form\Theme\ThemeContainer;
 use Yiisoft\FormModel\Field;
 use Yiisoft\FormModel\Tests\Support\FieldWithTheme;
 use Yiisoft\FormModel\Tests\Support\Form\TestForm;
@@ -222,43 +222,6 @@ final class FieldTest extends TestCase
             <div class="green">
             <label for="testform-birthday">Birthday</label>
             <input type="date" id="testform-birthday" name="TestForm[birthday]" value="1996-12-19">
-            </div>
-            HTML,
-            $result
-        );
-    }
-
-    public function testDateTime(): void
-    {
-        $result = Field::dateTime(new TestForm(), 'xDate')->render();
-        $this->assertSame(
-            <<<HTML
-            <div>
-            <label for="testform-xdate">Date X</label>
-            <input type="datetime" id="testform-xdate" name="TestForm[xDate]" value="2017-06-01T08:30">
-            </div>
-            HTML,
-            $result
-        );
-    }
-
-    public function testDateTimeWithTheme(): void
-    {
-        ThemeContainer::initialize([
-            'A' => [
-                'containerClass' => 'red',
-            ],
-            'B' => [
-                'containerClass' => 'green',
-            ],
-        ]);
-
-        $result = FieldWithTheme::dateTime(new TestForm(), 'xDate', theme: 'B')->render();
-        $this->assertSame(
-            <<<HTML
-            <div class="green">
-            <label for="testform-xdate">Date X</label>
-            <input type="datetime" id="testform-xdate" name="TestForm[xDate]" value="2017-06-01T08:30">
             </div>
             HTML,
             $result
