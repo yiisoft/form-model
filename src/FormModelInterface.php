@@ -84,12 +84,11 @@ interface FormModelInterface extends ValidatedInputInterface
      * Get a value for a property specified.
      *
      * @param string $property Name of the property.
-     * @return mixed Value.
-     *
      * @throws UndefinedObjectPropertyException
      * @throws StaticObjectPropertyException
      * @throws PropertyNotSupportNestedValuesException
      * @throws ValueNotFoundException
+     * @return mixed Value.
      */
     public function getPropertyValue(string $property): mixed;
 

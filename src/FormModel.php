@@ -117,13 +117,12 @@ abstract class FormModel implements FormModelInterface
      * Returns model property value given a path.
      *
      * @param string $path Property path.
-     * @return mixed Property value.
-     *
      * @throws UndefinedArrayElementException
      * @throws UndefinedObjectPropertyException
      * @throws StaticObjectPropertyException
      * @throws PropertyNotSupportNestedValuesException
      * @throws ValueNotFoundException
+     * @return mixed Property value.
      */
     private function readPropertyValue(string $path): mixed
     {
