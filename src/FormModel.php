@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\FormModel;
 
+use LogicException;
 use ReflectionClass;
 use ReflectionException;
 use Yiisoft\FormModel\Exception\PropertyNotSupportNestedValuesException;
@@ -122,6 +123,24 @@ abstract class FormModel implements FormModelInterface
     public function isValidated(): bool
     {
         return $this->validationResult !== null;
+    }
+
+    /**
+     * Add an error, the message of which does not require any post-processing.
+     *
+     * @see Error::addErrorWithoutPostProcessing()
+     *
+     * @return static Same instance of result.
+     *
+     * @throws LogicException When form is not validated.
+     *
+     * @psalm-param array<string,scalar|null> $parameters
+     * @psalm-param list<int|string> $valuePath
+     */
+    public function addError(string $message, array $valuePath = []): static
+    {
+        $this->getValidationResult()->addErrorWithoutPostProcessing($message, valuePath: $valuePath);
+        return $this;
     }
 
     /**

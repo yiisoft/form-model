@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\FormModel\Tests;
 
 use InvalidArgumentException;
+use LogicException;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use stdClass;
@@ -648,5 +649,43 @@ final class FormModelTest extends TestCase
         $form->nested = $nestedForm;
 
         $this->assertSame('My Name', $form->getPropertyLabel('nested.object.name'));
+    }
+
+    public function testAddError(): void
+    {
+        $form = new class() extends FormModel {
+            #[Required]
+            public string $name = '';
+        };
+
+        (new Validator())->validate($form);
+
+        $resultForm = $form->addError('Test message.');
+        $this->assertSame($resultForm, $form);
+
+        $form->addError('Bad name.', ['name']);
+
+        $this->assertSame(
+            [
+                'name' => [
+                    'Value cannot be blank.',
+                    'Bad name.'
+                ],
+                '' => ['Test message.'],
+            ],
+            $form->getValidationResult()->getErrorMessagesIndexedByAttribute(),
+        );
+    }
+
+    public function testAddErrorWithoutValidation(): void
+    {
+        $form = new class() extends FormModel {
+            #[Required]
+            public string $name = '';
+        };
+
+        $this->expectException(LogicException::class);
+        $this->expectExceptionMessage('Validation result is not set.');
+        $form->addError('Test message.');
     }
 }
