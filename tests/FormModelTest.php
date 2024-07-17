@@ -653,7 +653,7 @@ final class FormModelTest extends TestCase
 
     public function testAddError(): void
     {
-        $form = new class() extends FormModel {
+        $form = new class () extends FormModel {
             #[Required]
             public string $name = '';
         };
@@ -669,7 +669,7 @@ final class FormModelTest extends TestCase
             [
                 'name' => [
                     'Value cannot be blank.',
-                    'Bad name.'
+                    'Bad name.',
                 ],
                 '' => ['Test message.'],
             ],
@@ -679,7 +679,7 @@ final class FormModelTest extends TestCase
 
     public function testAddErrorWithoutValidation(): void
     {
-        $form = new class() extends FormModel {
+        $form = new class () extends FormModel {
             #[Required]
             public string $name = '';
         };

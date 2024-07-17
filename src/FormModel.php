@@ -130,9 +130,8 @@ abstract class FormModel implements FormModelInterface
      *
      * @see Error::addErrorWithoutPostProcessing()
      *
-     * @return static Same instance of result.
-     *
      * @throws LogicException When form is not validated.
+     * @return static Same instance of result.
      *
      * @psalm-param array<string,scalar|null> $parameters
      * @psalm-param list<int|string> $valuePath
