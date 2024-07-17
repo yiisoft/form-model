@@ -39,7 +39,12 @@ final class ValidationRulesEnricherTest extends TestCase
     {
         parent::setUp();
         ThemeContainer::initialize(
-            validationRulesEnricher: new ValidationRulesEnricher()
+            [
+                'default' => [
+                    'validationRulesEnricher' => new ValidationRulesEnricher(),
+                ],
+            ],
+            'default',
         );
     }
 
