@@ -39,6 +39,7 @@ class Field
 {
     /**
      * @var string|null Default theme to use if it is not specified explicitly. Override in child classes.
+     * @psalm-suppress MissingClassConstType Add constant type after bump PHP version to 8.3.
      */
     protected const DEFAULT_THEME = null;
 
