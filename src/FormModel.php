@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Yiisoft\FormModel;
 
-use LogicException;
 use ReflectionClass;
 use ReflectionException;
 use Yiisoft\FormModel\Exception\PropertyNotSupportNestedValuesException;
