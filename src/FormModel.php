@@ -125,17 +125,6 @@ abstract class FormModel implements FormModelInterface
         return $this->validationResult !== null;
     }
 
-    /**
-     * Add an error, the message of which does not require any post-processing.
-     *
-     * @see Error::addErrorWithoutPostProcessing()
-     *
-     * @throws LogicException When form is not validated.
-     * @return static Same instance of result.
-     *
-     * @psalm-param array<string,scalar|null> $parameters
-     * @psalm-param list<int|string> $valuePath
-     */
     public function addError(string $message, array $valuePath = []): static
     {
         $this->getValidationResult()->addErrorWithoutPostProcessing($message, valuePath: $valuePath);
