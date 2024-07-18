@@ -35,6 +35,19 @@ use Yiisoft\Validator\Rule\Required;
 
 final class ValidationRulesEnricherTest extends TestCase
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+        ThemeContainer::initialize(
+            [
+                'default' => [
+                    'validationRulesEnricher' => new ValidationRulesEnricher(),
+                ],
+            ],
+            'default',
+        );
+    }
+
     public static function dataUrl(): array
     {
         return [
@@ -87,7 +100,6 @@ final class ValidationRulesEnricherTest extends TestCase
         $field = Field::url(new UrlForm(), $property)
             ->hideLabel()
             ->enrichFromValidationRules()
-            ->validationRulesEnricher(new ValidationRulesEnricher())
             ->useContainer(false);
 
         $this->assertSame($expected, $field->render());
@@ -127,7 +139,6 @@ final class ValidationRulesEnricherTest extends TestCase
         $field = Field::text(new TextForm(), $property)
             ->hideLabel()
             ->enrichFromValidationRules()
-            ->validationRulesEnricher(new ValidationRulesEnricher())
             ->useContainer(false);
 
         $this->assertSame($expected, $field->render());
@@ -158,8 +169,7 @@ final class ValidationRulesEnricherTest extends TestCase
             ->inputData(new FormModelInputData(new TextareaForm(), $property))
             ->hideLabel()
             ->useContainer(false)
-            ->enrichFromValidationRules()
-            ->validationRulesEnricher(new ValidationRulesEnricher());
+            ->enrichFromValidationRules();
 
         $this->assertSame($expected, $field->render());
     }
@@ -197,7 +207,6 @@ final class ValidationRulesEnricherTest extends TestCase
             ->inputData(new FormModelInputData(new TelephoneForm(), $property))
             ->hideLabel()
             ->enrichFromValidationRules()
-            ->validationRulesEnricher(new ValidationRulesEnricher())
             ->useContainer(false);
 
         $this->assertSame($expected, $field->render());
@@ -209,7 +218,6 @@ final class ValidationRulesEnricherTest extends TestCase
             ->inputData(new FormModelInputData(new SelectForm(), 'color'))
             ->optionsData(['red' => 'Red'])
             ->enrichFromValidationRules()
-            ->validationRulesEnricher(new ValidationRulesEnricher())
             ->hideLabel()
             ->useContainer(false)
             ->render();
@@ -229,7 +237,6 @@ final class ValidationRulesEnricherTest extends TestCase
             ->inputData(new FormModelInputData(new SelectForm(), 'requiredWhen'))
             ->optionsData(['red' => 'Red'])
             ->enrichFromValidationRules()
-            ->validationRulesEnricher(new ValidationRulesEnricher())
             ->hideLabel()
             ->useContainer(false)
             ->render();
@@ -276,7 +283,6 @@ final class ValidationRulesEnricherTest extends TestCase
             ->inputData(new FormModelInputData(new PasswordForm(), $property))
             ->hideLabel()
             ->enrichFromValidationRules()
-            ->validationRulesEnricher(new ValidationRulesEnricher())
             ->useContainer(false);
 
         $this->assertSame($expected, $field->render());
@@ -288,7 +294,6 @@ final class ValidationRulesEnricherTest extends TestCase
             ->inputData(new FormModelInputData(new FileForm(), 'image'))
             ->hideLabel()
             ->enrichFromValidationRules()
-            ->validationRulesEnricher(new ValidationRulesEnricher())
             ->render();
 
         $expected = <<<HTML
@@ -306,7 +311,6 @@ final class ValidationRulesEnricherTest extends TestCase
             ->inputData(new FormModelInputData(new FileForm(), 'photo'))
             ->hideLabel()
             ->enrichFromValidationRules()
-            ->validationRulesEnricher(new ValidationRulesEnricher())
             ->render();
 
         $expected = <<<HTML
@@ -324,7 +328,6 @@ final class ValidationRulesEnricherTest extends TestCase
             ->inputData(new FormModelInputData(new DateForm(), 'main'))
             ->hideLabel()
             ->enrichFromValidationRules()
-            ->validationRulesEnricher(new ValidationRulesEnricher())
             ->render();
 
         $expected = <<<HTML
@@ -342,7 +345,6 @@ final class ValidationRulesEnricherTest extends TestCase
             ->inputData(new FormModelInputData(new DateForm(), 'second'))
             ->hideLabel()
             ->enrichFromValidationRules()
-            ->validationRulesEnricher(new ValidationRulesEnricher())
             ->render();
 
         $expected = <<<HTML
@@ -387,7 +389,6 @@ final class ValidationRulesEnricherTest extends TestCase
             ->inputData(new FormModelInputData(new EmailForm(), $attribute))
             ->hideLabel()
             ->enrichFromValidationRules()
-            ->validationRulesEnricher(new ValidationRulesEnricher())
             ->useContainer(false);
 
         $this->assertSame($expected, $field->render());
@@ -418,7 +419,6 @@ final class ValidationRulesEnricherTest extends TestCase
             ->inputData(new FormModelInputData(new NumberForm(), $property))
             ->hideLabel()
             ->enrichFromValidationRules()
-            ->validationRulesEnricher(new ValidationRulesEnricher())
             ->useContainer(false);
 
         $this->assertSame($expected, $field->render());
@@ -449,8 +449,7 @@ final class ValidationRulesEnricherTest extends TestCase
             ->inputData(new FormModelInputData(new RangeForm(), $property))
             ->hideLabel()
             ->useContainer(false)
-            ->enrichFromValidationRules()
-            ->validationRulesEnricher(new ValidationRulesEnricher());
+            ->enrichFromValidationRules();
 
         $this->assertSame($expected, $field->render());
     }

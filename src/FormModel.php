@@ -30,8 +30,19 @@ abstract class FormModel implements FormModelInterface
 {
     use ValidatedInputTrait;
 
+    /**
+     * @psalm-suppress MissingClassConstType Remove after fix https://github.com/vimeo/psalm/issues/11026
+     */
     private const META_LABEL = 1;
+
+    /**
+     * @psalm-suppress MissingClassConstType Remove after fix https://github.com/vimeo/psalm/issues/11026
+     */
     private const META_HINT = 2;
+
+    /**
+     * @psalm-suppress MissingClassConstType Remove after fix https://github.com/vimeo/psalm/issues/11026
+     */
     private const META_PLACEHOLDER = 3;
 
     private static ?Inflector $inflector = null;
@@ -111,6 +122,12 @@ abstract class FormModel implements FormModelInterface
     public function isValidated(): bool
     {
         return $this->validationResult !== null;
+    }
+
+    public function addError(string $message, array $valuePath = []): static
+    {
+        $this->getValidationResult()->addErrorWithoutPostProcessing($message, valuePath: $valuePath);
+        return $this;
     }
 
     /**
