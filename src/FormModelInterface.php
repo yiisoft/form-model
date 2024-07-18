@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\FormModel;
 
+use LogicException;
 use Yiisoft\FormModel\Exception\PropertyNotSupportNestedValuesException;
 use Yiisoft\FormModel\Exception\StaticObjectPropertyException;
 use Yiisoft\FormModel\Exception\UndefinedObjectPropertyException;
@@ -136,4 +137,17 @@ interface FormModelInterface extends ValidatedInputInterface
      * @return bool Whether form was validated.
      */
     public function isValidated(): bool;
+
+    /**
+     * Add an error, the message of which does not require any post-processing.
+     *
+     * @see Error::addErrorWithoutPostProcessing()
+     *
+     * @throws LogicException When form is not validated.
+     * @return static Same instance of result.
+     *
+     * @psalm-param array<string,scalar|null> $parameters
+     * @psalm-param list<int|string> $valuePath
+     */
+    public function addError(string $message, array $valuePath = []): static;
 }

@@ -124,6 +124,12 @@ abstract class FormModel implements FormModelInterface
         return $this->validationResult !== null;
     }
 
+    public function addError(string $message, array $valuePath = []): static
+    {
+        $this->getValidationResult()->addErrorWithoutPostProcessing($message, valuePath: $valuePath);
+        return $this;
+    }
+
     /**
      * Returns model property value given a path.
      *
