@@ -14,11 +14,6 @@ final class NestedMixedForm extends FormModel implements RulesProviderInterface
 {
     private Body $body;
 
-    public function __construct()
-    {
-        $this->body = new Body();
-    }
-
     public function getRules(): iterable
     {
         return [

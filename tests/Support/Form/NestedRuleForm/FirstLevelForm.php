@@ -14,11 +14,6 @@ final class FirstLevelForm extends FormModel implements RulesProviderInterface
     private int $number = 1;
     private SecondLevelForm $secondLevelForm;
 
-    public function __construct()
-    {
-        $this->secondLevelForm = new SecondLevelForm();
-    }
-
     public function getRules(): array
     {
         return [

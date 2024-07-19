@@ -17,6 +17,7 @@ use Yiisoft\FormModel\FormModelInputData;
 use Yiisoft\FormModel\FormModelInterface;
 use Yiisoft\FormModel\Safe;
 use Yiisoft\FormModel\Tests\Support\Dto\Coordinates;
+use Yiisoft\FormModel\Tests\Support\Form\Chart\ChartForm;
 use Yiisoft\FormModel\Tests\Support\Form\CustomFormNameForm;
 use Yiisoft\FormModel\Tests\Support\Form\DefaultFormNameForm;
 use Yiisoft\FormModel\Tests\Support\Form\FormWithNestedProperty;
@@ -493,6 +494,30 @@ final class FormModelTest extends TestCase
             [
                 'body.shipping.phone' => ['Invalid phone.'],
             ],
+            $result->getErrorMessagesIndexedByPath()
+        );
+    }
+
+    public function testNestedFormWithOneToManyRelation()
+    {
+        $form = new ChartForm();
+
+        TestHelper::createFormHydrator()->populate(
+            $form,
+            [
+                'points' => [
+                    ['coordinates' => ['x' => -11, 'y' => 11], 'rgb' => [-1, 256, 0]],
+                    ['coordinates' => ['x' => -12, 'y' => 12], 'rgb' => [0, -2, 257]],
+                ],
+            ],
+            scope: '',
+        );
+
+        $result = $form->getValidationResult();
+
+        $this->assertFalse($result->isValid());
+        $this->assertSame(
+            [],
             $result->getErrorMessagesIndexedByPath()
         );
     }

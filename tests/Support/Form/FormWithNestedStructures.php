@@ -20,9 +20,4 @@ final class FormWithNestedStructures extends FormModel
     {
         return $this->array;
     }
-
-    public function getCoordinates(): ?Coordinates
-    {
-        return $this->coordinates;
-    }
 }

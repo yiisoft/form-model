@@ -18,11 +18,6 @@ final class MainForm extends FormModel implements RulesProviderInterface
     #[Safe]
     public FirstLevelForm $firstLevelForm;
 
-    public function __construct()
-    {
-        $this->firstLevelForm = new FirstLevelForm();
-    }
-
     public function getRules(): array
     {
         return [
