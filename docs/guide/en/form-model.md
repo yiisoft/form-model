@@ -69,6 +69,9 @@ $form->getPropertyValue('password'); // null
 $form->getPropertyValue('passwordConfirmation'); // null
 ```
 
+> Static properties are not included in form model's set of properties. On attempt to get such property's value,
+> `Yiisoft\FormModel\Exception\StaticObjectPropertyException` exception will be thrown.
+
 ## Meta data
 
 Form model's meta data includes:
