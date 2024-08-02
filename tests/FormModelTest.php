@@ -17,7 +17,7 @@ use Yiisoft\FormModel\FormModelInputData;
 use Yiisoft\FormModel\FormModelInterface;
 use Yiisoft\FormModel\Safe;
 use Yiisoft\FormModel\Tests\Support\Dto\Coordinates;
-use Yiisoft\FormModel\Tests\Support\Form\Chart\ChartForm;
+use Yiisoft\FormModel\Tests\Support\Form\Chart\ChartSetForm;
 use Yiisoft\FormModel\Tests\Support\Form\CustomFormNameForm;
 use Yiisoft\FormModel\Tests\Support\Form\DefaultFormNameForm;
 use Yiisoft\FormModel\Tests\Support\Form\FormWithNestedProperty;
@@ -500,14 +500,30 @@ final class FormModelTest extends TestCase
 
     public function testNestedFormWithOneToManyRelation()
     {
-        $form = new ChartForm();
+        $form = new ChartSetForm();
 
         TestHelper::createFormHydrator()->populate(
             $form,
             [
-                'points' => [
-                    ['coordinates' => ['x' => -11, 'y' => 11], 'rgb' => [-1, 256, 0]],
-                    ['coordinates' => ['x' => -12, 'y' => 12], 'rgb' => [0, -2, 257]],
+                'charts' => [
+                    [
+                        'points' => [
+                            ['coordinates' => ['x' => -11, 'y' => 11], 'rgb' => [-1, 256, 0]],
+                            ['coordinates' => ['x' => -12, 'y' => 12], 'rgb' => [0, -2, 257]],
+                        ],
+                    ],
+                    [
+                        'points' => [
+                            ['coordinates' => ['x' => -1, 'y' => 1], 'rgb' => [0, 0, 0]],
+                            ['coordinates' => ['x' => -2, 'y' => 2], 'rgb' => [255, 255, 255]],
+                        ],
+                    ],
+                    [
+                        'points' => [
+                            ['coordinates' => ['x' => -13, 'y' => 13], 'rgb' => [-3, 258, 0]],
+                            ['coordinates' => ['x' => -14, 'y' => 14], 'rgb' => [0, -4, 259]],
+                        ],
+                    ],
                 ],
             ],
             scope: '',
@@ -517,8 +533,69 @@ final class FormModelTest extends TestCase
 
         $this->assertFalse($result->isValid());
         $this->assertSame(
-            [],
-            $result->getErrorMessagesIndexedByPath()
+            [
+                'charts.0.points.0.coordinates.x' => [
+                    'The value must be an array or an object.',
+                ],
+                'charts.0.points.0.coordinates.y' => [
+                    'The value must be an array or an object.',
+                ],
+                'charts.0.points.0.rgb.0' => [
+                    'Value must be no less than 0.',
+                ],
+                'charts.0.points.0.rgb.1' => [
+                    'Value must be no greater than 255.',
+                ],
+                'charts.0.points.1.coordinates.x' => [
+                    'The value must be an array or an object.',
+                ],
+                'charts.0.points.1.coordinates.y' => [
+                    'The value must be an array or an object.',
+                ],
+                'charts.0.points.1.rgb.1' => [
+                    'Value must be no less than 0.',
+                ],
+                'charts.0.points.1.rgb.2' => [
+                    'Value must be no greater than 255.',
+                ],
+                'charts.1.points.0.coordinates.x' => [
+                    'The value must be an array or an object.',
+                ],
+                'charts.1.points.0.coordinates.y' => [
+                    'The value must be an array or an object.',
+                ],
+                'charts.1.points.1.coordinates.x' => [
+                    'The value must be an array or an object.',
+                ],
+                'charts.1.points.1.coordinates.y' => [
+                    'The value must be an array or an object.',
+                ],
+                'charts.2.points.0.coordinates.x' => [
+                    'The value must be an array or an object.',
+                ],
+                'charts.2.points.0.coordinates.y' => [
+                    'The value must be an array or an object.',
+                ],
+                'charts.2.points.0.rgb.0' => [
+                    'Value must be no less than 0.',
+                ],
+                'charts.2.points.0.rgb.1' => [
+                    'Value must be no greater than 255.',
+                ],
+                'charts.2.points.1.coordinates.x' => [
+                    'The value must be an array or an object.',
+                ],
+                'charts.2.points.1.coordinates.y' => [
+                    'The value must be an array or an object.',
+                ],
+                'charts.2.points.1.rgb.1' => [
+                    'Value must be no less than 0.',
+                ],
+                'charts.2.points.1.rgb.2' => [
+                    'Value must be no greater than 255.',
+                ],
+            ],
+            $result->getErrorMessagesIndexedByPath(),
         );
     }
 
