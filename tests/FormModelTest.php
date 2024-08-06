@@ -461,7 +461,7 @@ final class FormModelTest extends TestCase
         $this->assertFalse($result->isValid());
         $this->assertSame(
             [
-                'firstLevelForm.secondLevelForm.float' => ['Value must be no less than 0.'],
+                'firstLevelForm.secondLevelForm.float' => ['Float must be no less than 0.'],
             ],
             $result->getErrorMessagesIndexedByPath()
         );
@@ -668,12 +668,12 @@ final class FormModelTest extends TestCase
         $this->assertSame(
             [
                 'name' => [
-                    'Value cannot be blank.',
+                    'Name cannot be blank.',
                     'Bad name.',
                 ],
                 '' => ['Test message.'],
             ],
-            $form->getValidationResult()->getErrorMessagesIndexedByAttribute(),
+            $form->getValidationResult()->getErrorMessagesIndexedByProperty(),
         );
     }
 
