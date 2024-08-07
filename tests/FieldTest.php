@@ -313,8 +313,8 @@ final class FieldTest extends TestCase
         $expected = <<<HTML
             <div>
             <ul>
-            <li>Value cannot be blank.</li>
-            <li>This value must contain at least 4 characters.</li>
+            <li>Name cannot be blank.</li>
+            <li>Name must contain at least 4 characters.</li>
             </ul>
             </div>
             HTML;
@@ -340,8 +340,8 @@ final class FieldTest extends TestCase
         $expected = <<<HTML
             <div class="green">
             <ul>
-            <li>Value cannot be blank.</li>
-            <li>This value must contain at least 4 characters.</li>
+            <li>Name cannot be blank.</li>
+            <li>Name must contain at least 4 characters.</li>
             </ul>
             </div>
             HTML;
@@ -1049,9 +1049,9 @@ final class FieldTest extends TestCase
 
         $expected = <<<HTML
             <div>
-            Value cannot be blank.
+            Name cannot be blank.
             <br>
-            This value must contain at least 4 characters.
+            Name must contain at least 4 characters.
             </div>
             HTML;
 
@@ -1073,9 +1073,9 @@ final class FieldTest extends TestCase
 
         $expected = <<<HTML
             <div class="green">
-            Value cannot be blank.
+            Name cannot be blank.
             <br>
-            This value must contain at least 4 characters.
+            Name must contain at least 4 characters.
             </div>
             HTML;
 

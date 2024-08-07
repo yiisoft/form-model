@@ -465,7 +465,7 @@ final class FormModelTest extends TestCase
         $this->assertFalse($result->isValid());
         $this->assertSame(
             [
-                'firstLevelForm.secondLevelForm.float' => ['Value must be no less than 0.'],
+                'firstLevelForm.secondLevelForm.float' => ['Float must be no less than 0.'],
             ],
             $result->getErrorMessagesIndexedByPath()
         );
@@ -555,52 +555,52 @@ final class FormModelTest extends TestCase
         $this->assertSame(
             [
                 'charts.0.points.0.coordinates.x' => [
-                    'Value must be no less than -10.',
+                    'X must be no less than -10.',
                 ],
                 'charts.0.points.0.coordinates.y' => [
-                    'Value must be no greater than 10.',
+                    'Y must be no greater than 10.',
                 ],
                 'charts.0.points.0.rgb.0' => [
-                    'Value must be no less than 0.',
+                    'Rgb must be no less than 0.',
                 ],
                 'charts.0.points.0.rgb.1' => [
-                    'Value must be no greater than 255.',
+                    'Rgb must be no greater than 255.',
                 ],
                 'charts.0.points.1.coordinates.x' => [
-                    'Value must be no less than -10.',
+                    'X must be no less than -10.',
                 ],
                 'charts.0.points.1.coordinates.y' => [
-                    'Value must be no greater than 10.',
+                    'Y must be no greater than 10.',
                 ],
                 'charts.0.points.1.rgb.1' => [
-                    'Value must be no less than 0.',
+                    'Rgb must be no less than 0.',
                 ],
                 'charts.0.points.1.rgb.2' => [
-                    'Value must be no greater than 255.',
+                    'Rgb must be no greater than 255.',
                 ],
                 'charts.2.points.0.coordinates.x' => [
-                    'Value must be no less than -10.',
+                    'X must be no less than -10.',
                 ],
                 'charts.2.points.0.coordinates.y' => [
-                    'Value must be no greater than 10.',
+                    'Y must be no greater than 10.',
                 ],
                 'charts.2.points.0.rgb.0' => [
-                    'Value must be no less than 0.',
+                    'Rgb must be no less than 0.',
                 ],
                 'charts.2.points.0.rgb.1' => [
-                    'Value must be no greater than 255.',
+                    'Rgb must be no greater than 255.',
                 ],
                 'charts.2.points.1.coordinates.x' => [
-                    'Value must be no less than -10.',
+                    'X must be no less than -10.',
                 ],
                 'charts.2.points.1.coordinates.y' => [
-                    'Value must be no greater than 10.',
+                    'Y must be no greater than 10.',
                 ],
                 'charts.2.points.1.rgb.1' => [
-                    'Value must be no less than 0.',
+                    'Rgb must be no less than 0.',
                 ],
                 'charts.2.points.1.rgb.2' => [
-                    'Value must be no greater than 255.',
+                    'Rgb must be no greater than 255.',
                 ],
             ],
             $result->getErrorMessagesIndexedByPath(),
@@ -778,12 +778,12 @@ final class FormModelTest extends TestCase
         $this->assertSame(
             [
                 'name' => [
-                    'Value cannot be blank.',
+                    'Name cannot be blank.',
                     'Bad name.',
                 ],
                 '' => ['Test message.'],
             ],
-            $form->getValidationResult()->getErrorMessagesIndexedByAttribute(),
+            $form->getValidationResult()->getErrorMessagesIndexedByProperty(),
         );
     }
 

@@ -186,7 +186,7 @@ class Field
         if ($formModel !== null) {
             $widget = $widget->errors(
                 $formModel->isValidated()
-                    ? $formModel->getValidationResult()->getErrorMessagesIndexedByAttribute()
+                    ? $formModel->getValidationResult()->getErrorMessagesIndexedByProperty()
                     : []
             );
         }

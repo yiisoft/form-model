@@ -123,7 +123,7 @@ final class FormModelInputData implements InputDataInterface
     {
         /** @psalm-var list<string> */
         return $this->model->isValidated()
-            ? $this->model->getValidationResult()->getAttributeErrorMessages($this->getPropertyName())
+            ? $this->model->getValidationResult()->getPropertyErrorMessages($this->getPropertyName())
             : [];
     }
 
