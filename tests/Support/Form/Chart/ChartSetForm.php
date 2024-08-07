@@ -19,4 +19,9 @@ final class ChartSetForm extends FormModel
         private array $charts = [],
     ) {
     }
+
+    public function getCharts(): array
+    {
+        return $this->charts;
+    }
 }

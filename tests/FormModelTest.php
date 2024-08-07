@@ -16,8 +16,11 @@ use Yiisoft\FormModel\FormModel;
 use Yiisoft\FormModel\FormModelInputData;
 use Yiisoft\FormModel\FormModelInterface;
 use Yiisoft\FormModel\Safe;
-use Yiisoft\FormModel\Tests\Support\Dto\Coordinates;
+use Yiisoft\FormModel\Tests\Support\Dto\Coordinates as GeoCoordinates;
+use Yiisoft\FormModel\Tests\Support\Form\Chart\Chart;
 use Yiisoft\FormModel\Tests\Support\Form\Chart\ChartSetForm;
+use Yiisoft\FormModel\Tests\Support\Form\Chart\Coordinates;
+use Yiisoft\FormModel\Tests\Support\Form\Chart\Point;
 use Yiisoft\FormModel\Tests\Support\Form\CustomFormNameForm;
 use Yiisoft\FormModel\Tests\Support\Form\DefaultFormNameForm;
 use Yiisoft\FormModel\Tests\Support\Form\FormWithNestedProperty;
@@ -436,7 +439,7 @@ final class FormModelTest extends TestCase
         $this->assertSame(['a' => 'b', 'nested' => ['c' => 'd']], $form->getPropertyValue('array'));
 
         $coordinates = $form->getPropertyValue('coordinates');
-        $this->assertInstanceOf(Coordinates::class, $coordinates);
+        $this->assertInstanceOf(GeoCoordinates::class, $coordinates);
         $this->assertSame('12.24', $coordinates->getLatitude());
         $this->assertSame('56.78', $coordinates->getLongitude());
     }
@@ -498,7 +501,7 @@ final class FormModelTest extends TestCase
         );
     }
 
-    public function testNestedFormWithOneToManyRelation()
+    public function testNestedFormWithRelations()
     {
         $form = new ChartSetForm();
 
@@ -528,6 +531,23 @@ final class FormModelTest extends TestCase
             ],
             scope: '',
         );
+        $this->assertEquals(
+            [
+                new Chart([
+                    new Point(new Coordinates(-11, 11), [-1, 256, 0]),
+                    new Point(new Coordinates(-12, 12), [0, -2, 257]),
+                ]),
+                new Chart([
+                    new Point(new Coordinates(-1, 1), [0, 0, 0]),
+                    new Point(new Coordinates(-2, 2), [255, 255, 255]),
+                ]),
+                new Chart([
+                    new Point(new Coordinates(-13, 13), [-3,258, 0]),
+                    new Point(new Coordinates(-14, 14), [0, -4, 259]),
+                ]),
+            ],
+            $form->getCharts(),
+        );
 
         $result = $form->getValidationResult();
 
@@ -535,10 +555,10 @@ final class FormModelTest extends TestCase
         $this->assertSame(
             [
                 'charts.0.points.0.coordinates.x' => [
-                    'The value must be an array or an object.',
+                    'Value must be no less than -10.',
                 ],
                 'charts.0.points.0.coordinates.y' => [
-                    'The value must be an array or an object.',
+                    'Value must be no greater than 10.',
                 ],
                 'charts.0.points.0.rgb.0' => [
                     'Value must be no less than 0.',
@@ -547,10 +567,10 @@ final class FormModelTest extends TestCase
                     'Value must be no greater than 255.',
                 ],
                 'charts.0.points.1.coordinates.x' => [
-                    'The value must be an array or an object.',
+                    'Value must be no less than -10.',
                 ],
                 'charts.0.points.1.coordinates.y' => [
-                    'The value must be an array or an object.',
+                    'Value must be no greater than 10.',
                 ],
                 'charts.0.points.1.rgb.1' => [
                     'Value must be no less than 0.',
@@ -558,23 +578,11 @@ final class FormModelTest extends TestCase
                 'charts.0.points.1.rgb.2' => [
                     'Value must be no greater than 255.',
                 ],
-                'charts.1.points.0.coordinates.x' => [
-                    'The value must be an array or an object.',
-                ],
-                'charts.1.points.0.coordinates.y' => [
-                    'The value must be an array or an object.',
-                ],
-                'charts.1.points.1.coordinates.x' => [
-                    'The value must be an array or an object.',
-                ],
-                'charts.1.points.1.coordinates.y' => [
-                    'The value must be an array or an object.',
-                ],
                 'charts.2.points.0.coordinates.x' => [
-                    'The value must be an array or an object.',
+                    'Value must be no less than -10.',
                 ],
                 'charts.2.points.0.coordinates.y' => [
-                    'The value must be an array or an object.',
+                    'Value must be no greater than 10.',
                 ],
                 'charts.2.points.0.rgb.0' => [
                     'Value must be no less than 0.',
@@ -583,10 +591,10 @@ final class FormModelTest extends TestCase
                     'Value must be no greater than 255.',
                 ],
                 'charts.2.points.1.coordinates.x' => [
-                    'The value must be an array or an object.',
+                    'Value must be no less than -10.',
                 ],
                 'charts.2.points.1.coordinates.y' => [
-                    'The value must be an array or an object.',
+                    'Value must be no greater than 10.',
                 ],
                 'charts.2.points.1.rgb.1' => [
                     'Value must be no less than 0.',

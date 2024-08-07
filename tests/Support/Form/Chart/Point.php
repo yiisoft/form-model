@@ -16,7 +16,7 @@ final class Point
     public function __construct(
         #[Collection(Coordinates::class)]
         #[Required]
-        #[Each([new Nested(Coordinates::class)])]
+        #[Nested(Coordinates::class)]
         private Coordinates $coordinates,
         #[Required]
         #[Count(exactly: 3)]
