@@ -8,44 +8,17 @@ To define a form model, create a class extending from `Yiisoft\FormModel\FormMod
 
 ## Properties
 
-Form model properties are defined as class properties. You can also add getters and setters for each of them. 
+Form model properties are defined as class properties.
 
 ```php
 final class LoginForm extends FormModel
 {
-    private ?string $login = null;
-    private ?string $password = null;
-    private bool $rememberMe = false;
-
-    public function getLogin(): ?string
-    {
-        return $this->login;
+    public function __construct(
+        public ?string $login = null;
+        public ?string $password = null;
+        public bool $rememberMe = false;
+    ) {
     }
-
-    public function getPassword(): ?string
-    {
-        return $this->password;
-    }
-
-    public function getRememberMe(): bool
-    {
-        return $this->rememberMe;
-    }
-
-    public function login(string $value): void
-    {
-        $this->login = $value;
-    }
-
-    public function password(string $value): void
-    {
-        $this->password = $value;
-    }
-
-    public function rememberMe(bool $value): void
-    {
-        $this->rememberMe = $value;
-    }   
 }
 ```
 
@@ -55,18 +28,18 @@ Example of working with properties individually:
 use Yiisoft\FormModel\FormModel;
 
 /** @var FormModel $form */
-$form = new FormModel();
-$form->login('john');
+$form = new LoginForm();
+$form->login = 'john';
 
 $form->hasProperty('login'); // true
 $form->hasProperty('passwordConfirmation'); // false
 
-$form->getLogin(); // "john"
+echo $form->login; // "john"
 // or
-$form->getPropertyValue('login'); // "john"
+echo $form->getPropertyValue('login'); // "john"
 
-$form->getPropertyValue('password'); // null
-$form->getPropertyValue('passwordConfirmation'); // null
+echo $form->getPropertyValue('password'); // null
+echo $form->getPropertyValue('passwordConfirmation'); // null
 ```
 
 > Static properties are not included in form model's set of properties. On attempt to get such property's value,
