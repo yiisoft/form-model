@@ -298,7 +298,7 @@ final class PostCategory extends FormModel
     }
 }
 
-final class Post
+final class Post extends FormModel
 {
     public function __construct(
         #[Required]
@@ -312,7 +312,7 @@ final class Post
     }
 }
 
-final class User
+final class User extends FormModel
 {
     public function __construct(
         #[Required]
