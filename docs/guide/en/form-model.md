@@ -272,7 +272,7 @@ final class LoginForm extends FormModel
 
 ### `Safe` rule
 
-This package also provides `Safe` rule that marks a model property as safe for filling.
+This package also provides `Safe` rule that marks a model property as safe for filling from user input.
 
 ```php
 use Yiisoft\FormModel\FormModel;
