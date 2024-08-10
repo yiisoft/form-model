@@ -1,7 +1,6 @@
 # Nested form models
 
-Form models can be nested. In this case, it's not necessary to declare all of them as form models. In the example below,
-the base one is form model and the rest ones are plain [DTOs](https://en.wikipedia.org/wiki/Data_transfer_object).
+Form models can be nested.
 
 - For one-to-one relations, you can add type hint of related class name to corresponding property.
 - For one-to-many relation, use

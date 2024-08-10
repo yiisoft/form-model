@@ -50,7 +50,9 @@ echo $form->getPropertyValue('passwordConfirmation'); // null
 Form model's meta data includes:
 
 - Property labels - the labels associated with each input (visible to the end user). When not set, they will be 
-automatically generated using inflector from the [strings](https://github.com/yiisoft/strings) package.
+automatically generated using inflector's 
+[`toWords()`](https://github.com/yiisoft/strings/blob/47a3675d817d98612aeec5083d73a184ecd5239c/src/Inflector.php#L495) 
+method from the [strings](https://github.com/yiisoft/strings) package.
 - Property hints - complimentary text explaining certain details regarding each input. Optional, not shown when not set.
 - Property placeholders - the values used as examples to help user fill the actual values. Optional, not shown when not
 set.
