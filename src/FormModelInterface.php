@@ -9,7 +9,6 @@ use Yiisoft\FormModel\Exception\PropertyNotSupportNestedValuesException;
 use Yiisoft\FormModel\Exception\StaticObjectPropertyException;
 use Yiisoft\FormModel\Exception\UndefinedObjectPropertyException;
 use Yiisoft\FormModel\Exception\ValueNotFoundException;
-use Yiisoft\Hydrator\Validator\ValidatedInputInterface;
 
 /**
  * Form model represents an HTML form: its data, validation and presentation.
