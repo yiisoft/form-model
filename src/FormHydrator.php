@@ -79,6 +79,13 @@ final class FormHydrator
         return true;
     }
 
+    /**
+     * Validate form model.
+     *
+     * @param FormModelInterface $model Form model to validate.
+     *
+     * @return Result Validation result.
+     */
     public function validate(FormModelInterface $model): Result
     {
         return $this->validator->validate($model);
