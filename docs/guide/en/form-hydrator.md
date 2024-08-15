@@ -7,7 +7,7 @@ Form hydrator is a wrapper for [hydrator](https://github.com/yiisoft/hydrator) a
 
 ### Manual initialization
 
-Form hydrator has 2 dependencies: hydrator and validator.
+Form hydrator has two dependencies: hydrator and validator.
 
 ```php
 use Yiisoft\FormModel\FormHydrator;
