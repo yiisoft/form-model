@@ -83,7 +83,7 @@ fill.
   - If `true`, fills either only data defined explicitly in a map or only data allowed via validation rules but not 
   both.
 - By default, form hydrator expects the data to be wrapped with form model name (class name if not customized). Use 
-`$scope` to customize outer' key name or `''' (empty string) to disable it completely.
+`$scope` to customize outer' key name or `''` (empty string) to disable it completely.
 
 ```php
 use Yiisoft\FormModel\FormHydrator;
