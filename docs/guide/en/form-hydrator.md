@@ -58,11 +58,11 @@ Hydrates form model from existing data.
 
 ```php
 use Yiisoft\FormModel\FormHydrator;
-use Yiisoft\FormModel\FormModelInterface;
+use Yiisoft\FormModel\FormModel;
 
 /** 
  * @var FormHydrator $formHydrator
- * @var FormModelInterface $formModel 
+ * @var FormModel $formModel 
  */
 $data = [
     'PostForm' => [
@@ -127,7 +127,7 @@ For further working with result, refer to corresponding
 
 ### `populateAndValidate()`
 
-A shortcut to execute `populate()`, then `validate()` consecutively.
+A shortcut to execute [`populate()`](#populate), then [`validate()`](#validate) consecutively.
 
 ```php
 use Yiisoft\FormModel\FormHydrator;
@@ -143,10 +143,52 @@ $data = [
         'name' => 'Hello!',
         'preview' => 'Introduction post',
     ],
-]
-$isValid = $formHydrator->populateAndValidate($formModel);
+];
+$isValid = $formHydrator->populateAndValidate($formModel, $data);
 $result = $form->getValidationResult();
 ```
 
 The parameters are the same as in [`populate()`](#populate). But, unlike [`validate()`](#validate), the method returns 
+just whether the validation was successful. Validation result is still available via form's dedicated method though.
+
+### `populateFromPost()`
+
+A shortcut, hydrates form model from existing data similar to [`populate()`](#populate) but data is retrieved from 
+request's parsed body. 
+
+```php
+use Psr\Http\Message\RequestInterface;
+use Yiisoft\FormModel\FormHydrator;
+use Yiisoft\FormModel\FormModel;
+
+/** 
+ * @var FormHydrator $formHydrator
+ * @var FormModel $formModel
+ * @var RequestInterface $request 
+ */
+ 
+$isPopulated = $formHydrator->populate($formModel, $request);
+```
+
+### `populateFromPostAndValidate()`
+
+A shortcut to execute [`populateFromPost()`](#populatefrompost), then [`validate()`](#validate) consecutively.
+
+```php
+use Psr\Http\Message\RequestInterface;
+use Yiisoft\FormModel\FormHydrator;
+use Yiisoft\FormModel\FormModel;
+
+/** 
+ * @var FormHydrator $formHydrator
+ * @var FormModel $formModel
+ * @var RequestInterface $request 
+ */
+
+
+$isValid = $formHydrator->populateAndValidate($formModel, $request);
+$result = $form->getValidationResult();
+```
+
+The parameters are the same as in [`populate()`](#populate). But, unlike [`validate()`](#validate), the method returns
 just whether the validation was successful. Validation result is still available via form's dedicated method though.
