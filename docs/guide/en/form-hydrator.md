@@ -107,7 +107,7 @@ $formHydrator->populate($formModel, $data, $map, strict: true, scope: '');
 
 ### `validate()`
 
-Validates hydrated form model separately:
+Validates already hydrated form model:
 
 ```php
 use Yiisoft\FormModel\FormHydrator;
