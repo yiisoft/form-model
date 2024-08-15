@@ -127,7 +127,7 @@ For further working with result, refer to corresponding
 
 ### `populateAndValidate()`
 
-A shortcut to execute `populate()`, then `validate()` consequtevily.
+A shortcut to execute `populate()`, then `validate()` consecutively.
 
 ```php
 use Yiisoft\FormModel\FormHydrator;
