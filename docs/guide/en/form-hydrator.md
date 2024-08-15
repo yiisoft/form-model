@@ -27,7 +27,7 @@ $formHydrator = new FormHydrator(
 );
 ```
 
-Detailed information about configuring each of them is available in the documentation to according packages:
+Detailed information about configuring each of them is available in the documentation of according packages:
 [Yii Hydrator](https://github.com/yiisoft/hydrator) and [Yii Validator](https://github.com/yiisoft/validator).
 
 ### Initialization using dependency injection
