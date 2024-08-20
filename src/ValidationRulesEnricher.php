@@ -27,6 +27,9 @@ use Yiisoft\Validator\WhenInterface;
 
 use function is_iterable;
 
+/**
+ * @psalm-suppress MixedArrayAssignment
+ */
 final class ValidationRulesEnricher implements ValidationRulesEnricherInterface
 {
     public function process(BaseField $field, mixed $rules): ?array
