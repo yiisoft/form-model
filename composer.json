@@ -34,7 +34,6 @@
         "yiisoft/form": "^1.0@dev",
         "yiisoft/html": "^3.3",
         "yiisoft/hydrator": "^1.3",
-        "yiisoft/hydrator-validator": "^2.0",
         "yiisoft/strings": "^2.3",
         "yiisoft/validator": "^2.0"
     },

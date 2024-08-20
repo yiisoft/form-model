@@ -11,6 +11,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Yiisoft\FormModel\FormModel;
 use Yiisoft\FormModel\Tests\Support\Form\CarForm;
 use Yiisoft\FormModel\Tests\Support\TestHelper;
+use Yiisoft\Validator\Result;
 
 final class FormHydratorTest extends TestCase
 {
@@ -27,6 +28,31 @@ final class FormHydratorTest extends TestCase
 
         $this->assertSame(1, $form->a);
         $this->assertSame(2, $form->b);
+    }
+
+    public static function dataValidate(): array
+    {
+        return [
+            'empty data' => [[], ['name' => ['Name must contain at least 3 characters.']]],
+            'invalid data' => [
+                ['CarForm' => ['name' => 'A']],
+                ['name' => ['Name must contain at least 3 characters.']],
+            ],
+            'valid data' => [['CarForm' => ['name' => 'Test']], []],
+        ];
+    }
+
+    #[DataProvider('dataValidate')]
+    public function testPopulateAndValidateSeparately(array $data, array $expectedErrorMessages): void
+    {
+        $form = new CarForm();
+        $formHydrator = TestHelper::createFormHydrator();
+
+        $formHydrator->populate($form, $data);
+        $result = $formHydrator->validate($form);
+
+        $this->assertInstanceOf(Result::class, $result);
+        $this->assertEquals($expectedErrorMessages, $result->getErrorMessagesIndexedByPath());
     }
 
     public static function dataPopulateAndValidate(): array

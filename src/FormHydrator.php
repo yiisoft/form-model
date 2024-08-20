@@ -8,6 +8,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Yiisoft\Hydrator\ArrayData;
 use Yiisoft\Hydrator\HydratorInterface;
 use Yiisoft\Validator\Helper\ObjectParser;
+use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RulesProviderInterface;
 use Yiisoft\Validator\ValidatorInterface;
 
@@ -79,6 +80,18 @@ final class FormHydrator
     }
 
     /**
+     * Validate form model.
+     *
+     * @param FormModelInterface $model Form model to validate.
+     *
+     * @return Result Validation result.
+     */
+    public function validate(FormModelInterface $model): Result
+    {
+        return $this->validator->validate($model);
+    }
+
+    /**
      * Fill the model with the data and validate it.
      *
      * @param FormModelInterface $model Model to fill.
@@ -106,7 +119,7 @@ final class FormHydrator
             return false;
         }
 
-        return $this->validator->validate($model)->isValid();
+        return $this->validate($model)->isValid();
     }
 
     /**
@@ -136,6 +149,37 @@ final class FormHydrator
         }
 
         return $this->populate($model, $request->getParsedBody(), $map, $strict, $scope);
+    }
+
+    /**
+     * Fill the model with the data parsed from request body and validate it.
+     *
+     * @param FormModelInterface $model Model to fill.
+     * @param ServerRequestInterface $request Request to get parsed data from.
+     * @param ?array $map Map of object property names to keys in the data array to use for hydration.
+     * If not provided, it may be generated automatically based on presence of property validation rules and a `strict`
+     * setting.
+     * @psalm-param MapType $map
+     * @param ?bool $strict If `false`, fills everything that is in the data. If `null`, fills data that is either
+     * defined in a map explicitly or allowed via validation rules. If `false`, fills only data defined explicitly
+     * in a map or only data allowed via validation rules but not both.
+     * @param ?string $scope Key to use in the data array as a source of data. Usually used when there are multiple
+     * forms at the same page. If not set, it equals to {@see FormModelInterface::getFormName()}.
+     *
+     * @return bool Whether model is filled with data and is valid.
+     */
+    public function populateFromPostAndValidate(
+        FormModelInterface $model,
+        ServerRequestInterface $request,
+        ?array $map = null,
+        ?bool $strict = null,
+        ?string $scope = null
+    ): bool {
+        if ($request->getMethod() !== 'POST') {
+            return false;
+        }
+
+        return $this->populateAndValidate($model, $request->getParsedBody(), $map, $strict, $scope);
     }
 
     /**
@@ -169,37 +213,6 @@ final class FormHydrator
         }
 
         return array_merge($generatedMap, $userMap);
-    }
-
-    /**
-     * Fill the model with the data parsed from request body and validate it.
-     *
-     * @param FormModelInterface $model Model to fill.
-     * @param ServerRequestInterface $request Request to get parsed data from.
-     * @param ?array $map Map of object property names to keys in the data array to use for hydration.
-     * If not provided, it may be generated automatically based on presence of property validation rules and a `strict`
-     * setting.
-     * @psalm-param MapType $map
-     * @param ?bool $strict If `false`, fills everything that is in the data. If `null`, fills data that is either
-     * defined in a map explicitly or allowed via validation rules. If `false`, fills only data defined explicitly
-     * in a map or only data allowed via validation rules but not both.
-     * @param ?string $scope Key to use in the data array as a source of data. Usually used when there are multiple
-     * forms at the same page. If not set, it equals to {@see FormModelInterface::getFormName()}.
-     *
-     * @return bool Whether model is filled with data and is valid.
-     */
-    public function populateFromPostAndValidate(
-        FormModelInterface $model,
-        ServerRequestInterface $request,
-        ?array $map = null,
-        ?bool $strict = null,
-        ?string $scope = null
-    ): bool {
-        if ($request->getMethod() !== 'POST') {
-            return false;
-        }
-
-        return $this->populateAndValidate($model, $request->getParsedBody(), $map, $strict, $scope);
     }
 
     /**

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\FormModel;
 
+use LogicException;
 use ReflectionClass;
 use ReflectionException;
 use Yiisoft\FormModel\Exception\PropertyNotSupportNestedValuesException;
@@ -11,9 +12,10 @@ use Yiisoft\FormModel\Exception\StaticObjectPropertyException;
 use Yiisoft\FormModel\Exception\UndefinedArrayElementException;
 use Yiisoft\FormModel\Exception\UndefinedObjectPropertyException;
 use Yiisoft\FormModel\Exception\ValueNotFoundException;
-use Yiisoft\Hydrator\Validator\ValidatedInputTrait;
+use Yiisoft\Hydrator\Attribute\SkipHydration;
 use Yiisoft\Strings\Inflector;
 use Yiisoft\Strings\StringHelper;
+use Yiisoft\Validator\Result;
 
 use function array_key_exists;
 use function array_slice;
@@ -28,8 +30,6 @@ use function substr;
  */
 abstract class FormModel implements FormModelInterface
 {
-    use ValidatedInputTrait;
-
     /**
      * @psalm-suppress MissingClassConstType Remove after fix https://github.com/vimeo/psalm/issues/11026
      */
@@ -44,6 +44,12 @@ abstract class FormModel implements FormModelInterface
      * @psalm-suppress MissingClassConstType Remove after fix https://github.com/vimeo/psalm/issues/11026
      */
     private const META_PLACEHOLDER = 3;
+
+    /**
+     * @var Result|null Validation result.
+     */
+    #[SkipHydration]
+    private ?Result $validationResult = null;
 
     private static ?Inflector $inflector = null;
 
@@ -128,6 +134,20 @@ abstract class FormModel implements FormModelInterface
     {
         $this->getValidationResult()->addErrorWithoutPostProcessing($message, valuePath: $valuePath);
         return $this;
+    }
+
+    public function processValidationResult(Result $result): void
+    {
+        $this->validationResult = $result;
+    }
+
+    public function getValidationResult(): Result
+    {
+        if (empty($this->validationResult)) {
+            throw new LogicException('Validation result is not set.');
+        }
+
+        return $this->validationResult;
     }
 
     /**

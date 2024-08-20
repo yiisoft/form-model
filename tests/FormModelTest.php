@@ -446,8 +446,7 @@ final class FormModelTest extends TestCase
     public function testNestedRuleWithFormModels(): void
     {
         $form = new MainForm();
-
-        TestHelper::createFormHydrator()->populate(
+        $isValid = TestHelper::createFormHydrator()->populateAndValidate(
             $form,
             [
                 'value' => 'main-form',
@@ -456,14 +455,12 @@ final class FormModelTest extends TestCase
             scope: ''
         );
 
-        $result = $form->getValidationResult();
-
-        $this->assertFalse($result->isValid());
+        $this->assertFalse($isValid);
         $this->assertSame(
             [
                 'firstLevelForm.secondLevelForm.float' => ['Float must be no less than 0.'],
             ],
-            $result->getErrorMessagesIndexedByPath()
+            $form->getValidationResult()->getErrorMessagesIndexedByPath()
         );
     }
 
@@ -473,8 +470,7 @@ final class FormModelTest extends TestCase
     public function testNestedRuleInForm(): void
     {
         $form = new NestedMixedForm();
-
-        TestHelper::createFormHydrator()->populate(
+        $isValid = TestHelper::createFormHydrator()->populateAndValidate(
             $form,
             [
                 'body' => [
@@ -486,14 +482,12 @@ final class FormModelTest extends TestCase
             scope: ''
         );
 
-        $result = $form->getValidationResult();
-
-        $this->assertFalse($result->isValid());
+        $this->assertFalse($isValid);
         $this->assertSame(
             [
                 'body.shipping.phone' => ['Invalid phone.'],
             ],
-            $result->getErrorMessagesIndexedByPath()
+            $form->getValidationResult()->getErrorMessagesIndexedByPath(),
         );
     }
 
