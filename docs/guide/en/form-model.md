@@ -14,9 +14,9 @@ Form model properties are defined as class properties.
 final class LoginForm extends FormModel
 {
     public function __construct(
-        public ?string $login = null;
-        public ?string $password = null;
-        public bool $rememberMe = false;
+        public ?string $login = null,
+        public ?string $password = null,
+        public bool $rememberMe = false,
     ) {
     }
 }
