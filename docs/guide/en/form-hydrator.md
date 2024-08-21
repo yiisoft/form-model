@@ -192,3 +192,14 @@ $result = $form->getValidationResult();
 
 The parameters are the same as in [`populate()`](#populate). But, unlike [`validate()`](#validate), the method returns
 just whether the validation was successful. Validation result is still available via form's dedicated method though.
+
+## Hydrator extensions
+
+This package provides some extensions for hydrator you can use:
+
+- `NonArrayTypeCaster` - type caster ensuring that non-array value for property of array type is converted to an empty 
+array.
+
+To register custom type caster, see 
+["Tweaking type-casting"](https://github.com/yiisoft/hydrator/blob/master/docs/guide/en/typecasting.md#tweaking-type-casting)
+section in hydrator's guide.
