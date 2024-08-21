@@ -42,7 +42,7 @@ For more info see these guide sections:
 
 ## Applying theme
 
-To additionally apply theme, you can pass it as argument to a specific field's method (supported by both helper and
+To apply a theme, you can pass it as an argument to a specific field's method (supported by both helper and
 factory):
 
 ```php
