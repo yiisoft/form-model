@@ -58,7 +58,7 @@ Field::text($formModel, 'login', theme: 'my-theme');
 // Using factory
 
 $factory = new FieldFactory();
-$factory->text('login', 'value', theme: 'my-theme');
+$factory->text('login', 'john', theme: 'my-theme');
 ```
 
 To apply the theme for all fields, either pass it as argument in constructor (supported by factory).
@@ -67,7 +67,7 @@ To apply the theme for all fields, either pass it as argument in constructor (su
 use Yiisoft\FormModel\FieldFactory;
 
 $factory = new FieldFactory('my-theme');
-$factory->text('name', 'value');
+$factory->text('login', 'john');
 ```
 
 or override the theme property via class inheritance (supported by helper):
