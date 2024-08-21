@@ -58,7 +58,7 @@ Field::text($formModel, 'login', theme: 'my-theme');
 // Using factory
 
 $factory = new FieldFactory();
-$factory->text('name', 'value', theme: 'my-theme');
+$factory->text('login', 'value', theme: 'my-theme');
 ```
 
 To apply the theme for all fields, either pass it as argument in constructor (supported by factory).
