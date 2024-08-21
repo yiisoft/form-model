@@ -9,7 +9,7 @@ An implementation of [input data](https://github.com/yiisoft/form/blob/master/do
 
 ## Usage with fields
 
-To add form model input data to a field, you only need to pass form model itself and the property name:
+To add form model input data to a field, you need to pass form model itself and the property name:
 
 ```php
 use Yiisoft\Form\Field\Text;
