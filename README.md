@@ -61,25 +61,40 @@ use Psr\Http\Message\RequestInterface;
 use Yiisoft\FormModel\FormHydrator;
 use Yiisoft\FormModel\FormModel;
 
-/** 
- * @var FormHydrator $formHydrator
- * @var FormModel $formModel
- * @var RequestInterface $request 
- */
-
-
-$isValid = $formHydrator->populateAndValidate($formModel, $request);
-$result = $form->getValidationResult();
+final class PostController 
+{
+    public function login(RequestInterface $request, FormHydrator $formHydrator): ResponseInterface
+    {
+        /** @var FormModel $formModel */
+        $formModel = new LoginForm();
+        $errors = [];
+        if ($formHydrator->populateFromPostAndValidate($formModel, $request)) {
+            $errors = $formModel->getValidationResult()->getErrorMessagesIndexedByProperty();
+        }
+        
+        // You can pass $formModel and $errors to the view now.
+    }
+}
 ```
 
-Display it using [pure fields](docs/guide/en/pure-fields.md):
+Display it using [pure fields](docs/guide/en/pure-fields.md) in the view:
 
 ```php
 use Yiisoft\FormModel\Field;
 use Yiisoft\FormModel\FormModel;
 
+if (!empty($errors)) {
+    foreach ($errors as $property => $errorMessage) {
+        // Display an error message.
+    }
+}
+
+// Display a field.
+
 /** @var FormModel $formModel */
-$field = Field::text($formModel, 'login');
+echo Field::text($formModel, 'login');
+
+// ...
 ```
 
 ## Documentation
