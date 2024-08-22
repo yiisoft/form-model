@@ -197,8 +197,8 @@ just whether the validation was successful. Validation result is still available
 
 This package provides some extensions for hydrator you can use:
 
-- `NonArrayTypeCaster` - type caster ensuring that a non-array value such as string provided for property of array type is converted into an empty 
-array.
+- `NonArrayTypeCaster` - type caster ensuring that a non-array value such as string provided for property of array type 
+is converted into an empty array.
 
 To register custom type caster, see 
 ["Tweaking type-casting"](https://github.com/yiisoft/hydrator/blob/master/docs/guide/en/typecasting.md#tweaking-type-casting)
