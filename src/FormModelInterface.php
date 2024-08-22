@@ -9,11 +9,13 @@ use Yiisoft\FormModel\Exception\PropertyNotSupportNestedValuesException;
 use Yiisoft\FormModel\Exception\StaticObjectPropertyException;
 use Yiisoft\FormModel\Exception\UndefinedObjectPropertyException;
 use Yiisoft\FormModel\Exception\ValueNotFoundException;
+use Yiisoft\Validator\PostValidationHookInterface;
+use Yiisoft\Validator\Result;
 
 /**
  * Form model represents an HTML form: its data, validation and presentation.
  */
-interface FormModelInterface extends ValidatedInputInterface
+interface FormModelInterface extends PostValidationHookInterface
 {
     /**
      * Returns the text hint for the specified property.
@@ -149,4 +151,12 @@ interface FormModelInterface extends ValidatedInputInterface
      * @psalm-param list<int|string> $valuePath
      */
     public function addError(string $message, array $valuePath = []): static;
+
+    /**
+     * Returns validation result.
+     *
+     * @throws LogicException When validation result is not set.
+     * @return Result Validation result.
+     */
+    public function getValidationResult(): Result;
 }
