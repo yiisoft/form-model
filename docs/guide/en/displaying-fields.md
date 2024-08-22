@@ -1,4 +1,4 @@
-# Pure fields
+# Displaying fields
 
 To ease the creation of the fields with `\Yiisoft\FormModel\FormModelInputData` as a data source, use
 corresponding helper (`\Yiisoft\FormModel\Field`):
@@ -61,7 +61,7 @@ $factory = new FieldFactory();
 $factory->text('login', 'john', theme: 'my-theme');
 ```
 
-To apply the theme for all fields, either pass it as argument in constructor (supported by factory).
+To apply the theme for all fields, pass it as argument in constructor (supported by factory).
 
 ```php
 use Yiisoft\FormModel\FieldFactory;
@@ -70,7 +70,7 @@ $factory = new FieldFactory('my-theme');
 $factory->text('login', 'john');
 ```
 
-or override the theme property via class inheritance (supported by helper):
+Or you can override the theme property via class inheritance (supported by helper):
 
 ```php
 use Yiisoft\Form\PureField\Field;
