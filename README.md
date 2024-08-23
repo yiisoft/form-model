@@ -61,7 +61,7 @@ use Psr\Http\Message\RequestInterface;
 use Yiisoft\FormModel\FormHydrator;
 use Yiisoft\FormModel\FormModel;
 
-final class PostController 
+final class AuthController 
 {
     public function login(RequestInterface $request, FormHydrator $formHydrator): ResponseInterface
     {
