@@ -161,13 +161,15 @@ final class ValidationRulesEnricher implements ValidationRulesEnricherInterface
 
         if ($field instanceof Url) {
             $enrichment = [];
+            $processedUrl = false;
             foreach ($rules as $rule) {
                 if ($this->hasWhen($rule)) {
                     continue;
                 }
                 $this->processRequiredToRequired($rule, $enrichment);
                 $this->processLengthToMinMaxLength($rule, $enrichment);
-                if (!$this->processUrlToPattern($rule, $enrichment)) {
+                $processedUrl = $processedUrl || $this->processUrlToPattern($rule, $enrichment);
+                if (!$processedUrl) {
                     $this->processRegexToPattern($rule, $enrichment);
                 }
             }

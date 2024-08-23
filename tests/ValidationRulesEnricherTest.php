@@ -76,7 +76,7 @@ final class ValidationRulesEnricherTest extends TestCase
                 'shop',
             ],
             'url-regex' => [
-                '<input type="url" id="urlform-beach" name="UrlForm[beach]" value pattern="\w+">',
+                '<input type="url" id="urlform-beach" name="UrlForm[beach]" value pattern="^((?i)http|https):\/\/(([a-zA-Z0-9][a-zA-Z0-9_-]*)(\.[a-zA-Z0-9][a-zA-Z0-9_-]*)+)(?::\d{1,5})?([?\/#].*$|$)">',
                 'beach',
             ],
             'regex-url' => [
