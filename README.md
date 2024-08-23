@@ -43,12 +43,14 @@ use Yiisoft\Validator\Rule\Required;
 final class LoginForm extends FormModel
 {
     #[Required]
-    #[Length(min: 4, max: 40, lessThanMinMessage: 'Is too short.', greaterThanMaxMessage: 'Is too long.')]
-    #[Email]
+    #[Length(min: 4, max: 40, skipOnEmpty: true)]
+    #[Email(skipOnEmpty: true)]
     private ?string $login = null;
+
     #[Required]
-    #[Length(min: 8, lessThanMinMessage: 'Is too short.')]
-    private ?string $password = null;    
+    #[Length(min: 8, skipOnEmpty: true)]
+    private ?string $password = null;
+
     #[Safe]
     private bool $rememberMe = false;
 }
