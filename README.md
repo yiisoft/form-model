@@ -87,6 +87,7 @@ use Yiisoft\FormModel\FormModel;
 if (!empty($errors)) {
     foreach ($errors as $property => $errorMessage) {
         // Display an error message.
+        <p><?= Html::encode($errorMessage) ?></p>
     }
 }
 
