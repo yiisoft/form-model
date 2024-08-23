@@ -65,7 +65,6 @@ final class PostController
 {
     public function login(RequestInterface $request, FormHydrator $formHydrator): ResponseInterface
     {
-        /** @var FormModel $formModel */
         $formModel = new LoginForm();
         $errors = [];
         if ($formHydrator->populateFromPostAndValidate($formModel, $request)) {
