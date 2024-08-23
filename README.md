@@ -77,7 +77,7 @@ final class PostController
 }
 ```
 
-Display it using [pure fields](docs/guide/en/pure-fields.md) in the view:
+Display it using [fields](docs/guide/en/displaying-fields.md) in the view:
 
 ```php
 use Yiisoft\FormModel\Field;
