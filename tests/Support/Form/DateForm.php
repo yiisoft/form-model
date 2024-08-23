@@ -12,12 +12,14 @@ final class DateForm extends FormModel implements RulesProviderInterface
 {
     private ?string $main = null;
     private ?string $second = null;
+    private ?string $three = null;
 
     public function getRules(): array
     {
         return [
             'main' => [new Required()],
             'second' => [new Required(when: static fn() => false)],
+            'three' => [new Required(when: static fn() => false), new Required()],
         ];
     }
 }

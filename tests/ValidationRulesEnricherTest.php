@@ -250,6 +250,25 @@ final class ValidationRulesEnricherTest extends TestCase
         $this->assertSame($expected, $result);
     }
 
+    public function testSelectWithWhenNext(): void
+    {
+        $result = Select::widget()
+            ->inputData(new FormModelInputData(new SelectForm(), 'requiredWhenNext'))
+            ->optionsData(['red' => 'Red'])
+            ->enrichFromValidationRules()
+            ->hideLabel()
+            ->useContainer(false)
+            ->render();
+
+        $expected = <<<HTML
+            <select id="selectform-requiredwhennext" name="SelectForm[requiredWhenNext]" required>
+            <option value="red">Red</option>
+            </select>
+            HTML;
+
+        $this->assertSame($expected, $result);
+    }
+
     public static function dataPassword(): array
     {
         return [
@@ -322,6 +341,23 @@ final class ValidationRulesEnricherTest extends TestCase
         $this->assertSame($expected, $result);
     }
 
+    public function testFileWithWhenNext(): void
+    {
+        $result = File::widget()
+            ->inputData(new FormModelInputData(new FileForm(), 'video'))
+            ->hideLabel()
+            ->enrichFromValidationRules()
+            ->render();
+
+        $expected = <<<HTML
+            <div>
+            <input type="file" id="fileform-video" name="FileForm[video]" required>
+            </div>
+            HTML;
+
+        $this->assertSame($expected, $result);
+    }
+
     public function testDateTimeInputField(): void
     {
         $result = StubDateTimeInputField::widget()
@@ -350,6 +386,23 @@ final class ValidationRulesEnricherTest extends TestCase
         $expected = <<<HTML
             <div>
             <input type="datetime" id="dateform-second" name="DateForm[second]">
+            </div>
+            HTML;
+
+        $this->assertSame($expected, $result);
+    }
+
+    public function testDateTimeInputFieldWithWhenAndNext(): void
+    {
+        $result = StubDateTimeInputField::widget()
+            ->inputData(new FormModelInputData(new DateForm(), 'three'))
+            ->hideLabel()
+            ->enrichFromValidationRules()
+            ->render();
+
+        $expected = <<<HTML
+            <div>
+            <input type="datetime" id="dateform-three" name="DateForm[three]" required>
             </div>
             HTML;
 
