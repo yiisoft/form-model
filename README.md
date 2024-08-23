@@ -31,12 +31,73 @@ composer require yiisoft/form-model
 
 ## General usage
 
-TODO: 
+Define a [form model](docs/guide/en/form-model.md):
 
-1. Define a model (FormModelInterface, FormModel, Safe)
-2. Fill it with data and validate (FormHydrator)
-3. Display it (show both Field and FieldFactory!).
-4. ValidationRulesEnricher
+```php
+use Yiisoft\FormModel\FormModel;
+use Yiisoft\FormModel\Safe;
+use Yiisoft\Validator\Rule\Email;
+use Yiisoft\Validator\Rule\Length;
+use Yiisoft\Validator\Rule\Required;
+
+final class LoginForm extends FormModel
+{
+    #[Required]
+    #[Length(min: 4, max: 40, skipOnEmpty: true)]
+    #[Email(skipOnEmpty: true)]
+    private ?string $login = null;
+
+    #[Required]
+    #[Length(min: 8, skipOnEmpty: true)]
+    private ?string $password = null;
+
+    #[Safe]
+    private bool $rememberMe = false;
+}
+```
+
+Fill it with data and validate using [form hydrator](docs/guide/en/form-hydrator.md):
+
+```php
+use Psr\Http\Message\RequestInterface;
+use Yiisoft\FormModel\FormHydrator;
+use Yiisoft\FormModel\FormModel;
+
+final class AuthController 
+{
+    public function login(RequestInterface $request, FormHydrator $formHydrator): ResponseInterface
+    {
+        $formModel = new LoginForm();
+        $errors = [];
+        if ($formHydrator->populateFromPostAndValidate($formModel, $request)) {
+            $errors = $formModel->getValidationResult()->getErrorMessagesIndexedByProperty();
+        }
+        
+        // You can pass $formModel and $errors to the view now.
+    }
+}
+```
+
+Display it using [fields](docs/guide/en/displaying-fields.md) in the view:
+
+```php
+use Yiisoft\FormModel\Field;
+use Yiisoft\FormModel\FormModel;
+
+if (!empty($errors)) {
+    foreach ($errors as $property => $errorMessage) {
+        // Display an error message.
+        <p><?= Html::encode($errorMessage) ?></p>
+    }
+}
+
+// Display a field.
+
+/** @var FormModel $formModel */
+echo Field::text($formModel, 'login');
+
+// ...
+```
 
 ## Documentation
 
