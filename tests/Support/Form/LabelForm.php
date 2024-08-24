@@ -18,7 +18,7 @@ final class LabelForm extends FormModel
     public function getPropertyLabels(): array
     {
         return [
-            'name' => 'NameFromGetter'
+            'name' => 'NameFromGetter',
         ];
     }
 }
