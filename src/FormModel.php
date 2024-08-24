@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\FormModel;
 
 use LogicException;
+use ReflectionAttribute;
 use ReflectionClass;
 use ReflectionException;
 use Yiisoft\FormModel\Exception\PropertyNotSupportNestedValuesException;
@@ -15,6 +16,7 @@ use Yiisoft\FormModel\Exception\ValueNotFoundException;
 use Yiisoft\Hydrator\Attribute\SkipHydration;
 use Yiisoft\Strings\Inflector;
 use Yiisoft\Strings\StringHelper;
+use Yiisoft\Validator\Label;
 use Yiisoft\Validator\Result;
 
 use function array_key_exists;
@@ -235,6 +237,18 @@ abstract class FormModel implements FormModelInterface
             }
             if ($property->isStatic()) {
                 return null;
+            }
+
+            /**
+             * Try to get label from {@see Label} PHP attribute.
+             */
+            if ($metaKey === self::META_LABEL) {
+                $attributes = $property->getAttributes(Label::class, ReflectionAttribute::IS_INSTANCEOF);
+                foreach ($attributes as $attribute) {
+                    /** @var Label $instance */
+                    $instance = $attribute->newInstance();
+                    return $instance->getLabel();
+                }
             }
 
             $value = $property->getValue($value);

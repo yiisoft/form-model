@@ -21,6 +21,7 @@ use Yiisoft\FormModel\Tests\Support\Form\CustomFormNameForm;
 use Yiisoft\FormModel\Tests\Support\Form\DefaultFormNameForm;
 use Yiisoft\FormModel\Tests\Support\Form\FormWithNestedProperty;
 use Yiisoft\FormModel\Tests\Support\Form\FormWithNestedStructures;
+use Yiisoft\FormModel\Tests\Support\Form\LabelForm;
 use Yiisoft\FormModel\Tests\Support\Form\LoginForm;
 use Yiisoft\FormModel\Tests\Support\Form\NestedForm;
 use Yiisoft\FormModel\Tests\Support\Form\NestedMixedForm\NestedMixedForm;
@@ -681,5 +682,21 @@ final class FormModelTest extends TestCase
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('Validation result is not set.');
         $form->addError('Test message.');
+    }
+
+    public static function dataLabel(): iterable
+    {
+        yield ['AgeFromAttribute', 'age'];
+        yield ['NameFromGetter', 'name'];
+    }
+
+    #[DataProvider('dataLabel')]
+    public function testLabel(string $expected, string $property): void
+    {
+        $form = new LabelForm();
+
+        $label = $form->getPropertyLabel($property);
+
+        $this->assertSame($expected, $label);
     }
 }
