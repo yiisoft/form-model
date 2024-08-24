@@ -42,15 +42,18 @@ use Yiisoft\Validator\Rule\Required;
 
 final class LoginForm extends FormModel
 {
+    #[Label('Your login')]
     #[Required]
     #[Length(min: 4, max: 40, skipOnEmpty: true)]
     #[Email(skipOnEmpty: true)]
     private ?string $login = null;
 
+    #[Label('Your password')]
     #[Required]
     #[Length(min: 8, skipOnEmpty: true)]
     private ?string $password = null;
 
+    #[Label('Remember me for 1 week')]
     #[Safe]
     private bool $rememberMe = false;
 }
