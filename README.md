@@ -34,8 +34,8 @@ composer require yiisoft/form-model
 Define a [form model](docs/guide/en/form-model.md):
 
 ```php
+use Yiisoft\FormModel\Attribute\Safe;
 use Yiisoft\FormModel\FormModel;
-use Yiisoft\FormModel\Safe;
 use Yiisoft\Validator\Rule\Email;
 use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\Rule\Required;

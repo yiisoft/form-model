@@ -8,6 +8,9 @@ use LogicException;
 use ReflectionAttribute;
 use ReflectionClass;
 use ReflectionException;
+use ReflectionProperty;
+use Yiisoft\FormModel\Attribute\Hint;
+use Yiisoft\FormModel\Attribute\Placeholder;
 use Yiisoft\FormModel\Exception\PropertyNotSupportNestedValuesException;
 use Yiisoft\FormModel\Exception\StaticObjectPropertyException;
 use Yiisoft\FormModel\Exception\UndefinedArrayElementException;
@@ -239,16 +242,9 @@ abstract class FormModel implements FormModelInterface
                 return null;
             }
 
-            /**
-             * Try to get label from {@see Label} PHP attribute.
-             */
-            if ($metaKey === self::META_LABEL) {
-                $attributes = $property->getAttributes(Label::class, ReflectionAttribute::IS_INSTANCEOF);
-                foreach ($attributes as $attribute) {
-                    /** @var Label $instance */
-                    $instance = $attribute->newInstance();
-                    return $instance->getLabel();
-                }
+            $valueByAttribute = $this->getPropertyMetaValueByAttribute($metaKey, $property);
+            if ($valueByAttribute!== null) {
+                return $valueByAttribute;
             }
 
             $value = $property->getValue($value);
@@ -318,5 +314,49 @@ abstract class FormModel implements FormModelInterface
             }
         }
         return $path;
+    }
+
+    /**
+     * @psalm-param self::META_* $metaKey
+     */
+    private function getPropertyMetaValueByAttribute(int $metaKey, ReflectionProperty $property): ?string
+    {
+        switch ($metaKey) {
+            /** Try to get label from {@see Label} PHP attribute. */
+            case self::META_LABEL:
+                $attributes = $property->getAttributes(Label::class, ReflectionAttribute::IS_INSTANCEOF);
+                if (!empty($attributes)) {
+                    /** @var Label $instance */
+                    $instance = $attributes[0]->newInstance();
+
+                    return $instance->getLabel();
+                }
+
+                break;
+            /** Try to get label from {@see Hint} PHP attribute. */
+            case self::META_HINT:
+                $attributes = $property->getAttributes(Hint::class, ReflectionAttribute::IS_INSTANCEOF);
+                if (!empty($attributes)) {
+                    /** @var Hint $instance */
+                    $instance = $attributes[0]->newInstance();
+
+                    return $instance->getHint();
+                }
+
+                break;
+            /** Try to get label from {@see Placeholder} PHP attribute. */
+            case self::META_PLACEHOLDER:
+                $attributes = $property->getAttributes(Placeholder::class, ReflectionAttribute::IS_INSTANCEOF);
+                if (!empty($attributes)) {
+                    /** @var Placeholder $instance */
+                    $instance = $attributes[0]->newInstance();
+
+                    return $instance->getPlaceholder();
+                }
+
+                break;
+        }
+
+        return null;
     }
 }

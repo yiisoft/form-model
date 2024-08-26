@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Yiisoft\FormModel\Tests\Support\Form\NestedRuleForm;
 
+use Yiisoft\FormModel\Attribute\Safe;
 use Yiisoft\FormModel\FormModel;
-use Yiisoft\FormModel\Safe;
 use Yiisoft\Validator\Rule\Nested;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\RulesProviderInterface;

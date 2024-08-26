@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\FormModel;
+namespace Yiisoft\FormModel\Attribute;
 
 use Attribute;
 use Yiisoft\Validator\Result;
