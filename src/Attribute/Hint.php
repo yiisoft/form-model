@@ -10,7 +10,7 @@ use Attribute;
 final class Hint
 {
     public function __construct(
-        private string $hint,
+        private readonly string $hint,
     ) {
     }
 

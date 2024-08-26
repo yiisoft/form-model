@@ -106,16 +106,13 @@ interface FormModelInterface extends PostValidationHookInterface
     /**
      * Returns the form name that this model class should use.
      *
-     * The form name is mainly used by {@see TODO: FIX NAMESPACE HtmlForm} to determine how to name the input
-     * fields for the properties in a model.
+     * The form name is mainly used by {@see FormModelInputData} to determine how to name the input fields for
+     * the properties in a model.
      * If the form name is "A" and a property name is "b", then the corresponding input name would be "A[b]".
      * If the form name is an empty string, then the input name would be "b".
      *
      * The purpose of the above naming schema is that for forms which contain multiple different models, the properties
      * of each model are grouped in sub-arrays of the POST-data, and it is easier to differentiate between them.
-     *
-     * By default, this method returns the model class name (without the namespace part) as the form name. You may
-     * override it when the model is used in different forms.
      *
      * @return string The form name of this model class.
      */

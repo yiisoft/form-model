@@ -10,6 +10,8 @@ use Yiisoft\Hydrator\Result;
 use Yiisoft\Hydrator\TypeCaster\TypeCastContext;
 use Yiisoft\Hydrator\TypeCaster\TypeCasterInterface;
 
+use function is_array;
+
 /**
  * Ensures that non-array value for property of array type is converted to an empty array.
  */
