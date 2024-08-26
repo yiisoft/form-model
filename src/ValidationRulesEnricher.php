@@ -28,7 +28,7 @@ use Yiisoft\Validator\WhenInterface;
 use function is_iterable;
 
 /**
- * @psalm-suppress MixedArrayAssignment
+ * @psalm-type EnrichmentType = array{inputAttributes?:array}
  */
 final class ValidationRulesEnricher implements ValidationRulesEnricherInterface
 {
@@ -38,47 +38,140 @@ final class ValidationRulesEnricher implements ValidationRulesEnricherInterface
             return null;
         }
 
-        if (
-            $field instanceof DateTimeInputField ||
-            $field instanceof File ||
-            $field instanceof Select
-        ) {
+        if ($field instanceof DateTimeInputField) {
             $enrichment = [];
             foreach ($rules as $rule) {
-                $this->processRequired($rule, $enrichment);
+                if ($this->hasWhen($rule)) {
+                    continue;
+                }
+                $this->processRequiredToRequired($rule, $enrichment);
             }
             return $enrichment;
         }
 
-        if (
-            $field instanceof Number ||
-            $field instanceof Range
-        ) {
+        if ($field instanceof Email) {
             $enrichment = [];
             foreach ($rules as $rule) {
-                $this->processNumber($rule, $enrichment);
+                if ($this->hasWhen($rule)) {
+                    continue;
+                }
+                $this->processRequiredToRequired($rule, $enrichment);
+                $this->processLengthToMinMaxLength($rule, $enrichment);
+                $this->processRegexToPattern($rule, $enrichment);
             }
             return $enrichment;
         }
 
-        if (
-            $field instanceof Email ||
-            $field instanceof Password ||
-            $field instanceof Telephone ||
-            $field instanceof Text ||
-            $field instanceof Textarea
-        ) {
+        if ($field instanceof File) {
             $enrichment = [];
             foreach ($rules as $rule) {
-                $this->processText($rule, $enrichment);
+                if ($this->hasWhen($rule)) {
+                    continue;
+                }
+                $this->processRequiredToRequired($rule, $enrichment);
+            }
+            return $enrichment;
+        }
+
+        if ($field instanceof Number) {
+            $enrichment = [];
+            foreach ($rules as $rule) {
+                if ($this->hasWhen($rule)) {
+                    continue;
+                }
+                $this->processRequiredToRequired($rule, $enrichment);
+                $this->processAbstractNumberToMinMax($rule, $enrichment);
+            }
+            return $enrichment;
+        }
+
+        if ($field instanceof Password) {
+            $enrichment = [];
+            foreach ($rules as $rule) {
+                if ($this->hasWhen($rule)) {
+                    continue;
+                }
+                $this->processRequiredToRequired($rule, $enrichment);
+                $this->processLengthToMinMaxLength($rule, $enrichment);
+                $this->processRegexToPattern($rule, $enrichment);
+            }
+            return $enrichment;
+        }
+
+        if ($field instanceof Range) {
+            $enrichment = [];
+            foreach ($rules as $rule) {
+                if ($this->hasWhen($rule)) {
+                    continue;
+                }
+                $this->processRequiredToRequired($rule, $enrichment);
+                $this->processAbstractNumberToMinMax($rule, $enrichment);
+            }
+            return $enrichment;
+        }
+
+        if ($field instanceof Select) {
+            $enrichment = [];
+            foreach ($rules as $rule) {
+                if ($this->hasWhen($rule)) {
+                    continue;
+                }
+                $this->processRequiredToRequired($rule, $enrichment);
+            }
+            return $enrichment;
+        }
+
+        if ($field instanceof Telephone) {
+            $enrichment = [];
+            foreach ($rules as $rule) {
+                if ($this->hasWhen($rule)) {
+                    continue;
+                }
+                $this->processRequiredToRequired($rule, $enrichment);
+                $this->processLengthToMinMaxLength($rule, $enrichment);
+                $this->processRegexToPattern($rule, $enrichment);
+            }
+            return $enrichment;
+        }
+
+        if ($field instanceof Text) {
+            $enrichment = [];
+            foreach ($rules as $rule) {
+                if ($this->hasWhen($rule)) {
+                    continue;
+                }
+                $this->processRequiredToRequired($rule, $enrichment);
+                $this->processLengthToMinMaxLength($rule, $enrichment);
+                $this->processRegexToPattern($rule, $enrichment);
+            }
+            return $enrichment;
+        }
+
+        if ($field instanceof Textarea) {
+            $enrichment = [];
+            foreach ($rules as $rule) {
+                if ($this->hasWhen($rule)) {
+                    continue;
+                }
+                $this->processRequiredToRequired($rule, $enrichment);
+                $this->processLengthToMinMaxLength($rule, $enrichment);
             }
             return $enrichment;
         }
 
         if ($field instanceof Url) {
             $enrichment = [];
+            $processedUrl = false;
             foreach ($rules as $rule) {
-                $this->processUrl($rule, $enrichment);
+                if ($this->hasWhen($rule)) {
+                    continue;
+                }
+                $this->processRequiredToRequired($rule, $enrichment);
+                $this->processLengthToMinMaxLength($rule, $enrichment);
+                $processedUrl = $processedUrl || $this->processUrlToPattern($rule, $enrichment);
+                if (!$processedUrl) {
+                    $this->processRegexToPattern($rule, $enrichment);
+                }
             }
             return $enrichment;
         }
@@ -86,21 +179,21 @@ final class ValidationRulesEnricher implements ValidationRulesEnricherInterface
         return null;
     }
 
-    private function processRequired(mixed $rule, array &$enrichment): void
+    /**
+     * @psalm-param EnrichmentType $enrichment
+     */
+    private function processRequiredToRequired(mixed $rule, array &$enrichment): void
     {
-        if ($rule instanceof Required && $rule->getWhen() === null) {
+        if ($rule instanceof Required) {
             $enrichment['inputAttributes']['required'] = true;
         }
     }
 
-    private function processText(mixed $rule, array &$enrichment): void
+    /**
+     * @psalm-param EnrichmentType $enrichment
+     */
+    private function processLengthToMinMaxLength(mixed $rule, array &$enrichment): void
     {
-        if ($rule instanceof WhenInterface && $rule->getWhen() !== null) {
-            return;
-        }
-
-        $this->processRequired($rule, $enrichment);
-
         if ($rule instanceof Length) {
             if (null !== $min = $rule->getMin()) {
                 $enrichment['inputAttributes']['minlength'] = $min;
@@ -109,22 +202,35 @@ final class ValidationRulesEnricher implements ValidationRulesEnricherInterface
                 $enrichment['inputAttributes']['maxlength'] = $max;
             }
         }
+    }
 
+    /**
+     * @psalm-param EnrichmentType $enrichment
+     */
+    private function processRegexToPattern(mixed $rule, array &$enrichment): void
+    {
         if ($rule instanceof Regex && !$rule->isNot()) {
-            $enrichment['inputAttributes']['pattern'] = Html::normalizeRegexpPattern(
-                $rule->getPattern(),
-            );
+            $enrichment['inputAttributes']['pattern'] = Html::normalizeRegexpPattern($rule->getPattern());
         }
     }
 
-    private function processNumber(mixed $rule, array &$enrichment): void
+    /**
+     * @psalm-param EnrichmentType $enrichment
+     */
+    private function processUrlToPattern(mixed $rule, array &$enrichment): bool
     {
-        if ($rule instanceof WhenInterface && $rule->getWhen() !== null) {
-            return;
+        if ($rule instanceof UrlRule && !$rule->isIdnEnabled()) {
+            $enrichment['inputAttributes']['pattern'] = Html::normalizeRegexpPattern($rule->getPattern());
+            return true;
         }
+        return false;
+    }
 
-        $this->processRequired($rule, $enrichment);
-
+    /**
+     * @psalm-param EnrichmentType $enrichment
+     */
+    private function processAbstractNumberToMinMax(mixed $rule, array &$enrichment): void
+    {
         if ($rule instanceof AbstractNumber) {
             if (null !== $min = $rule->getMin()) {
                 $enrichment['inputAttributes']['min'] = $min;
@@ -135,12 +241,8 @@ final class ValidationRulesEnricher implements ValidationRulesEnricherInterface
         }
     }
 
-    private function processUrl(mixed $rule, array &$enrichment): void
+    private function hasWhen(mixed $rule): bool
     {
-        $this->processText($rule, $enrichment);
-
-        if ($rule instanceof UrlRule && !$rule->isIdnEnabled()) {
-            $enrichment['inputAttributes']['pattern'] = Html::normalizeRegexpPattern($rule->getPattern());
-        }
+        return $rule instanceof WhenInterface && $rule->getWhen() !== null;
     }
 }

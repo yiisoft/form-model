@@ -12,12 +12,14 @@ final class FileForm extends FormModel implements RulesProviderInterface
 {
     private ?string $image = null;
     private ?string $photo = null;
+    private ?string $video = null;
 
     public function getRules(): array
     {
         return [
             'image' => [new Required()],
             'photo' => [new Required(when: static fn () => false)],
+            'video' => [new Required(when: static fn () => false), new Required()],
         ];
     }
 }
