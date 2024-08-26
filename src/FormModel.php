@@ -243,7 +243,7 @@ abstract class FormModel implements FormModelInterface
             }
 
             $valueByAttribute = $this->getPropertyMetaValueByAttribute($metaKey, $property);
-            if ($valueByAttribute!== null) {
+            if ($valueByAttribute !== null) {
                 return $valueByAttribute;
             }
 
@@ -333,7 +333,7 @@ abstract class FormModel implements FormModelInterface
                 }
 
                 break;
-            /** Try to get label from {@see Hint} PHP attribute. */
+                /** Try to get label from {@see Hint} PHP attribute. */
             case self::META_HINT:
                 $attributes = $property->getAttributes(Hint::class, ReflectionAttribute::IS_INSTANCEOF);
                 if (!empty($attributes)) {
@@ -344,7 +344,7 @@ abstract class FormModel implements FormModelInterface
                 }
 
                 break;
-            /** Try to get label from {@see Placeholder} PHP attribute. */
+                /** Try to get label from {@see Placeholder} PHP attribute. */
             case self::META_PLACEHOLDER:
                 $attributes = $property->getAttributes(Placeholder::class, ReflectionAttribute::IS_INSTANCEOF);
                 if (!empty($attributes)) {
