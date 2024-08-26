@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Yiisoft\FormModel\Tests\Support\Form;
 
+use Yiisoft\FormModel\Attribute\Safe;
 use Yiisoft\FormModel\FormModel;
-use Yiisoft\FormModel\Safe;
 use Yiisoft\FormModel\Tests\Support\Dto\Coordinates;
 
 final class FormWithNestedStructures extends FormModel

@@ -9,19 +9,19 @@ use LogicException;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use stdClass;
+use Yiisoft\FormModel\Attribute\Safe;
 use Yiisoft\FormModel\Exception\PropertyNotSupportNestedValuesException;
 use Yiisoft\FormModel\Exception\StaticObjectPropertyException;
 use Yiisoft\FormModel\Exception\UndefinedObjectPropertyException;
 use Yiisoft\FormModel\FormModel;
 use Yiisoft\FormModel\FormModelInputData;
 use Yiisoft\FormModel\FormModelInterface;
-use Yiisoft\FormModel\Safe;
 use Yiisoft\FormModel\Tests\Support\Dto\Coordinates;
 use Yiisoft\FormModel\Tests\Support\Form\CustomFormNameForm;
 use Yiisoft\FormModel\Tests\Support\Form\DefaultFormNameForm;
 use Yiisoft\FormModel\Tests\Support\Form\FormWithNestedProperty;
 use Yiisoft\FormModel\Tests\Support\Form\FormWithNestedStructures;
-use Yiisoft\FormModel\Tests\Support\Form\LabelForm;
+use Yiisoft\FormModel\Tests\Support\Form\AttributeForm;
 use Yiisoft\FormModel\Tests\Support\Form\LoginForm;
 use Yiisoft\FormModel\Tests\Support\Form\NestedForm;
 use Yiisoft\FormModel\Tests\Support\Form\NestedMixedForm\NestedMixedForm;
@@ -686,16 +686,48 @@ final class FormModelTest extends TestCase
 
     public static function dataLabel(): iterable
     {
-        yield ['AgeFromAttribute', 'age'];
-        yield ['NameFromGetter', 'name'];
+        yield ['AgeLabelFromAttribute', 'age'];
+        yield ['NameLabelFromGetter', 'name'];
     }
 
     #[DataProvider('dataLabel')]
     public function testLabel(string $expected, string $property): void
     {
-        $form = new LabelForm();
+        $form = new AttributeForm();
 
         $label = $form->getPropertyLabel($property);
+
+        $this->assertSame($expected, $label);
+    }
+
+    public static function dataHint(): iterable
+    {
+        yield ['AgeHintFromAttribute', 'age'];
+        yield ['NameHintFromGetter', 'name'];
+    }
+
+    #[DataProvider('dataHint')]
+    public function testHint(string $expected, string $property): void
+    {
+        $form = new AttributeForm();
+
+        $label = $form->getPropertyHint($property);
+
+        $this->assertSame($expected, $label);
+    }
+
+    public static function dataPlaceholder(): iterable
+    {
+        yield ['AgePlaceholderFromAttribute', 'age'];
+        yield ['NamePlaceholderFromGetter', 'name'];
+    }
+
+    #[DataProvider('dataPlaceholder')]
+    public function testPlaceholder(string $expected, string $property): void
+    {
+        $form = new AttributeForm();
+
+        $label = $form->getPropertyPlaceholder($property);
 
         $this->assertSame($expected, $label);
     }
