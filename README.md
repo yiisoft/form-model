@@ -20,6 +20,7 @@ The package provides a base for form models and helps to fill them with data, va
 ## Requirements
 
 - PHP 8.1 or higher.
+- `mbstring` PHP extension.
 
 ## Installation
 
@@ -87,17 +88,9 @@ Display it using [fields](docs/guide/en/displaying-fields.md) in the view:
 use Yiisoft\FormModel\Field;
 use Yiisoft\FormModel\FormModel;
 
-if (!empty($errors)) {
-    foreach ($errors as $property => $errorMessage) {
-        // Display an error message.
-        <p><?= Html::encode($errorMessage) ?></p>
-    }
-}
-
-// Display a field.
-
-/** @var FormModel $formModel */
 echo Field::text($formModel, 'login');
+echo Field::password($formModel, 'password');
+echo Field::checkbox($formModel, 'rememberMe');
 
 // ...
 ```

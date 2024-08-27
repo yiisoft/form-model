@@ -10,7 +10,7 @@ use Attribute;
 final class Placeholder
 {
     public function __construct(
-        private string $placeholder,
+        private readonly string $placeholder,
     ) {
     }
 
