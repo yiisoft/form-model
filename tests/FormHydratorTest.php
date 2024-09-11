@@ -148,7 +148,7 @@ final class FormHydratorTest extends TestCase
 
     public function testPopulateFormWithRulesFromAttributesAndMethod(): void
     {
-        $form = new class extends FormModel implements RulesProviderInterface {
+        $form = new class () extends FormModel implements RulesProviderInterface {
             #[Length(min: 3)]
             public string $name = '';
 
