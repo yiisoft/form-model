@@ -12,6 +12,10 @@ use Yiisoft\FormModel\FormModel;
 use Yiisoft\FormModel\Tests\Support\Form\CarForm;
 use Yiisoft\FormModel\Tests\Support\TestHelper;
 use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule\Integer;
+use Yiisoft\Validator\Rule\Length;
+use Yiisoft\Validator\Rule\Required;
+use Yiisoft\Validator\RulesProviderInterface;
 
 final class FormHydratorTest extends TestCase
 {
@@ -140,5 +144,40 @@ final class FormHydratorTest extends TestCase
         $result = TestHelper::createFormHydrator()->populateFromPostAndValidate($form, $request);
 
         $this->assertSame($expected, $result);
+    }
+
+    public function testPopulateFormWithRulesFromAttributesAndMethod(): void
+    {
+        $form = new class () extends FormModel implements RulesProviderInterface {
+            #[Length(min: 3)]
+            public string $name = '';
+
+            public ?int $age = null;
+
+            #[Required]
+            public string $job = '';
+
+            public string $tip = '';
+
+            public function getRules(): iterable
+            {
+                return [
+                    'age' => new Integer(min: 17),
+                    'job' => new Length(min: 2),
+                ];
+            }
+        };
+
+        TestHelper::createFormHydrator()->populate($form, [
+            'name' => 'Sergei',
+            'age' => 38,
+            'job' => 'developer',
+            'tip' => 'test',
+        ]);
+
+        $this->assertSame('Sergei', $form->name);
+        $this->assertSame(38, $form->age);
+        $this->assertSame('developer', $form->job);
+        $this->assertSame('', $form->tip);
     }
 }

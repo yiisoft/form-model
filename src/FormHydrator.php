@@ -12,7 +12,9 @@ use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RulesProviderInterface;
 use Yiisoft\Validator\ValidatorInterface;
 
+use function array_merge;
 use function is_array;
+use function is_string;
 
 /**
  * Form hydrator fills model with the data and optionally checks the data validity.
@@ -221,16 +223,16 @@ final class FormHydrator
      * Extract object property names mapped to keys in the data array based on model validation rules.
      *
      * @return array Object property names mapped to keys in the data array.
-     * @psalm-return list<string>
+     * @psalm-return array<int, string>
      */
     private function getPropertiesWithRules(FormModelInterface $model): array
     {
-        if ($model instanceof RulesProviderInterface) {
-            return $this->extractStringKeys($model->getRules());
-        }
-
         $parser = new ObjectParser($model, skipStaticProperties: true);
-        return $this->extractStringKeys($parser->getRules());
+        $properties = $this->extractStringKeys($parser->getRules());
+
+        return $model instanceof RulesProviderInterface
+            ? array_merge($properties, $this->extractStringKeys($model->getRules()))
+            : $properties;
     }
 
     /**
