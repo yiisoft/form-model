@@ -68,7 +68,9 @@ final class FormHydrator
             if (!isset($data[$scope]) || !is_array($data[$scope])) {
                 return false;
             }
-            $hydrateData = $data[$scope];
+
+            $filteredData = $this->filterDataNestedForms($model,$data);
+            $hydrateData = array_merge($data[$model->getFormName()], $filteredData);
         }
 
         $this->hydrator->hydrate(
@@ -250,5 +252,31 @@ final class FormHydrator
             }
         }
         return $result;
+    }
+
+    private function filterDataNestedForms(FormModelInterface $formModel, array &$data): array
+    {
+        $reflection = new \ReflectionClass($formModel);
+        $properties = $reflection->getProperties(\ReflectionProperty::IS_PUBLIC);
+
+        $filteredData = [];
+        foreach ($properties as $property) {
+            if ($property->isStatic()) {
+                continue;
+            }
+
+            if ($property->isReadOnly() && $property->isInitialized($formModel)) {
+                continue;
+            }
+
+            $propertyValue = $property->getValue($formModel);
+            if ($propertyValue instanceof FormModel && isset($data[$propertyValue->getFormName()])) {
+                $dataNestedForms = $this->filterDataNestedForms($property->getValue($formModel), $data);
+                $filteredData[$property->getName()] = array_merge($data[$propertyValue->getFormName()], $dataNestedForms);
+                unset($data[$propertyValue->getFormName()]);
+            }
+        }
+
+        return $filteredData;
     }
 }
