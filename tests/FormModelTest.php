@@ -17,6 +17,9 @@ use Yiisoft\FormModel\FormModel;
 use Yiisoft\FormModel\FormModelInputData;
 use Yiisoft\FormModel\FormModelInterface;
 use Yiisoft\FormModel\Tests\Support\Dto\Coordinates;
+use Yiisoft\FormModel\Tests\Support\Form\Chart\Chart;
+use Yiisoft\FormModel\Tests\Support\Form\Chart\ChartSetForm;
+use Yiisoft\FormModel\Tests\Support\Form\Chart\Point;
 use Yiisoft\FormModel\Tests\Support\Form\CustomFormNameForm;
 use Yiisoft\FormModel\Tests\Support\Form\DefaultFormNameForm;
 use Yiisoft\FormModel\Tests\Support\Form\FormWithNestedProperty;
@@ -24,6 +27,9 @@ use Yiisoft\FormModel\Tests\Support\Form\FormWithNestedStructures;
 use Yiisoft\FormModel\Tests\Support\Form\AttributeForm;
 use Yiisoft\FormModel\Tests\Support\Form\LoginForm;
 use Yiisoft\FormModel\Tests\Support\Form\NestedForm;
+use Yiisoft\FormModel\Tests\Support\Form\NestedForm\Post;
+use Yiisoft\FormModel\Tests\Support\Form\NestedForm\PostCategory;
+use Yiisoft\FormModel\Tests\Support\Form\NestedForm\User;
 use Yiisoft\FormModel\Tests\Support\Form\NestedMixedForm\NestedMixedForm;
 use Yiisoft\FormModel\Tests\Support\Form\NestedRuleForm\MainForm;
 use Yiisoft\FormModel\Tests\Support\StubInputField;
@@ -489,6 +495,162 @@ final class FormModelTest extends TestCase
                 'body.shipping.phone' => ['Invalid phone.'],
             ],
             $form->getValidationResult()->getErrorMessagesIndexedByPath(),
+        );
+    }
+
+    public function testNestedFormWithRelations(): void
+    {
+        $form = new ChartSetForm();
+        $formHydrator = TestHelper::createFormHydrator();
+
+        $formHydrator->populate(
+            $form,
+            [
+                'charts' => [
+                    [
+                        'points' => [
+                            ['coordinates' => ['x' => -11, 'y' => 11], 'rgb' => [-1, 256, 0]],
+                            ['coordinates' => ['x' => -12, 'y' => 12], 'rgb' => [0, -2, 257]],
+                        ],
+                    ],
+                    [
+                        'points' => [
+                            ['coordinates' => ['x' => -1, 'y' => 1], 'rgb' => [0, 0, 0]],
+                            ['coordinates' => ['x' => -2, 'y' => 2], 'rgb' => [255, 255, 255]],
+                        ],
+                    ],
+                    [
+                        'points' => [
+                            ['coordinates' => ['x' => -13, 'y' => 13], 'rgb' => [-3, 258, 0]],
+                            ['coordinates' => ['x' => -14, 'y' => 14], 'rgb' => [0, -4, 259]],
+                        ],
+                    ],
+                ],
+            ],
+            scope: '',
+        );
+        $this->assertEquals(
+            [
+                new Chart([
+                    new Point(new \Yiisoft\FormModel\Tests\Support\Form\Chart\Coordinates(-11, 11), [-1, 256, 0]),
+                    new Point(new \Yiisoft\FormModel\Tests\Support\Form\Chart\Coordinates(-12, 12), [0, -2, 257]),
+                ]),
+                new Chart([
+                    new Point(new \Yiisoft\FormModel\Tests\Support\Form\Chart\Coordinates(-1, 1), [0, 0, 0]),
+                    new Point(new \Yiisoft\FormModel\Tests\Support\Form\Chart\Coordinates(-2, 2), [255, 255, 255]),
+                ]),
+                new Chart([
+                    new Point(new \Yiisoft\FormModel\Tests\Support\Form\Chart\Coordinates(-13, 13), [-3,258, 0]),
+                    new Point(new \Yiisoft\FormModel\Tests\Support\Form\Chart\Coordinates(-14, 14), [0, -4, 259]),
+                ]),
+            ],
+            $form->getCharts(),
+        );
+
+        $formHydrator->validate($form);
+        $result = $form->getValidationResult();
+
+        $this->assertFalse($result->isValid());
+        $this->assertSame(
+            [
+                'charts.0.points.0.coordinates.x' => [
+                    'X must be no less than -10.',
+                ],
+                'charts.0.points.0.coordinates.y' => [
+                    'Y must be no greater than 10.',
+                ],
+                'charts.0.points.0.rgb.0' => [
+                    'Rgb must be no less than 0.',
+                ],
+                'charts.0.points.0.rgb.1' => [
+                    'Rgb must be no greater than 255.',
+                ],
+                'charts.0.points.1.coordinates.x' => [
+                    'X must be no less than -10.',
+                ],
+                'charts.0.points.1.coordinates.y' => [
+                    'Y must be no greater than 10.',
+                ],
+                'charts.0.points.1.rgb.1' => [
+                    'Rgb must be no less than 0.',
+                ],
+                'charts.0.points.1.rgb.2' => [
+                    'Rgb must be no greater than 255.',
+                ],
+                'charts.2.points.0.coordinates.x' => [
+                    'X must be no less than -10.',
+                ],
+                'charts.2.points.0.coordinates.y' => [
+                    'Y must be no greater than 10.',
+                ],
+                'charts.2.points.0.rgb.0' => [
+                    'Rgb must be no less than 0.',
+                ],
+                'charts.2.points.0.rgb.1' => [
+                    'Rgb must be no greater than 255.',
+                ],
+                'charts.2.points.1.coordinates.x' => [
+                    'X must be no less than -10.',
+                ],
+                'charts.2.points.1.coordinates.y' => [
+                    'Y must be no greater than 10.',
+                ],
+                'charts.2.points.1.rgb.1' => [
+                    'Rgb must be no less than 0.',
+                ],
+                'charts.2.points.1.rgb.2' => [
+                    'Rgb must be no greater than 255.',
+                ],
+            ],
+            $result->getErrorMessagesIndexedByPath(),
+        );
+    }
+
+    public function testNestedFormModel(): void
+    {
+        $form = new PostCategory();
+        $formHydrator = TestHelper::createFormHydrator();
+        $formHydrator->populate(
+            $form,
+            [
+                'name' => 'Post category 1',
+                'posts' => [
+                    [
+                        'name' => 'Post name 1',
+                        'description' => 'Post description 1',
+                        'author' => [
+                            'id' => 1,
+                        ],
+                    ],
+                    [
+                        'name' => 'Post name 2',
+                        'description' => 'Post description 2',
+                        'author' => [
+                            'id' => 2,
+                        ],
+                    ],
+                ],
+            ],
+            scope: '',
+        );
+
+        $this->assertEquals(
+            $form,
+            new PostCategory(
+                name: 'Post category 1',
+                posts: [
+                    new Post(
+                        name: 'Post name 1',
+                        description: 'Post description 1',
+                        author: new User(id: 1),
+                    ),
+                    new Post(
+                        name: 'Post name 2',
+                        description: 'Post description 2',
+                        author: new User(id: 2),
+                    ),
+                ],
+            ),
         );
     }
 
