@@ -22,7 +22,7 @@ final class PostCategory extends FormModel
     public function __construct(
         #[Required]
         #[Length(max: 255)]
-        private string $name,
+        private string $name = '',
         #[Collection(Post::class)]
         #[Each([new Nested(Post::class)])]
         private array $posts = [],
@@ -39,7 +39,7 @@ final class Post extends FormModel
         #[StringType]
         private string $description = '',
         #[Required]
-        private Author $author,
+        private User $author,
     ) {
     }
 }
