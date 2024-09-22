@@ -16,7 +16,7 @@ final class Post extends FormModel
         #[Length(max: 255)]
         private string $name,
         #[StringType]
-        private string $description = '',
+        private string $description,
         // #[Required]
         private User $author,
     ) {
