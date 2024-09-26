@@ -10,6 +10,7 @@ use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Yiisoft\FormModel\FormModel;
 use Yiisoft\FormModel\Tests\Support\Form\CarForm;
+use Yiisoft\FormModel\Tests\Support\Form\PopulateNestedForm\MainForm;
 use Yiisoft\FormModel\Tests\Support\TestHelper;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Integer;
@@ -144,6 +145,95 @@ final class FormHydratorTest extends TestCase
         $result = TestHelper::createFormHydrator()->populateFromPostAndValidate($form, $request);
 
         $this->assertSame($expected, $result);
+    }
+
+    public static function dataNestedPopulate(): array
+    {
+        $factory = new ServerRequestFactory();
+        $expected = [
+            'value' => 'test',
+            'firstForm' => 'firstTest',
+            'secondForm' => 3,
+            'secondForm.string' => 'string'
+        ];
+        return [
+            'nested-array-data' => [
+                $expected,
+                $factory->createServerRequest('POST', '/')->withParsedBody([
+                    'MainForm' => [
+                        'value' => $expected['value'],
+                        'firstForm' => [
+                            'value' => $expected['firstForm'],
+                            'secondForm' => [
+                                'value' => $expected['secondForm'],
+                                'string' => $expected['secondForm.string']
+                            ]
+                        ]
+                    ]
+                ]),
+            ],
+            'dot-notation-data' => [
+                $expected,
+                $factory->createServerRequest('POST', '/')->withParsedBody([
+                    'MainForm' => [
+                        'value' => $expected['value'],
+                        'firstForm.value' => $expected['firstForm'],
+                        'firstForm.secondForm.value' => $expected['secondForm'],
+                        'firstForm.secondForm.string' => $expected['secondForm.string']
+                    ]
+                ]),
+            ],
+            'one-level-array-data' => [
+                $expected,
+                $factory->createServerRequest('POST', '/')->withParsedBody([
+                    'MainForm' => ['value' => $expected['value']],
+                    'FirstNestedForm' => ['value' => $expected['firstForm']],
+                    'SecondNestedForm' => ['value' => $expected['secondForm'], 'string' => $expected['secondForm.string']],
+                ]),
+            ],
+            'mixed-one-level-and-dot-notation-data' => [
+                $expected,
+                $factory->createServerRequest('POST', '/')->withParsedBody([
+                    'MainForm' => [
+                        'value' => $expected['value'],
+                        'firstForm.secondForm.string' => $expected['secondForm.string'],
+                    ],
+                    'FirstNestedForm' => [
+                        'value' => $expected['firstForm'],
+                        'secondForm.value' => $expected['secondForm'],
+                    ]
+                ])
+            ],
+            'mixed-one-level-and-nested-array-data' => [
+                $expected,
+                $factory->createServerRequest('POST', '/')->withParsedBody([
+                    'MainForm' => [
+                        'value' => $expected['value'],
+                        'firstForm' => [
+                            'value' => $expected['firstForm'],
+                            'secondForm' => [
+                                'string' => $expected['secondForm.string'],
+                            ]
+                        ],
+                    ],
+                    'SecondNestedForm' => [
+                        'value' => $expected['secondForm'],
+                    ],
+                ])
+            ],
+        ];
+    }
+
+    #[DataProvider('dataNestedPopulate')]
+    public function testPopulateNestedFormFromPost(array $expected, ServerRequestInterface $request): void
+    {
+        $form  = new MainForm();
+
+        TestHelper::createFormHydrator()->populateFromPost($form, $request);
+        $this->assertSame($expected['value'], $form->value);
+        $this->assertSame($expected['firstForm'], $form->firstForm->value);
+        $this->assertSame($expected['secondForm'], $form->firstForm->secondForm->value);
+        $this->assertSame($expected['secondForm.string'], $form->firstForm->secondForm->string);
     }
 
     public function testPopulateFormWithRulesFromAttributesAndMethod(): void
