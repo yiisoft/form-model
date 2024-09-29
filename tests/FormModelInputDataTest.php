@@ -11,6 +11,7 @@ use Yiisoft\FormModel\FormModel;
 use Yiisoft\FormModel\FormModelInputData;
 use Yiisoft\FormModel\FormModelInterface;
 use Yiisoft\FormModel\Tests\Support\Form\FormWithNestedStructures;
+use Yiisoft\FormModel\Tests\Support\Form\ValidationErrorNestedForm\MainForm;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\Validator;
 
@@ -131,5 +132,121 @@ final class FormModelInputDataTest extends TestCase
     {
         $inputData = new FormModelInputData($form, 'name');
         $this->assertSame($expected, $inputData->isValidated());
+    }
+
+    public static function dataGetValidationErrors()
+    {
+        $validator = new Validator();
+
+        $form = new MainForm();
+
+        $validForm = clone $form;
+        $validForm->value = 'test';
+        $validForm->firstForm->value = 'firstTest';
+        $validForm->firstForm->secondForm->number = 10;
+        $validator->validate($validForm);
+
+        $notValidForm = clone $form;
+        $notValidForm->value = 'no';
+        $notValidForm->firstForm->value = 'firstTest';
+        $notValidForm->firstForm->secondForm->number = 10;
+        $validator->validate($notValidForm);
+
+        $notValidFirstForm = clone $form;
+        $notValidFirstForm->value = 'test';
+        $notValidFirstForm->firstForm->value = 'abc';
+        $notValidFirstForm->firstForm->secondForm->number = 15;
+        $validator->validate($notValidFirstForm);
+
+        $notValidSecondForm = clone $form;
+        $notValidSecondForm->value = 'test';
+        $notValidSecondForm->firstForm->value = 'firstTest';
+        $notValidSecondForm->firstForm->secondForm->number = 5;
+        $validator->validate($notValidSecondForm);
+
+        return [
+            'validForm' => [
+                true,
+                $validForm,
+                'value'
+            ],
+            'notValidForm' => [
+                false,
+                $notValidForm,
+                'value'
+            ],
+            //pr is resolved https://github.com/yiisoft/validator/pull/748
+            'validFirstFrom' => [
+                true,
+                $validForm->firstForm,
+                'value'
+            ],
+            'validFirstFrom-dot-notation' => [
+                true,
+                $validForm,
+                'firstForm.value'
+            ],
+            'validFirstFrom-array' => [
+                true,
+                $validForm,
+                'firstForm[value]'
+            ],
+            //failed test until pr is resolved https://github.com/yiisoft/validator/pull/748
+            'notValidFirstForm' => [
+                false,
+                $notValidFirstForm->firstForm,
+                'value'
+            ],
+            'notValidFirstForm-dot-notation' => [
+                false,
+                $notValidFirstForm,
+                'firstForm.value'
+            ],
+            'notValidFirstForm-array' => [
+                false,
+                $notValidFirstForm,
+                'firstForm[value]'
+            ],
+            //pr is resolved https://github.com/yiisoft/validator/pull/748
+            'validSecondForm' => [
+                true,
+                $notValidSecondForm->firstForm->secondForm,
+                'value'
+            ],
+            'validSecondForm-dot-notation' => [
+                true,
+                $validForm,
+                'firstForm.secondForm.value'
+            ],
+            'validSecondForm-array' => [
+                true,
+                $validForm,
+                'firstForm[secondForm][value]'
+            ],
+            //failed test until pr is resolved https://github.com/yiisoft/validator/pull/748
+            'notValidSecondForm' => [
+                false,
+                $notValidSecondForm->firstForm->secondForm,
+                'value'
+            ],
+            'notValidSecondForm-array' => [
+                false,
+                $notValidSecondForm,
+                'firstForm[secondForm][number]'
+            ],
+            'notValidSecondForm-dot-notation' => [
+                false,
+                $notValidSecondForm,
+                'firstForm.secondForm.number'
+            ],
+
+        ];
+    }
+
+    #[DataProvider('dataGetValidationErrors')]
+    public function testGetValidationErrors( bool $expected, FormModelInterface $form, string $propertyName): void
+    {
+        $inputData = new FormModelInputData($form, $propertyName);
+        $this->assertSame($expected, empty($inputData->getValidationErrors()));
     }
 }

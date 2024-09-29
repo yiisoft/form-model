@@ -121,10 +121,13 @@ final class FormModelInputData implements InputDataInterface
 
     public function getValidationErrors(): array
     {
-        /** @psalm-var list<string> */
-        return $this->model->isValidated()
-            ? $this->model->getValidationResult()->getPropertyErrorMessages($this->getPropertyName())
-            : [];
+        $property = $this->parseProperty($this->property);
+        $property = $property['name'] . str_replace(['][', '['], '.', rtrim($property['suffix'],'\.[]') );
+        if ($this->model->isValidated()) {
+            $errors = $this->model->getValidationResult()->getErrorMessagesIndexedByPath('.');
+            return $errors[$property] ?? [];
+        }
+        return [];
     }
 
     private function getPropertyName(): string
