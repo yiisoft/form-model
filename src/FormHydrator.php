@@ -70,7 +70,7 @@ final class FormHydrator
             }
 
             $filteredData = $this->filterDataNestedForms($model,$data);
-            $hydrateData = array_merge_recursive($data[$model->getFormName()], $filteredData);
+            $hydrateData = array_merge_recursive((array)$data[$model->getFormName()], $filteredData);
         }
 
         $this->hydrator->hydrate(
@@ -270,10 +270,13 @@ final class FormHydrator
             }
 
             $propertyValue = $property->getValue($formModel);
-            if ($propertyValue instanceof FormModel) {
-                $dataNestedForms = $this->filterDataNestedForms($property->getValue($formModel), $data);
+            if ($propertyValue instanceof FormModelInterface) {
+                $dataNestedForms = $this->filterDataNestedForms($propertyValue, $data);
                 if (isset($data[$propertyValue->getFormName()])) {
-                    $filteredData[$property->getName()] = array_merge($data[$propertyValue->getFormName()], $dataNestedForms);
+                    $filteredData[$property->getName()] = array_merge(
+                        (array)$data[$propertyValue->getFormName()],
+                        $dataNestedForms,
+                    );
                     unset($data[$propertyValue->getFormName()]);
                 } else if (!empty($dataNestedForms)) {
                     $filteredData[$property->getName()] = $dataNestedForms;
