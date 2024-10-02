@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-
 namespace Yiisoft\FormModel\Tests\Support\Form\PopulateNestedForm;
 
 use Yiisoft\FormModel\FormModel;

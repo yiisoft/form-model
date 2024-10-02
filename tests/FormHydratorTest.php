@@ -166,7 +166,7 @@ final class FormHydratorTest extends TestCase
                             'value' => $expected['firstForm'],
                             'secondForm' => [
                                 'value' => $expected['secondForm'],
-                                'string' => $expected['secondForm.string']
+                                'string' => $expected['secondForm.string'],
                             ],
                         ],
                     ],
@@ -179,7 +179,7 @@ final class FormHydratorTest extends TestCase
                         'value' => $expected['value'],
                         'firstForm.value' => $expected['firstForm'],
                         'firstForm.secondForm.value' => $expected['secondForm'],
-                        'firstForm.secondForm.string' => $expected['secondForm.string']
+                        'firstForm.secondForm.string' => $expected['secondForm.string'],
                     ],
                 ]),
             ],
