@@ -10,9 +10,8 @@ use Yiisoft\Validator\Rule\Nested;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\Rule\StringValue;
 
-
-class MainForm extends FormModel {
-
+class MainForm extends FormModel
+{
     #[Nested(FirstNestedForm::class)]
     public FirstNestedForm $firstForm;
 
@@ -21,7 +20,8 @@ class MainForm extends FormModel {
     #[Length(min: 3)]
     public string $value = '';
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->firstForm = new FirstNestedForm();
     }
 }

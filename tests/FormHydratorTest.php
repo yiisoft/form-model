@@ -151,10 +151,10 @@ final class FormHydratorTest extends TestCase
     {
         $factory = new ServerRequestFactory();
         $expected = [
-            'value' => 'test',
+            'value' => 'mainProperty',
             'firstForm' => 'firstTest',
             'secondForm' => 3,
-            'secondForm.string' => 'string'
+            'secondForm.string' => 'secondFormString',
         ];
         return [
             'nested-array-data' => [
@@ -167,9 +167,9 @@ final class FormHydratorTest extends TestCase
                             'secondForm' => [
                                 'value' => $expected['secondForm'],
                                 'string' => $expected['secondForm.string']
-                            ]
-                        ]
-                    ]
+                            ],
+                        ],
+                    ],
                 ]),
             ],
             'dot-notation-data' => [
@@ -180,7 +180,7 @@ final class FormHydratorTest extends TestCase
                         'firstForm.value' => $expected['firstForm'],
                         'firstForm.secondForm.value' => $expected['secondForm'],
                         'firstForm.secondForm.string' => $expected['secondForm.string']
-                    ]
+                    ],
                 ]),
             ],
             'one-level-array-data' => [
@@ -201,8 +201,8 @@ final class FormHydratorTest extends TestCase
                     'FirstNestedForm' => [
                         'value' => $expected['firstForm'],
                         'secondForm.value' => $expected['secondForm'],
-                    ]
-                ])
+                    ],
+                ]),
             ],
             'mixed-one-level-and-nested-array-data' => [
                 $expected,
@@ -213,13 +213,13 @@ final class FormHydratorTest extends TestCase
                             'value' => $expected['firstForm'],
                             'secondForm' => [
                                 'string' => $expected['secondForm.string'],
-                            ]
+                            ],
                         ],
                     ],
                     'SecondNestedForm' => [
                         'value' => $expected['secondForm'],
                     ],
-                ])
+                ]),
             ],
         ];
     }
@@ -227,7 +227,7 @@ final class FormHydratorTest extends TestCase
     #[DataProvider('dataNestedPopulate')]
     public function testPopulateNestedFormFromPost(array $expected, ServerRequestInterface $request): void
     {
-        $form  = new MainForm();
+        $form = new MainForm();
 
         TestHelper::createFormHydrator()->populateFromPost($form, $request);
         $this->assertSame($expected['value'], $form->value);

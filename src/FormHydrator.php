@@ -69,7 +69,7 @@ final class FormHydrator
                 return false;
             }
 
-            $filteredData = $this->filterDataNestedForms($model,$data);
+            $filteredData = $this->filterDataNestedForms($model, $data);
             $hydrateData = array_merge_recursive((array)$data[$model->getFormName()], $filteredData);
         }
 
@@ -265,7 +265,7 @@ final class FormHydrator
                 continue;
             }
 
-            if ($property->isReadOnly() && $property->isInitialized($formModel)) {
+            if ($property->isReadOnly()) {
                 continue;
             }
 
@@ -278,7 +278,7 @@ final class FormHydrator
                         $dataNestedForms,
                     );
                     unset($data[$propertyValue->getFormName()]);
-                } else if (!empty($dataNestedForms)) {
+                } elseif (!empty($dataNestedForms)) {
                     $filteredData[$property->getName()] = $dataNestedForms;
                 }
             }
