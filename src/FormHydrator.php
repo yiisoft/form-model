@@ -257,7 +257,10 @@ final class FormHydrator
     private function filterDataNestedForms(FormModelInterface $formModel, array &$data): array
     {
         $reflection = new \ReflectionClass($formModel);
-        $properties = $reflection->getProperties(\ReflectionProperty::IS_PUBLIC);
+        $properties = $reflection->getProperties(\ReflectionProperty::IS_PUBLIC |
+            \ReflectionProperty::IS_PROTECTED |
+            \ReflectionProperty::IS_PRIVATE,
+        );
 
         $filteredData = [];
         foreach ($properties as $property) {

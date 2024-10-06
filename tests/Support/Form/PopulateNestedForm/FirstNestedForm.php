@@ -21,7 +21,7 @@ class FirstNestedForm extends FormModel
 
     #[Required]
     #[Nested(SecondNestedForm::class)]
-    public SecondNestedForm $secondForm;
+    private SecondNestedForm $secondForm;
 
     public readonly string $readonly;
 
@@ -29,4 +29,10 @@ class FirstNestedForm extends FormModel
     {
         $this->secondForm = new SecondNestedForm();
     }
+
+    public function secondForm(): SecondNestedForm
+    {
+        return $this->secondForm;
+    }
+
 }

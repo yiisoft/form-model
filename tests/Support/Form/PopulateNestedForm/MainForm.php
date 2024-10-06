@@ -13,7 +13,7 @@ use Yiisoft\Validator\Rule\StringValue;
 class MainForm extends FormModel
 {
     #[Nested(FirstNestedForm::class)]
-    public FirstNestedForm $firstForm;
+    protected FirstNestedForm $firstForm;
 
     #[Required]
     #[StringValue]
@@ -24,4 +24,10 @@ class MainForm extends FormModel
     {
         $this->firstForm = new FirstNestedForm();
     }
+
+    public function firstNestedForm(): FirstNestedForm
+    {
+        return $this->firstForm;
+    }
+
 }

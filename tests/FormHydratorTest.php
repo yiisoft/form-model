@@ -231,9 +231,9 @@ final class FormHydratorTest extends TestCase
 
         TestHelper::createFormHydrator()->populateFromPost($form, $request);
         $this->assertSame($expected['value'], $form->value);
-        $this->assertSame($expected['firstForm'], $form->firstForm->value);
-        $this->assertSame($expected['secondForm'], $form->firstForm->secondForm->value);
-        $this->assertSame($expected['secondForm.string'], $form->firstForm->secondForm->string);
+        $this->assertSame($expected['firstForm'], $form->firstNestedForm()->value);
+        $this->assertSame($expected['secondForm'], $form->firstNestedForm()->secondForm()->value);
+        $this->assertSame($expected['secondForm.string'], $form->firstNestedForm()->secondForm()->string);
     }
 
     public function testPopulateFormWithRulesFromAttributesAndMethod(): void
