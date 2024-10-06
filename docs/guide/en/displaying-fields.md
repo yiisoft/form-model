@@ -9,6 +9,13 @@ use Yiisoft\FormModel\FormModel;
 
 /** @var FormModel $formModel */
 $field = Field::text($formModel, 'login');
+
+/** Display fields nested forms */
+$nestedField = Field::text($formModel->nestedForm, 'text');
+/** or dot-notation */
+$nestedField = Field::text($formModel, 'nestedForm.text');
+/** or array notation */
+$nestedField = Field::text($formModel, 'nestedForm[text]');
 ```
 
 or factory (`\Yiisoft\FormModel\FieldFactory`):
@@ -20,6 +27,13 @@ use Yiisoft\FormModel\FormModel;
 /** @var FormModel $formModel */
 $factory = new FieldFactory();
 $factory->text($formModel, 'login');
+
+/** Display nested form field */
+$nestedField = $factory->text($formModel->nestedForm, 'text');
+/** or dot-notation */
+$nestedField = $factory->text($formModel, 'nestedForm.text');
+/** or array notation */
+$nestedField = $factory->text($formModel, 'nestedForm[text]');
 ```
 
 If you want to customize other properties, such as label, hint, etc., use dedicated methods:
