@@ -29,5 +29,4 @@ class MainForm extends FormModel
     {
         return $this->firstForm;
     }
-
 }
