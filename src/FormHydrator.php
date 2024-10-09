@@ -5,13 +5,17 @@ declare(strict_types=1);
 namespace Yiisoft\FormModel;
 
 use Psr\Http\Message\ServerRequestInterface;
+use ReflectionNamedType;
+use ReflectionProperty;
 use Yiisoft\Hydrator\ArrayData;
 use Yiisoft\Hydrator\HydratorInterface;
+use Yiisoft\Hydrator\ObjectMap;
 use Yiisoft\Validator\Helper\ObjectParser;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RulesProviderInterface;
 use Yiisoft\Validator\ValidatorInterface;
 
+use function array_key_exists;
 use function array_merge;
 use function is_array;
 use function is_string;
@@ -47,7 +51,7 @@ final class FormHydrator
      * = If `null`, fills data that is either defined in a map explicitly or allowed via validation rules.
      * - If `true`, fills either only data defined explicitly in a map or only data allowed via validation rules but not
      * both.
-     * @param ?string $scope Key to use in the data array as a source of data. Usually used when there are multiple
+     * @param string|null $scope Key to use in the data array as a source of data. Usually used when there are multiple
      * forms at the same page. If not set, it equals to {@see FormModelInterface::getFormName()}.
      */
     public function populate(
@@ -70,7 +74,9 @@ final class FormHydrator
             }
             $hydrateData = $data[$scope];
         }
-
+//$x = $this->createMap($model, $map, $strict);
+//        print_r($x);
+//        die;
         $this->hydrator->hydrate(
             $model,
             new ArrayData(
@@ -199,7 +205,12 @@ final class FormHydrator
      * @return array A map of object property names mapped to keys in the data array.
      * @psalm-return MapType
      */
-    private function createMap(FormModelInterface $model, ?array $userMap, ?bool $strict): array
+    private function createMap(
+        object $model,
+        ?array $userMap = null,
+        ?bool $strict = null,
+        ?string $prefix = null
+    ): array
     {
         if ($strict === false) {
             return $userMap ?? [];
@@ -210,7 +221,30 @@ final class FormHydrator
         }
 
         $properties = $this->getPropertiesWithRules($model);
-        $generatedMap = array_combine($properties, $properties);
+
+        $generatedMap = [];
+        foreach ($properties as $property) {
+            $className = $this->getPropertyObjectClassName($property);
+            if ($className === null) {
+                $generatedMap[$property->getName()] = $prefix === null
+                    ? $property->getName()
+                    : [$prefix, $property->getName()];
+                continue;
+            }
+
+            $n = $property->getName();
+            $o = $property->getValue($model);
+            if ($o instanceof FormModelInterface) {
+                $generatedMap[$n] = new ObjectMap(
+                    $this->createMap($o, prefix: ($prefix === null ? '': ($prefix.'.')).$n)
+                );
+                continue;
+            }
+
+            $generatedMap[$property->getName()] = $prefix === null
+                ? $property->getName()
+                : [$prefix, $property->getName()];
+        }
 
         if ($userMap === null) {
             return $generatedMap;
@@ -223,16 +257,39 @@ final class FormHydrator
      * Extract object property names mapped to keys in the data array based on model validation rules.
      *
      * @return array Object property names mapped to keys in the data array.
-     * @psalm-return array<int, string>
+     * @psalm-return list<ReflectionProperty>
      */
-    private function getPropertiesWithRules(FormModelInterface $model): array
+    private function getPropertiesWithRules(object $model): array
     {
         $parser = new ObjectParser($model, skipStaticProperties: true);
-        $properties = $this->extractStringKeys($parser->getRules());
 
-        return $model instanceof RulesProviderInterface
-            ? array_merge($properties, $this->extractStringKeys($model->getRules()))
-            : $properties;
+        $properties = $this->extractStringKeys($parser->getRules());
+        if ($model instanceof RulesProviderInterface) {
+            $properties = array_merge($properties, $this->extractStringKeys($model->getRules()));
+        }
+
+        $reflectionProperties = $parser->getReflectionProperties();
+
+        $result = [];
+        foreach ($properties as $property) {
+            if (!array_key_exists($property, $reflectionProperties)) {
+                continue;
+            }
+            $result[] = $reflectionProperties[$property];
+        }
+        return $result;
+    }
+
+    private function getPropertyObjectClassName(ReflectionProperty $property): ?string
+    {
+        $type = $property->getType();
+        if (!$type instanceof ReflectionNamedType) {
+            return null;
+        }
+        if ($type->isBuiltin()) {
+            return null;
+        }
+        return $type->getName();
     }
 
     /**
