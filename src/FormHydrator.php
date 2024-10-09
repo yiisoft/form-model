@@ -74,7 +74,7 @@ final class FormHydrator
             }
             $hydrateData = $data[$scope];
         }
-//$x = $this->createMap($model, $map, $strict);
+        //$x = $this->createMap($model, $map, $strict);
 //        print_r($x);
 //        die;
         $this->hydrator->hydrate(
@@ -210,8 +210,7 @@ final class FormHydrator
         ?array $userMap = null,
         ?bool $strict = null,
         ?string $prefix = null
-    ): array
-    {
+    ): array {
         if ($strict === false) {
             return $userMap ?? [];
         }
@@ -236,7 +235,7 @@ final class FormHydrator
             $o = $property->getValue($model);
             if ($o instanceof FormModelInterface) {
                 $generatedMap[$n] = new ObjectMap(
-                    $this->createMap($o, prefix: ($prefix === null ? '': ($prefix.'.')).$n)
+                    $this->createMap($o, prefix: ($prefix === null ? '' : ($prefix . '.')) . $n)
                 );
                 continue;
             }
