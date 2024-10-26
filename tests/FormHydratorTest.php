@@ -10,6 +10,7 @@ use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Yiisoft\FormModel\FormModel;
 use Yiisoft\FormModel\Tests\Support\Form\CarForm;
+use Yiisoft\FormModel\Tests\Support\Form\FormsTestCreateMap\MainMapForm;
 use Yiisoft\FormModel\Tests\Support\Form\PopulateNestedForm\MainForm;
 use Yiisoft\FormModel\Tests\Support\TestHelper;
 use Yiisoft\Validator\Result;
@@ -234,6 +235,65 @@ final class FormHydratorTest extends TestCase
         $this->assertSame($expected['firstForm'], $form->firstNestedForm()->value);
         $this->assertSame($expected['secondForm'], $form->firstNestedForm()->secondForm()->value);
         $this->assertSame($expected['secondForm.string'], $form->firstNestedForm()->secondForm()->string);
+    }
+
+    public function testPopulateNestedFormsWithCreateMap()
+    {
+        $form = new MainMapForm();
+
+        $validationResult = TestHelper::createFormHydrator()->populate($form, [
+            'MainMapForm' => [
+                'age' => 38,
+                'job' => 'developer',
+                'firstForm' => [
+                    'value' => 'value',
+                    'secondForm' => [
+                        'post' => 'post',
+                        'author' => 'author',
+                    ],
+                ],
+                'blog' => [
+                    'title' => 'title',
+                    'description' => 'description',
+                    'post' => [
+                        'title' => 'title',
+                        'content' => 'content',
+                        'author' => [
+                            'name' => 'author',
+                            'email' => 'author@yiisoft.com',
+                            'bio' => 'My bio',
+                        ],
+                    ],
+                ],
+                'shop' => [
+                    'name' => 'shop',
+                    'address' => 'address',
+                    'phone' => 'phone',
+                    'storage' => [
+                        'name' => 'storage',
+                        'address' => 'address',
+                        'phone' => 'phone',
+                    ],
+                ],
+            ],
+        ]);
+
+        $this->assertSame(38, $form->age);
+        $this->assertSame('developer', $form->job);
+        $this->assertSame('title', $form->blog->post->title);
+        $this->assertSame('content', $form->blog->post->content);
+        $this->assertSame('author', $form->blog->post->author->name);
+        $this->assertSame('author@yiisoft.com', $form->blog->post->author->email);
+        $this->assertSame('My bio', $form->blog->post->author->bio);
+        $this->assertSame('shop', $form->shop->name);
+        $this->assertSame('address', $form->shop->address);
+        $this->assertSame('phone', $form->shop->phone);
+        $this->assertSame('storage', $form->shop->storage->name);
+        $this->assertSame('address', $form->shop->storage->address);
+        $this->assertSame('phone', $form->shop->storage->phone);
+        $this->assertSame('value', $form->firstForm->value);
+        $this->assertSame('post', $form->firstForm->secondForm->post);
+        $this->assertSame('author', $form->firstForm->secondForm->author);
     }
 
     public function testPopulateFormWithRulesFromAttributesAndMethod(): void

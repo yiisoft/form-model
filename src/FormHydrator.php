@@ -7,19 +7,22 @@ namespace Yiisoft\FormModel;
 use Psr\Http\Message\ServerRequestInterface;
 use Yiisoft\Hydrator\ArrayData;
 use Yiisoft\Hydrator\HydratorInterface;
+use Yiisoft\Hydrator\ObjectMap;
 use Yiisoft\Validator\Helper\ObjectParser;
 use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule\Nested;
 use Yiisoft\Validator\RulesProviderInterface;
 use Yiisoft\Validator\ValidatorInterface;
 
 use function array_merge;
 use function is_array;
-use function is_string;
 
 /**
  * Form hydrator fills model with the data and optionally checks the data validity.
  *
  * @psalm-import-type MapType from ArrayData
+ * @psalm-import-type RawRulesMap from ValidatorInterface
+ * @psalm-import-type NormalizedNestedRulesArray from Nested
  */
 final class FormHydrator
 {
@@ -188,72 +191,6 @@ final class FormHydrator
         return $this->populateAndValidate($model, $request->getParsedBody(), $map, $strict, $scope);
     }
 
-    /**
-     * Get a map of object property names mapped to keys in the data array.
-     *
-     * @param FormModelInterface $model Model to read validation rules from.
-     * @param ?array $userMap Explicit map defined by user.
-     * @psalm-param MapType $userMap
-     * @param ?bool $strict If `false`, fills everything that is in the data. If `null`, fills data that is either
-     * defined in a map explicitly or allowed via validation rules. If `false`, fills only data defined explicitly
-     * in a map or only data allowed via validation rules but not both.
-     *
-     * @return array A map of object property names mapped to keys in the data array.
-     * @psalm-return MapType
-     */
-    private function createMap(FormModelInterface $model, ?array $userMap, ?bool $strict): array
-    {
-        if ($strict === false) {
-            return $userMap ?? [];
-        }
-
-        if ($strict && $userMap !== null) {
-            return $userMap;
-        }
-
-        $properties = $this->getPropertiesWithRules($model);
-        $generatedMap = array_combine($properties, $properties);
-
-        if ($userMap === null) {
-            return $generatedMap;
-        }
-
-        return array_merge($generatedMap, $userMap);
-    }
-
-    /**
-     * Extract object property names mapped to keys in the data array based on model validation rules.
-     *
-     * @return array Object property names mapped to keys in the data array.
-     * @psalm-return array<int, string>
-     */
-    private function getPropertiesWithRules(FormModelInterface $model): array
-    {
-        $parser = new ObjectParser($model, skipStaticProperties: true);
-        $properties = $this->extractStringKeys($parser->getRules());
-
-        return $model instanceof RulesProviderInterface
-            ? array_merge($properties, $this->extractStringKeys($model->getRules()))
-            : $properties;
-    }
-
-    /**
-     * Get only string keys from an array.
-     *
-     * @return array String keys.
-     * @psalm-return list<string>
-     */
-    private function extractStringKeys(iterable $array): array
-    {
-        $result = [];
-        foreach ($array as $key => $_value) {
-            if (is_string($key)) {
-                $result[] = $key;
-            }
-        }
-        return $result;
-    }
-
     private function filterDataNestedForms(FormModelInterface $formModel, array &$data): array
     {
         $reflection = new \ReflectionClass($formModel);
@@ -289,5 +226,222 @@ final class FormHydrator
         }
 
         return $filteredData;
+    }
+
+    /**
+     * Get a map of object property names mapped to keys in the data array.
+     *
+     * @param FormModelInterface $model Model to read validation rules from.
+     * @param ?array $userMap Explicit map defined by user.
+     * @psalm-param MapType $userMap
+     * @param ?bool $strict If `false`, fills everything that is in the data. If `null`, fills data that is either
+     * defined in a map explicitly or allowed via validation rules. If `false`, fills only data defined explicitly
+     * in a map or only data allowed via validation rules but not both.
+     *
+     * @return array A map of object property names mapped to keys in the data array.
+     * @psalm-return MapType
+     */
+    private function createMap(FormModelInterface $model, ?array $userMap, ?bool $strict): array
+    {
+        if ($strict === false) {
+            return $userMap ?? [];
+        }
+
+        if ($strict && $userMap !== null) {
+            return $userMap;
+        }
+
+        $map = $this->getMapFromRules($model);
+
+        if ($userMap === null) {
+            return $map;
+        }
+
+        return $this->mapMerge($userMap, $map);
+    }
+
+    /**
+     * Extract object property names mapped to keys in the data array based on model validation rules.
+     *
+     * @return array Object property names mapped to keys in the data array.
+     * @psalm-return MapType
+     */
+    private function getMapFromRules(FormModelInterface $model): array
+    {
+        $parser = new ObjectParser($model, skipStaticProperties: true);
+        $mapFromAttributes = $this->getMapFromRulesAttributes($parser->getRules());
+
+        if ($model instanceof RulesProviderInterface) {
+            $mapFromProvider = $this->getMapFromRulesProvider($model);
+            return $this->mapMerge($mapFromAttributes, $mapFromProvider);
+        }
+
+        return $mapFromAttributes;
+    }
+
+    /**
+     * @psalm-return MapType
+     */
+    private function getMapFromRulesAttributes(array $array): array
+    {
+        $result = [];
+        foreach ($array as $key => $_value) {
+            if (is_int($key)) {
+                continue;
+            }
+            $result[$key] = $key;
+            foreach ($_value as $nestedRule) {
+                if ($nestedRule instanceof Nested) {
+                    $nestedMap = $this->getNestedMap($nestedRule, [$key]);
+                    if ($nestedMap !== null) {
+                        $result[$key] = new ObjectMap($nestedMap);
+                    }
+                }
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param array<int, string> $parentKeys
+     * @psalm-return MapType|null
+     */
+    private function getNestedMap(Nested $rule, array $parentKeys): ?array
+    {
+        /**
+         * @psalm-param $rules NormalizedNestedRulesArray
+         */
+        $rules = $rule->getRules();
+        if ($rules === null) {
+            return null;
+        }
+
+        $map = [];
+        foreach ($rules as $key => $nestedRules) {
+            if (is_int($key)) {
+                continue;
+            }
+
+            if (is_array($nestedRules)) {
+                $map[$key] = [...$parentKeys, $key];
+                foreach ($nestedRules as $item) {
+                    if ($item instanceof Nested) {
+                        $nestedMap = $this->getNestedMap($item, [...$parentKeys, $key]);
+                        if ($nestedMap !== null) {
+                            $map[$key] = new ObjectMap($nestedMap);
+                        }
+                    }
+                }
+            }
+        }
+
+        return $map;
+    }
+
+    /**
+     * @param array<int, string> $path
+     * @psalm-return MapType
+     */
+    private function getMapFromRulesProvider(
+        RulesProviderInterface $formModel,
+        array $path = [],
+    ): array
+    {
+        $mapModel = [];
+        /**
+         * @psalm-param $rules RawRulesMap
+         */
+        $rules = $formModel->getRules();
+        foreach ($rules as $key => $rule) {
+            if (is_int($key)) {
+                continue;
+            }
+            $mapModel[$key] = [...$path, $key];
+            if ($rule instanceof Nested) {
+                $nestedMap = $this->getNestedMap($rule, [...$path, $key]);
+                if ($nestedMap !== null) {
+                    $mapModel[$key] = new ObjectMap($nestedMap);
+                }
+            } elseif (is_array($rule)) {
+                foreach ($rule as $ruleKey => $item) {
+                    if ($item instanceof Nested) {
+                        $nestedMap = $this->getNestedMap($item, [...$path, $key]);
+                        if ($nestedMap !== null) {
+                            $mapModel[$key] = new ObjectMap($nestedMap);
+                        }
+                    }
+                }
+            }
+        }
+
+        $mapNestedModels = $this->getMapNestedModels($formModel, $path);
+
+        return $this->mapMerge($mapModel, $mapNestedModels);
+    }
+
+    /**
+     * @param array<int, string> $path
+     * @psalm-return MapType
+     */
+    private function getMapNestedModels(RulesProviderInterface $formModel, array $path): array
+    {
+        $reflection = new \ReflectionClass($formModel);
+        $properties = $reflection->getProperties(
+            \ReflectionProperty::IS_PUBLIC |
+            \ReflectionProperty::IS_PROTECTED |
+            \ReflectionProperty::IS_PRIVATE,
+        );
+
+        $propertiesNestedModels = [];
+        foreach ($properties as $property) {
+            if ($property->isStatic()) {
+                continue;
+            }
+
+            if ($property->isReadOnly()) {
+                continue;
+            }
+
+            $propertyValue = $property->getValue($formModel);
+            if ($propertyValue instanceof RulesProviderInterface) {
+                $propertiesNestedModels[$property->getName()] = new ObjectMap(
+                    $this->getMapFromRulesProvider(
+                        $propertyValue,
+                        [...$path, $property->getName()],
+                    ),
+                );
+            }
+        }
+
+        return $propertiesNestedModels;
+    }
+
+    /**
+     * @psalm-param MapType $map
+     * @psalm-param MapType $secondMap
+     * @psalm-return MapType
+     */
+    private function mapMerge(array $map, array $secondMap): array
+    {
+        $result = [];
+        foreach ($map as $key => $value) {
+            if (isset($secondMap[$key]) && $value instanceof ObjectMap && $secondMap[$key] instanceof ObjectMap) {
+                $mergedMap = $this->mapMerge($value->map, $secondMap[$key]->map);
+                $result[$key] = new ObjectMap($mergedMap);
+            } elseif (isset($secondMap[$key]) && $secondMap[$key] instanceof ObjectMap) {
+                $result[$key] = $secondMap[$key];
+            } else {
+                $result[$key] = $value;
+            }
+        }
+
+        foreach ($secondMap as $key => $value) {
+            if (!isset($result[$key])) {
+                $result[$key] = $value;
+            }
+        }
+
+        return $result;
     }
 }
