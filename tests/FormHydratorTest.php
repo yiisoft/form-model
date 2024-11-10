@@ -237,46 +237,81 @@ final class FormHydratorTest extends TestCase
         $this->assertSame($expected['secondForm.string'], $form->firstNestedForm()->secondForm()->string);
     }
 
-    public function testPopulateNestedFormsWithCreateMap()
+    public static function dataNestedFormsCreateMap(): array
     {
-        $form = new MainMapForm();
-
-        $validationResult = TestHelper::createFormHydrator()->populate($form, [
-            'MainMapForm' => [
-                'age' => 38,
-                'job' => 'developer',
-                'firstForm' => [
-                    'value' => 'value',
-                    'secondForm' => [
-                        'post' => 'post',
-                        'author' => 'author',
-                    ],
-                ],
-                'blog' => [
-                    'title' => 'title',
-                    'description' => 'description',
-                    'post' => [
-                        'title' => 'title',
-                        'content' => 'content',
-                        'author' => [
-                            'name' => 'author',
-                            'email' => 'author@yiisoft.com',
-                            'bio' => 'My bio',
+        return [
+            'array-data' => [
+                [
+                    'MainMapForm' => [
+                        'age' => 38,
+                        'job' => 'developer',
+                        'firstForm' => [
+                            'value' => 'value',
+                            'secondForm' => [
+                                'post' => 'post',
+                                'author' => 'author',
+                            ],
+                        ],
+                        'blog' => [
+                            'title' => 'title',
+                            'description' => 'description',
+                            'post' => [
+                                'title' => 'title',
+                                'content' => 'content',
+                                'author' => [
+                                    'name' => 'author',
+                                    'email' => 'author@yiisoft.com',
+                                    'bio' => 'My bio',
+                                ],
+                            ],
+                        ],
+                        'shop' => [
+                            'name' => 'shop',
+                            'address' => 'address',
+                            'phone' => 'phone',
+                            'storage' => [
+                                'name' => 'storage',
+                                'address' => 'address',
+                                'phone' => 'phone',
+                            ],
                         ],
                     ],
                 ],
-                'shop' => [
-                    'name' => 'shop',
-                    'address' => 'address',
-                    'phone' => 'phone',
-                    'storage' => [
-                        'name' => 'storage',
-                        'address' => 'address',
-                        'phone' => 'phone',
+            ],
+            'dot-notation-data' => [
+                [
+                    'MainMapForm' => [
+                        'age' => 38,
+                        'job' => 'developer',
+                        'firstForm.value' => 'value',
+                        'firstForm.secondForm.post' => 'post',
+                        'firstForm.secondForm.author' => 'author',
+                        'blog.title' => 'title',
+                        'blog.description' => 'description',
+                        'blog.post.title' => 'title',
+                        'blog.post.content' => 'content',
+                        'blog.post.author.name' => 'author',
+                        'blog.post.author.email' => 'author@yiisoft.com',
+                        'blog.post.author.bio' => 'My bio',
+                        'shop.name' => 'shop',
+                        'shop.address' => 'address',
+                        'shop.phone' => 'phone',
+                        'shop.storage.name' => 'storage',
+                        'shop.storage.address' => 'address',
+                        'shop.storage.phone' => 'phone',
                     ],
                 ],
             ],
-        ]);
+
+        ];
+    }
+
+    #[DataProvider('dataNestedFormsCreateMap')]
+    public function testPopulateNestedFormsWithCreateMap(array $data): void
+    {
+        $form = new MainMapForm();
+
+        TestHelper::createFormHydrator()->populate($form, $data);
 
         $this->assertSame(38, $form->age);
         $this->assertSame('developer', $form->job);
