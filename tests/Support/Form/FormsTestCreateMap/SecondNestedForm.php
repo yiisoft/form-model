@@ -11,7 +11,6 @@ class SecondNestedForm extends FormModel
     public function __construct(
         public string $post = '',
         public string $author = '',
-    )
-    {
+    ) {
     }
 }

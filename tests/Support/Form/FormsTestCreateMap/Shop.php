@@ -20,8 +20,7 @@ class Shop extends FormModel implements RulesProviderInterface
         public string $phone = '',
         public Storage $storage = new Storage(),
         public readonly string $readonly = '',
-    )
-    {
+    ) {
     }
 
     public function getRules(): array

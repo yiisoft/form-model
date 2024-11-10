@@ -15,7 +15,6 @@ class FirstNestedForm extends FormModel
         public string $value = '',
         #[Nested(null)]
         public SecondNestedForm $secondForm = new SecondNestedForm(),
-    )
-    {
+    ) {
     }
 }

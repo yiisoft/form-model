@@ -14,8 +14,7 @@ class Storage extends FormModel implements RulesProviderInterface
         public string $name = '',
         public string $address = '',
         public string $phone = '',
-    )
-    {
+    ) {
     }
 
     public function getRules(): array

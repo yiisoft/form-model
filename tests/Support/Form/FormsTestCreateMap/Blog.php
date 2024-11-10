@@ -16,8 +16,7 @@ class Blog extends FormModel implements RulesProviderInterface
         public string $title = '',
         public string $description = '',
         public Post $post = new Post(),
-    )
-    {
+    ) {
     }
 
     public function getRules(): array

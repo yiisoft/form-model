@@ -23,8 +23,7 @@ class MainMapForm extends FormModel implements RulesProviderInterface
         public FirstNestedForm $firstForm = new FirstNestedForm(),
         public Blog $blog = new Blog(),
         public Shop $shop = new Shop(),
-    )
-    {
+    ) {
     }
 
     public function getRules(): array

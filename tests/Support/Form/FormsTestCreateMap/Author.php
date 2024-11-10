@@ -15,8 +15,7 @@ class Author extends FormModel implements RulesProviderInterface
         public string $name = '',
         public string $email = '',
         public string $bio = '',
-    )
-    {
+    ) {
     }
 
     public function getRules(): array
