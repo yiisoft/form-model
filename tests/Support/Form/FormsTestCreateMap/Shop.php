@@ -12,8 +12,6 @@ use Yiisoft\Validator\RulesProviderInterface;
 
 class Shop extends FormModel implements RulesProviderInterface
 {
-
-
     public function __construct(
         public string $name = '',
         public string $address = '',

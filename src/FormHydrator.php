@@ -381,8 +381,7 @@ final class FormHydrator
     private function getMapFromRulesProvider(
         RulesProviderInterface $formModel,
         array $path = [],
-    ): array
-    {
+    ): array {
         $mapModel = [];
         /**
          * @psalm-param $rules RawRulesMap

@@ -302,7 +302,6 @@ final class FormHydratorTest extends TestCase
                     ],
                 ],
             ],
-
         ];
     }
 
