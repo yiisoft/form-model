@@ -324,11 +324,23 @@ final class FormHydrator
             }
 
             if (is_array($nestedRules)) {
-                $map[$key] = [...$parentKeys, $key];
+                $keyPath = null;
+                if (str_contains($key, '.')) {
+                    $keyPath = explode('.', $key);
+                    $key = reset($keyPath);
+                    $dotKeyMap = $this->dotKeyInMap($keyPath, $parentKeys, null);
+                    $map[$key] = $dotKeyMap[$key];
+                } else {
+                    $map[$key] = [...$parentKeys, $key];
+                }
                 foreach ($nestedRules as $item) {
                     if ($item instanceof Nested) {
-                        $nestedMap = $this->getNestedMap($item, [...$parentKeys, $key]);
-                        if ($nestedMap !== null) {
+                        $pathKeys = $keyPath ?? [$key];
+                        $nestedMap = $this->getNestedMap($item, [...$parentKeys, ...$pathKeys]);
+                        if (isset($keyPath)) {
+                            $dotKeyMap = $this->dotKeyInMap($keyPath, $parentKeys, $nestedMap);
+                            $map[$key] = $dotKeyMap[$key];
+                        } elseif ($nestedMap !== null) {
                             $map[$key] = new ObjectMap($nestedMap);
                         }
                     }
@@ -337,6 +349,29 @@ final class FormHydrator
         }
 
         return $map;
+    }
+
+    /**
+     * @psalm-param array<int, string> $keyPath
+     * @psalm-param array<int, string> $parentsKeys
+     * @psalm-param MapType|null $nestedMap
+     * @psalm-return MapType
+     */
+    private function dotKeyInMap(array $keyPath, array $parentsKeys, ?array $nestedMap): array
+    {
+        $dotMap = [];
+        $reverseKeyPath = array_reverse($keyPath);
+        foreach ($reverseKeyPath as $key) {
+            if ($dotMap !== []) {
+                $dotMap = [$key => new ObjectMap($dotMap)];
+            } else {
+                $dotMap = [
+                    $key => is_array($nestedMap) ? new ObjectMap($nestedMap) : [...$parentsKeys, ...$keyPath],
+                ];
+            }
+        }
+
+        return $dotMap;
     }
 
     /**
