@@ -2,7 +2,8 @@
 
 ## 1.0.2 under development
 
-- no changes in this release.
+- Bug #68: Populating out forms with a hydrator when displaying fields `Field::text($form->nestedForm, 'text')` of
+  nested forms (@DAGpro)
 
 ## 1.0.1 September 13, 2024
 
