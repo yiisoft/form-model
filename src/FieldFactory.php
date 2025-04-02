@@ -33,8 +33,9 @@ use Yiisoft\Form\Field\Textarea;
 use Yiisoft\Form\Field\Url;
 
 /**
- * FieldFactory is a factory to ease creation of fields of various builtin types.
+ * `FieldFactory` is a factory to ease creation of fields of various builtin types.
  *
+ * @psalm-suppress ClassMustBeFinal We allow to extend this class.
  * @psalm-import-type Errors from ErrorSummary
  */
 class FieldFactory
