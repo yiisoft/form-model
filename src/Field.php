@@ -33,7 +33,9 @@ use Yiisoft\Form\Field\Textarea;
 use Yiisoft\Form\Field\Url;
 
 /**
- * Field is a shortcut static factory to ease creation of fields of various builtin types.
+ * `Field` is a shortcut static factory to ease creation of fields of various builtin types.
+ *
+ * @psalm-suppress ClassMustBeFinal We allow to extend this class.
  */
 class Field
 {
