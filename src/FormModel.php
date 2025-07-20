@@ -168,7 +168,7 @@ abstract class FormModel implements FormModelInterface
      */
     private function readPropertyValue(string $path): mixed
     {
-        $normalizedPath = $this->normalizePath($path);
+        $normalizedPath = PathNormalizer::normalize($path);
 
         $value = $this;
         $keys = [[static::class, $this]];
@@ -215,7 +215,7 @@ abstract class FormModel implements FormModelInterface
      */
     private function readPropertyMetaValue(int $metaKey, string $path): ?string
     {
-        $normalizedPath = $this->normalizePath($path);
+        $normalizedPath = PathNormalizer::normalize($path);
 
         $value = $this;
         $n = 0;
@@ -279,17 +279,6 @@ abstract class FormModel implements FormModelInterface
         return StringHelper::uppercaseFirstCharacterInEachWord(
             self::$inflector->toWords($property)
         );
-    }
-
-    /**
-     * Normalize property path and return it as an array.
-     *
-     * @return string[] Normalized property path as an array.
-     */
-    private function normalizePath(string $path): array
-    {
-        $path = str_replace(['][', '['], '.', rtrim($path, ']'));
-        return StringHelper::parsePath($path);
     }
 
     /**
