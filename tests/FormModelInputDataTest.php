@@ -96,11 +96,10 @@ final class FormModelInputDataTest extends TestCase
     {
         $form = new class () extends FormModel {
         };
-        $inputData = new FormModelInputData($form, 'new age');
 
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Property name must contain word characters only.');
-        $inputData->getLabel();
+        new FormModelInputData($form, 'new age');
     }
 
     public static function dataIsValid(): array
