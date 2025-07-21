@@ -272,12 +272,10 @@ abstract class FormModel implements FormModelInterface
      */
     private function generatePropertyLabel(string $property): string
     {
-        if (self::$inflector === null) {
-            self::$inflector = new Inflector();
-        }
+        $inflector = $this->getInflector();
 
         $pieces = array_map(
-            static fn(string $piece): string => self::$inflector->toWords($piece),
+            static fn(string $piece): string => $inflector->toWords($piece),
             PathNormalizer::normalize($property),
         );
 
@@ -352,5 +350,13 @@ abstract class FormModel implements FormModelInterface
         }
 
         return null;
+    }
+
+    private function getInflector(): Inflector
+    {
+        if (self::$inflector === null) {
+            self::$inflector = new Inflector();
+        }
+        return self::$inflector;
     }
 }
