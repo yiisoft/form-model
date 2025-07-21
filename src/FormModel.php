@@ -276,8 +276,13 @@ abstract class FormModel implements FormModelInterface
             self::$inflector = new Inflector();
         }
 
+        $pieces = array_map(
+            static fn(string $piece): string => self::$inflector->toWords($piece),
+            PathNormalizer::normalize($property),
+        );
+
         return StringHelper::uppercaseFirstCharacterInEachWord(
-            self::$inflector->toWords($property)
+            implode(' ', $pieces),
         );
     }
 
