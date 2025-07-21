@@ -145,35 +145,4 @@ final class FormModelInputData implements InputDataInterface
 
         return $property;
     }
-
-    /**
-     * This method parses a property expression and returns an associative array containing
-     * real property name, prefix and suffix.
-     * For example: `['name' => 'content', 'prefix' => '', 'suffix' => '[0]']`
-     *
-     * A property expression is a property name prefixed and/or suffixed with array indexes. It is mainly used in
-     * tabular data input and/or input of array type. Below are some examples:
-     *
-     * - `[0]content` is used in tabular data input to represent the "content" property for the first model in tabular
-     *    input;
-     * - `dates[0]` represents the first array element of the "dates" property;
-     * - `[0]dates[0]` represents the first array element of the "dates" property for the first model in tabular
-     *    input.
-     *
-     * @param string $property The property name or expression
-     *
-     * @throws InvalidArgumentException If the property name contains non-word characters.
-     * @return string[] The property name, prefix and suffix.
-     */
-    private function parseProperty(string $property): array
-    {
-        if (!preg_match('/(^|.*\])([\w\.\+\-_]+)(\[.*|$)/u', $property, $matches)) {
-            throw new InvalidArgumentException('Property name must contain word characters only.');
-        }
-        return [
-            'name' => $matches[2],
-            'prefix' => $matches[1],
-            'suffix' => $matches[3],
-        ];
-    }
 }
