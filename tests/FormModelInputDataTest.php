@@ -11,8 +11,12 @@ use Yiisoft\FormModel\FormModel;
 use Yiisoft\FormModel\FormModelInputData;
 use Yiisoft\FormModel\FormModelInterface;
 use Yiisoft\FormModel\Tests\Support\Form\FormWithNestedStructures;
+use Yiisoft\Validator\Rule\Each;
+use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\Validator;
+
+use function PHPUnit\Framework\assertSame;
 
 final class FormModelInputDataTest extends TestCase
 {
@@ -130,5 +134,48 @@ final class FormModelInputDataTest extends TestCase
     {
         $inputData = new FormModelInputData($form, 'name');
         $this->assertSame($expected, $inputData->isValidated());
+    }
+
+    public static function dataGetValidationErrors(): iterable
+    {
+        yield 'non-exist' => [
+            'property' => 'another-name',
+            'expectedErrors' => [],
+        ];
+        yield 'single' => [
+            'property' => 'name',
+            'expectedErrors' => ['Name cannot be blank.'],
+        ];
+        yield 'summary' => [
+            'property' => 'amounts',
+            'expectedErrors' => ['Amounts cannot be blank.', 'Amounts must be no greater than 50.'],
+        ];
+        yield 'nested' => [
+            'property' => 'amounts[usd]',
+            'expectedErrors' => ['Amounts must be no greater than 50.'],
+        ];
+    }
+
+    #[DataProvider('dataGetValidationErrors')]
+    public function testGetValidationErrors(string $property, array $expectedErrors): void
+    {
+        $form = new class () extends FormModel {
+            #[Required]
+            public ?string $name = null;
+
+            #[Each([
+                new Required(),
+                new Number(max: 50, skipOnEmpty: true),
+            ])]
+            public array $amounts = [
+                'rub' => '',
+                'usd' => '100',
+            ];
+        };
+        (new Validator())->validate($form);
+
+        $inputData = new FormModelInputData($form, $property);
+
+        assertSame($expectedErrors, $inputData->getValidationErrors());
     }
 }

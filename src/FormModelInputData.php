@@ -91,7 +91,7 @@ final class FormModelInputData implements InputDataInterface
 
     public function getLabel(): ?string
     {
-        return $this->model->getPropertyLabel($this->property->name . $this->property->suffix);
+        return $this->model->getPropertyLabel($this->getPropertyName() . $this->property->suffix);
     }
 
     public function getHint(): ?string
