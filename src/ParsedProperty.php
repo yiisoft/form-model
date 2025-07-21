@@ -6,6 +6,9 @@ namespace Yiisoft\FormModel;
 
 use InvalidArgumentException;
 
+/**
+ * @internal
+ */
 final class ParsedProperty
 {
     public readonly string $raw;
