@@ -13,6 +13,11 @@ final class ParsedProperty
     public readonly string $prefix;
     public readonly string $suffix;
 
+    /**
+     * @psalm-var non-empty-list<string>
+     */
+    public readonly array $path;
+
     public function __construct(string $property)
     {
         if (!preg_match('/(^|.*\])([\w\.\+\-_]+)(\[.*|$)/u', $property, $matches)) {
@@ -22,5 +27,6 @@ final class ParsedProperty
         $this->name = $matches[2];
         $this->prefix = $matches[1];
         $this->suffix = $matches[3];
+        $this->path = PathNormalizer::normalize($this->name . $this->suffix);
     }
 }

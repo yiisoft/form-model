@@ -91,7 +91,7 @@ final class FormModelInputData implements InputDataInterface
 
     public function getLabel(): ?string
     {
-        return $this->model->getPropertyLabel($this->getPropertyName());
+        return $this->model->getPropertyLabel($this->property->name . $this->property->suffix);
     }
 
     public function getHint(): ?string
@@ -131,7 +131,7 @@ final class FormModelInputData implements InputDataInterface
     {
         /** @psalm-var list<string> */
         return $this->model->isValidated()
-            ? $this->model->getValidationResult()->getPropertyErrorMessages($this->getPropertyName())
+            ? $this->model->getValidationResult()->getPropertyErrorMessagesByPath($this->property->path)
             : [];
     }
 
