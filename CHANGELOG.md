@@ -3,6 +3,8 @@
 ## 1.0.2 under development
 
 - Chg #75: Change PHP constraint in `composer.json` to `8.1 - 8.4` (@vjik)
+- Bug #77: Display field-specific errors for nested properties (@vjik)
+- Bug #77: Generate field-specific labels for nested properties (@vjik)
 
 ## 1.0.1 September 13, 2024
 
