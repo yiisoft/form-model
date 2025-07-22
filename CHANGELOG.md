@@ -1,6 +1,6 @@
 # Yii Form Model Change Log
 
-## 1.0.2 under development
+## 1.0.2 July 22, 2025
 
 - Chg #75: Change PHP constraint in `composer.json` to `8.1 - 8.4` (@vjik)
 - Bug #77: Display field-specific errors for nested properties (@vjik)
