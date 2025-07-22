@@ -59,7 +59,7 @@ final class FormModelTest extends TestCase
     {
         $expected = <<<'HTML'
         <div>
-        <label for="nestedform-letters-0">Letters</label>
+        <label for="nestedform-letters-0">Letters 0</label>
         <input type="text" id="nestedform-letters-0" name="NestedForm[letters][0]" value="A">
         </div>
         HTML;
@@ -89,7 +89,7 @@ final class FormModelTest extends TestCase
         $this->assertSame(
             <<<HTML
             <div>
-            <label for="nestedform-letters-1">Letters</label>
+            <label for="nestedform-letters-1">Letters 1</label>
             <input type="text" id="nestedform-letters-1" name="NestedForm[letters][1]" value>
             </div>
             HTML,
@@ -101,7 +101,7 @@ final class FormModelTest extends TestCase
     {
         $expected = <<<'HTML'
         <div>
-        <label for="nestedform-object-numbers-1">Object</label>
+        <label for="nestedform-object-numbers-1">Object Numbers 1</label>
         <input type="text" id="nestedform-object-numbers-1" name="NestedForm[object][numbers][1]" value="42">
         </div>
         HTML;

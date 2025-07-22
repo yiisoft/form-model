@@ -34,7 +34,7 @@
         "yiisoft/html": "^3.3",
         "yiisoft/hydrator": "^1.3",
         "yiisoft/strings": "^2.3",
-        "yiisoft/validator": "^2.1"
+        "yiisoft/validator": "^2.5"
     },
     "require-dev": {
         "httpsoft/http-message": "^1.1.6",

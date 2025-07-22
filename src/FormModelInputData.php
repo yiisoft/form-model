@@ -12,6 +12,8 @@ use Yiisoft\FormModel\Exception\UndefinedObjectPropertyException;
 use Yiisoft\FormModel\Exception\ValueNotFoundException;
 use Yiisoft\Validator\Helper\RulesNormalizer;
 
+use function sprintf;
+
 /**
  * @psalm-import-type NormalizedRulesList from RulesNormalizer
  */
@@ -21,11 +23,13 @@ final class FormModelInputData implements InputDataInterface
      * @psalm-var NormalizedRulesList|null
      */
     private ?iterable $validationRules = null;
+    private ParsedProperty $property;
 
     public function __construct(
         private readonly FormModelInterface $model,
-        private readonly string $property,
+        string $property,
     ) {
+        $this->property = new ParsedProperty($property);
     }
 
     /**
@@ -35,7 +39,7 @@ final class FormModelInputData implements InputDataInterface
     {
         if ($this->validationRules === null) {
             $rules = RulesNormalizer::normalize(null, $this->model);
-            $this->validationRules = $rules[$this->property] ?? [];
+            $this->validationRules = $rules[$this->property->name] ?? [];
         }
         return $this->validationRules;
     }
@@ -55,15 +59,20 @@ final class FormModelInputData implements InputDataInterface
      */
     public function getName(): string
     {
-        $data = $this->parseProperty($this->property);
         $formName = $this->model->getFormName();
 
-        if ($formName === '' && $data['prefix'] === '') {
-            return $this->property;
+        if ($formName === '' && $this->property->prefix === '') {
+            return $this->property->raw;
         }
 
         if ($formName !== '') {
-            return "$formName{$data['prefix']}[{$data['name']}]{$data['suffix']}";
+            return sprintf(
+                '%s%s[%s]%s',
+                $formName,
+                $this->property->prefix,
+                $this->property->name,
+                $this->property->suffix
+            );
         }
 
         throw new InvalidArgumentException('Form name cannot be empty for tabular inputs.');
@@ -77,13 +86,12 @@ final class FormModelInputData implements InputDataInterface
      */
     public function getValue(): mixed
     {
-        $parsedName = $this->parseProperty($this->property);
-        return $this->model->getPropertyValue($parsedName['name'] . $parsedName['suffix']);
+        return $this->model->getPropertyValue($this->property->name . $this->property->suffix);
     }
 
     public function getLabel(): ?string
     {
-        return $this->model->getPropertyLabel($this->getPropertyName());
+        return $this->model->getPropertyLabel($this->getPropertyName() . $this->property->suffix);
     }
 
     public function getHint(): ?string
@@ -123,49 +131,18 @@ final class FormModelInputData implements InputDataInterface
     {
         /** @psalm-var list<string> */
         return $this->model->isValidated()
-            ? $this->model->getValidationResult()->getPropertyErrorMessages($this->getPropertyName())
+            ? $this->model->getValidationResult()->getPropertyErrorMessagesByPath($this->property->path)
             : [];
     }
 
     private function getPropertyName(): string
     {
-        $property = $this->parseProperty($this->property)['name'];
+        $property = $this->property->name;
 
         if (!$this->model->hasProperty($property)) {
             throw new InvalidArgumentException('Property "' . $property . '" does not exist.');
         }
 
         return $property;
-    }
-
-    /**
-     * This method parses a property expression and returns an associative array containing
-     * real property name, prefix and suffix.
-     * For example: `['name' => 'content', 'prefix' => '', 'suffix' => '[0]']`
-     *
-     * A property expression is a property name prefixed and/or suffixed with array indexes. It is mainly used in
-     * tabular data input and/or input of array type. Below are some examples:
-     *
-     * - `[0]content` is used in tabular data input to represent the "content" property for the first model in tabular
-     *    input;
-     * - `dates[0]` represents the first array element of the "dates" property;
-     * - `[0]dates[0]` represents the first array element of the "dates" property for the first model in tabular
-     *    input.
-     *
-     * @param string $property The property name or expression
-     *
-     * @throws InvalidArgumentException If the property name contains non-word characters.
-     * @return string[] The property name, prefix and suffix.
-     */
-    private function parseProperty(string $property): array
-    {
-        if (!preg_match('/(^|.*\])([\w\.\+\-_]+)(\[.*|$)/u', $property, $matches)) {
-            throw new InvalidArgumentException('Property name must contain word characters only.');
-        }
-        return [
-            'name' => $matches[2],
-            'prefix' => $matches[1],
-            'suffix' => $matches[3],
-        ];
     }
 }
