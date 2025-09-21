@@ -5,11 +5,15 @@ declare(strict_types=1);
 namespace Yiisoft\FormModel\Tests;
 
 use HttpSoft\Message\ServerRequestFactory;
+use HttpSoft\Message\StreamFactory;
+use HttpSoft\Message\UploadedFile;
+use HttpSoft\Message\UploadedFileFactory;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Yiisoft\FormModel\FormModel;
 use Yiisoft\FormModel\Tests\Support\Form\CarForm;
+use Yiisoft\FormModel\Tests\Support\Form\UploadedFileForm;
 use Yiisoft\FormModel\Tests\Support\TestHelper;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Integer;
@@ -179,5 +183,26 @@ final class FormHydratorTest extends TestCase
         $this->assertSame(38, $form->age);
         $this->assertSame('developer', $form->job);
         $this->assertSame('', $form->tip);
+    }
+
+    public function testUploadedFile(): void
+    {
+        $stream = (new StreamFactory())
+            ->createStreamFromFile('./Support/Dto/Coordinates.php')
+        ;
+        $uploadedFile = (new UploadedFileFactory())
+            ->createUploadedFile($stream)
+        ;
+        $request = (new ServerRequestFactory())
+            ->createServerRequest('POST', '/')
+            ->withUploadedFiles([$uploadedFile])
+        ;
+
+        $form = new UploadedFileForm();
+
+        $result = TestHelper::createFormHydrator()->populateFromPostAndValidate($form, $request);
+        
+        $this->assertTrue($result);
+        $this->assertInstanceOf(UploadedFile::class, $form->file);
     }
 }
