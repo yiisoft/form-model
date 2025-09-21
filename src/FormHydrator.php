@@ -52,15 +52,11 @@ final class FormHydrator
      */
     public function populate(
         FormModelInterface $model,
-        mixed $data,
+        array $data,
         ?array $map = null,
         ?bool $strict = null,
         ?string $scope = null
     ): bool {
-        if (!is_array($data)) {
-            return false;
-        }
-
         $scope ??= $model->getFormName();
         if ($scope === '') {
             $hydrateData = $data;
@@ -152,7 +148,13 @@ final class FormHydrator
             return false;
         }
 
-        return $this->populate($model, $request->getParsedBody(), $map, $strict, $scope);
+        return $this->populate(
+            $model,
+            array_merge($request->getParsedBody(), $request->getUploadedFiles()),
+            $map,
+            $strict,
+            $scope
+        );
     }
 
     /**
@@ -179,11 +181,11 @@ final class FormHydrator
         ?bool $strict = null,
         ?string $scope = null
     ): bool {
-        if ($request->getMethod() !== 'POST') {
+        if (!$this->populateFromPost($model, $request, $map, $strict, $scope)) {
             return false;
         }
 
-        return $this->populateAndValidate($model, $request->getParsedBody(), $map, $strict, $scope);
+        return $this->validate($model)->isValid();
     }
 
     /**
