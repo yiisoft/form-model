@@ -167,7 +167,7 @@ use Yiisoft\FormModel\FormModel;
  * @var RequestInterface $request 
  */
  
-$isPopulated = $formHydrator->populate($formModel, $request);
+$isPopulated = $formHydrator->populateFromPost($formModel, $request);
 ```
 
 ### `populateFromPostAndValidate()`
@@ -186,8 +186,8 @@ use Yiisoft\FormModel\FormModel;
  */
 
 
-$isValid = $formHydrator->populateAndValidate($formModel, $request);
-$result = $form->getValidationResult();
+$isValid = $formHydrator->populateFromPostAndValidate($formModel, $request);
+$result = $formModel->getValidationResult();
 ```
 
 The parameters are the same as in [`populate()`](#populate). But, unlike [`validate()`](#validate), the method returns
