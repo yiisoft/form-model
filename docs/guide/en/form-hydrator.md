@@ -151,6 +151,25 @@ $result = $form->getValidationResult();
 The parameters are the same as in [`populate()`](#populate). But, unlike [`validate()`](#validate), the method returns 
 just whether the validation was successful. Validation result is still available via form's dedicated method though.
 
+### `populateFromGet()`
+
+A shortcut, hydrates form model from existing data similar to [`populate()`](#populate) but data is retrieved from
+query parameters of request (for example `?CarForm[name]=Test`). 
+
+```php
+use Psr\Http\Message\RequestInterface;
+use Yiisoft\FormModel\FormHydrator;
+use Yiisoft\FormModel\FormModel;
+
+/** 
+ * @var FormHydrator $formHydrator
+ * @var FormModel $formModel
+ * @var RequestInterface $request 
+ */
+
+$isPopulated = $formHydrator->populateFromGet($formModel, $request);
+```
+
 ### `populateFromPost()`
 
 A shortcut, hydrates form model from existing data similar to [`populate()`](#populate) but data is retrieved from 
@@ -169,6 +188,28 @@ use Yiisoft\FormModel\FormModel;
  
 $isPopulated = $formHydrator->populate($formModel, $request);
 ```
+
+### `populateFromGetAndValidate()`
+
+A shortcut to execute [`populateFromGet()`](#populatefromget), then [`validate()`](#validate) consecutively.
+
+```php
+use Psr\Http\Message\RequestInterface;
+use Yiisoft\FormModel\FormHydrator;
+use Yiisoft\FormModel\FormModel;
+
+/** 
+ * @var FormHydrator $formHydrator
+ * @var FormModel $formModel
+ * @var RequestInterface $request 
+ */
+
+$isValid = $formHydrator->populateFromGetAndValidate($formModel, $request);
+$result = $formModel->getValidationResult();
+```
+
+The parameters are the same as in [`populate()`](#populate). But, unlike [`validate()`](#validate), the method returns
+just whether the validation was successful. Validation result is still available via form's dedicated method though.
 
 ### `populateFromPostAndValidate()`
 

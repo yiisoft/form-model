@@ -2,7 +2,7 @@
 
 ## 1.0.3 under development
 
-- no changes in this release.
+- Chg #80: Added `populateFromGet()` and `populateFromGetAndValidate()` to `FormHydrator` (@m1n64)
 
 ## 1.0.2 July 22, 2025
 

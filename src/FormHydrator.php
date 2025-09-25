@@ -136,7 +136,7 @@ final class FormHydrator
      * setting.
      * @psalm-param MapType|null $map
      * @param bool|null $strict If `false`, fills everything that is in the data. If `null`, fills data that is either
-     * defined in a map explicitly or allowed via validation rules. If `false`, fills only data defined explicitly
+     * defined in a map explicitly or allowed via validation rules. If `true`, fills only data defined explicitly
      * in a map or only data allowed via validation rules but not both.
      * @param string|null $scope Key to use in the data array as a source of data. Usually used when there are multiple
      * forms at the same page. If not set, it equals to {@see FormModelInterface::getFormName()}.
@@ -195,7 +195,7 @@ final class FormHydrator
      * setting.
      * @psalm-param MapType|null $map
      * @param bool|null $strict If `false`, fills everything that is in the data. If `null`, fills data that is either
-     * defined in a map explicitly or allowed via validation rules. If `false`, fills only data defined explicitly
+     * defined in a map explicitly or allowed via validation rules. If `true`, fills only data defined explicitly
      * in a map or only data allowed via validation rules but not both.
      * @param string|null $scope Key to use in the data array as a source of data. Usually used when there are multiple
      * forms at the same page. If not set, it equals to {@see FormModelInterface::getFormName()}.
