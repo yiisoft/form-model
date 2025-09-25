@@ -78,6 +78,44 @@ final class FormHydratorTest extends TestCase
         $this->assertSame($expected, $result);
     }
 
+    public static function dataPopulateFromGet(): array
+    {
+        $factory = new ServerRequestFactory();
+
+        return [
+            'non-get' => [
+                false,
+                $factory->createServerRequest('POST', '/'),
+            ],
+            'empty-data' => [
+                false,
+                $factory->createServerRequest('GET', '/'),
+            ],
+            'invalid-data' => [
+                true,
+                $factory
+                    ->createServerRequest('GET', '/')
+                    ->withQueryParams(['CarForm' => ['name' => 'A']]),
+            ],
+            'valid-data' => [
+                true,
+                $factory
+                    ->createServerRequest('GET', '/')
+                    ->withQueryParams(['CarForm' => ['name' => 'TEST']]),
+            ],
+        ];
+    }
+
+    #[DataProvider('dataPopulateFromGet')]
+    public function testPopulateFromGet(bool $expected, ServerRequestInterface $request): void
+    {
+        $form = new CarForm();
+
+        $result = TestHelper::createFormHydrator()->populateFromGet($form, $request);
+
+        $this->assertSame($expected, $result);
+    }
+
     public static function dataPopulateFromPost(): array
     {
         $factory = new ServerRequestFactory();
@@ -108,6 +146,44 @@ final class FormHydratorTest extends TestCase
         $form = new CarForm();
 
         $result = TestHelper::createFormHydrator()->populateFromPost($form, $request);
+
+        $this->assertSame($expected, $result);
+    }
+
+    public static function dataPopulateFromGetAndValidate(): array
+    {
+        $factory = new ServerRequestFactory();
+
+        return [
+            'non-get' => [
+                false,
+                $factory->createServerRequest('POST', '/'),
+            ],
+            'empty-data' => [
+                false,
+                $factory->createServerRequest('GET', '/'),
+            ],
+            'invalid-data' => [
+                false,
+                $factory
+                    ->createServerRequest('GET', '/')
+                    ->withQueryParams(['CarForm' => ['name' => 'A']]),
+            ],
+            'valid-data' => [
+                true,
+                $factory
+                    ->createServerRequest('GET', '/')
+                    ->withQueryParams(['CarForm' => ['name' => 'TEST']]),
+            ],
+        ];
+    }
+
+    #[DataProvider('dataPopulateFromGetAndValidate')]
+    public function testPopulateFromGetAndValidate(bool $expected, ServerRequestInterface $request): void
+    {
+        $form = new CarForm();
+
+        $result = TestHelper::createFormHydrator()->populateFromGetAndValidate($form, $request);
 
         $this->assertSame($expected, $result);
     }
