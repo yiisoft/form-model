@@ -127,6 +127,36 @@ final class FormHydrator
     }
 
     /**
+     * Fill the model with the data from query parameters.
+     *
+     * @param FormModelInterface $model Model to fill.
+     * @param ServerRequestInterface $request Request to get query parameters from.
+     * @param array|null $map Map of object property names to keys in the data array to use for hydration.
+     * If not provided, it may be generated automatically based on presence of property validation rules and a `strict`
+     * setting.
+     * @psalm-param MapType|null $map
+     * @param bool|null $strict If `false`, fills everything that is in the data. If `null`, fills data that is either
+     * defined in a map explicitly or allowed via validation rules. If `true`, fills only data defined explicitly
+     * in a map or only data allowed via validation rules but not both.
+     * @param string|null $scope Key to use in the data array as a source of data. Usually used when there are multiple
+     * forms at the same page. If not set, it equals to {@see FormModelInterface::getFormName()}.
+     * @return bool Whether model is filled with data.
+     */
+    public function populateFromGet(
+        FormModelInterface $model,
+        ServerRequestInterface $request,
+        ?array $map = null,
+        ?bool $strict = null,
+        ?string $scope = null
+    ): bool {
+        if ($request->getMethod() !== 'GET') {
+            return false;
+        }
+
+        return $this->populate($model, $request->getQueryParams(), $map, $strict, $scope);
+    }
+
+    /**
      * Fill the model with the data parsed from request body.
      *
      * @param FormModelInterface $model Model to fill.
@@ -153,6 +183,36 @@ final class FormHydrator
         }
 
         return $this->populate($model, $request->getParsedBody(), $map, $strict, $scope);
+    }
+
+    /**
+     * Fill the model with the data from query parameters and validate it.
+     *
+     * @param FormModelInterface $model Model to fill.
+     * @param ServerRequestInterface $request Request to get query parameters from.
+     * @param array|null $map Map of object property names to keys in the data array to use for hydration.
+     * If not provided, it may be generated automatically based on presence of property validation rules and a `strict`
+     * setting.
+     * @psalm-param MapType|null $map
+     * @param bool|null $strict If `false`, fills everything that is in the data. If `null`, fills data that is either
+     * defined in a map explicitly or allowed via validation rules. If `true`, fills only data defined explicitly
+     * in a map or only data allowed via validation rules but not both.
+     * @param string|null $scope Key to use in the data array as a source of data. Usually used when there are multiple
+     * forms at the same page. If not set, it equals to {@see FormModelInterface::getFormName()}.
+     * @return bool Whether model is filled with data and is valid.
+     */
+    public function populateFromGetAndValidate(
+        FormModelInterface $model,
+        ServerRequestInterface $request,
+        ?array $map = null,
+        ?bool $strict = null,
+        ?string $scope = null
+    ): bool {
+        if ($request->getMethod() !== 'GET') {
+            return false;
+        }
+
+        return $this->populateAndValidate($model, $request->getQueryParams(), $map, $strict, $scope);
     }
 
     /**
