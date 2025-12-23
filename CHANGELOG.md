@@ -3,6 +3,7 @@
 ## 1.0.3 under development
 
 - New #80: Add `populateFromGet()` and `populateFromGetAndValidate()` to `FormHydrator` (@m1n64)
+- Enh #87: Add PHP 8.5 support (@vjik)
 
 ## 1.0.2 July 22, 2025
 

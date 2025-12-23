@@ -43,9 +43,9 @@ final class FormHydrator
      * setting.
      * @psalm-param MapType $map
      * @param ?bool $strict Whether to enable strict mode for filling data:
-     * - If `false`, fills everything that is in the data.
-     * = If `null`, fills data that is either defined in a map explicitly or allowed via validation rules.
-     * - If `true`, fills either only data defined explicitly in a map or only data allowed via validation rules but not
+     * - if `false`, fills everything that is in the data.
+     * - if `null`, fills data that is either defined in a map explicitly or allowed via validation rules.
+     * - if `true`, fills either only data defined explicitly in a map or only data allowed via validation rules but not
      * both.
      * @param ?string $scope Key to use in the data array as a source of data. Usually used when there are multiple
      * forms at the same page. If not set, it equals to {@see FormModelInterface::getFormName()}.
@@ -161,14 +161,14 @@ final class FormHydrator
      *
      * @param FormModelInterface $model Model to fill.
      * @param ServerRequestInterface $request Request to get parsed data from.
-     * @param ?array $map Map of object property names to keys in the data array to use for hydration.
+     * @param array|null $map Map of object property names to keys in the data array to use for hydration.
      * If not provided, it may be generated automatically based on presence of property validation rules and a `strict`
      * setting.
      * @psalm-param MapType $map
-     * @param ?bool $strict If `false`, fills everything that is in the data. If `null`, fills data that is either
+     * @param bool|null $strict If `false`, fills everything that is in the data. If `null`, fills data that is either
      * defined in a map explicitly or allowed via validation rules. If `true`, fills only data defined explicitly
      * in a map or only data allowed via validation rules but not both.
-     * @param ?string $scope Key to use in the data array as a source of data. Usually used when there are multiple
+     * @param string|null $scope Key to use in the data array as a source of data. Usually used when there are multiple
      * forms at the same page. If not set, it equals to {@see FormModelInterface::getFormName()}.
      */
     public function populateFromPost(
@@ -179,6 +179,7 @@ final class FormHydrator
         ?string $scope = null
     ): bool {
         if ($request->getMethod() !== 'POST') {
+            /** @infection-ignore-all */
             return false;
         }
 
@@ -220,14 +221,14 @@ final class FormHydrator
      *
      * @param FormModelInterface $model Model to fill.
      * @param ServerRequestInterface $request Request to get parsed data from.
-     * @param ?array $map Map of object property names to keys in the data array to use for hydration.
+     * @param array|null $map Map of object property names to keys in the data array to use for hydration.
      * If not provided, it may be generated automatically based on presence of property validation rules and a `strict`
      * setting.
      * @psalm-param MapType $map
-     * @param ?bool $strict If `false`, fills everything that is in the data. If `null`, fills data that is either
+     * @param bool|null $strict If `false`, fills everything that is in the data. If `null`, fills data that is either
      * defined in a map explicitly or allowed via validation rules. If `true`, fills only data defined explicitly
      * in a map or only data allowed via validation rules but not both.
-     * @param ?string $scope Key to use in the data array as a source of data. Usually used when there are multiple
+     * @param string|null $scope Key to use in the data array as a source of data. Usually used when there are multiple
      * forms at the same page. If not set, it equals to {@see FormModelInterface::getFormName()}.
      *
      * @return bool Whether model is filled with data and is valid.
@@ -240,6 +241,7 @@ final class FormHydrator
         ?string $scope = null
     ): bool {
         if ($request->getMethod() !== 'POST') {
+            /** @infection-ignore-all */
             return false;
         }
 
@@ -250,9 +252,9 @@ final class FormHydrator
      * Get a map of object property names mapped to keys in the data array.
      *
      * @param FormModelInterface $model Model to read validation rules from.
-     * @param ?array $userMap Explicit map defined by user.
+     * @param array|null $userMap Explicit map defined by user.
      * @psalm-param MapType $userMap
-     * @param ?bool $strict If `false`, fills everything that is in the data. If `null`, fills data that is either
+     * @param bool|null $strict If `false`, fills everything that is in the data. If `null`, fills data that is either
      * defined in a map explicitly or allowed via validation rules. If `false`, fills only data defined explicitly
      * in a map or only data allowed via validation rules but not both.
      *
@@ -262,6 +264,7 @@ final class FormHydrator
     private function createMap(FormModelInterface $model, ?array $userMap, ?bool $strict): array
     {
         if ($strict === false) {
+            /** @infection-ignore-all */
             return $userMap ?? [];
         }
 

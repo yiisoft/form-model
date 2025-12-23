@@ -275,7 +275,7 @@ abstract class FormModel implements FormModelInterface
         $inflector = $this->getInflector();
 
         $pieces = array_map(
-            static fn(string $piece): string => $inflector->toWords($piece),
+            $inflector->toWords(...),
             PathNormalizer::normalize($property),
         );
 

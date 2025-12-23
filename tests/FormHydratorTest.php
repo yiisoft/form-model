@@ -78,6 +78,16 @@ final class FormHydratorTest extends TestCase
         $this->assertSame($expected, $result);
     }
 
+    public function testPopulateAndValidateWithNonArrayData(): void
+    {
+        $form = new CarForm();
+        $form->name = 'ValidData';
+
+        $result = TestHelper::createFormHydrator()->populateAndValidate($form, null);
+
+        $this->assertFalse($result);
+    }
+
     public static function dataPopulateFromGet(): array
     {
         $factory = new ServerRequestFactory();
@@ -101,6 +111,12 @@ final class FormHydratorTest extends TestCase
                 true,
                 $factory
                     ->createServerRequest('GET', '/')
+                    ->withQueryParams(['CarForm' => ['name' => 'TEST']]),
+            ],
+            'post-with-query-params' => [
+                false,
+                $factory
+                    ->createServerRequest('POST', '/')
                     ->withQueryParams(['CarForm' => ['name' => 'TEST']]),
             ],
         ];
@@ -173,6 +189,12 @@ final class FormHydratorTest extends TestCase
                 true,
                 $factory
                     ->createServerRequest('GET', '/')
+                    ->withQueryParams(['CarForm' => ['name' => 'TEST']]),
+            ],
+            'post-with-query-params' => [
+                false,
+                $factory
+                    ->createServerRequest('POST', '/')
                     ->withQueryParams(['CarForm' => ['name' => 'TEST']]),
             ],
         ];

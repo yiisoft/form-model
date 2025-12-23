@@ -19,7 +19,7 @@ The package provides a base for form models and helps to fill them with data, va
 
 ## Requirements
 
-- PHP 8.1 or higher.
+- PHP 8.1 - 8.5.
 - `mbstring` PHP extension.
 
 ## Installation
