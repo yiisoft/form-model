@@ -18,8 +18,8 @@ final class FileForm extends FormModel implements RulesProviderInterface
     {
         return [
             'image' => [new Required()],
-            'photo' => [new Required(when: static fn () => false)],
-            'video' => [new Required(when: static fn () => false), new Required()],
+            'photo' => [new Required(when: static fn() => false)],
+            'video' => [new Required(when: static fn() => false), new Required()],
         ];
     }
 }

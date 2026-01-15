@@ -11,9 +11,9 @@ use Yiisoft\Validator\RulesProviderInterface;
 
 final class RangeForm extends FormModel implements RulesProviderInterface
 {
+    public ?int $requiredWhen = null;
     private int $volume = 23;
     private ?int $count = null;
-    public ?int $requiredWhen = null;
 
     public function getRules(): array
     {
@@ -21,7 +21,7 @@ final class RangeForm extends FormModel implements RulesProviderInterface
             'volume' => [new Required()],
             'count' => [new Number(min: 1, max: 9)],
             'requiredWhen' => [
-                new Required(when: static fn () => false),
+                new Required(when: static fn() => false),
                 new Number(min: 1),
             ],
         ];

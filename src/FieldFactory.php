@@ -45,8 +45,7 @@ class FieldFactory
      */
     final public function __construct(
         protected readonly ?string $defaultTheme = null,
-    ) {
-    }
+    ) {}
 
     /**
      * Create a button field.
@@ -192,7 +191,7 @@ class FieldFactory
             $widget = $widget->errors(
                 $formModel->isValidated()
                     ? $formModel->getValidationResult()->getErrorMessagesIndexedByProperty()
-                    : []
+                    : [],
             );
         }
         return $widget;

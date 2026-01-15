@@ -31,6 +31,7 @@ use Yiisoft\FormModel\Tests\Support\TestHelper;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\RulesProviderInterface;
 use Yiisoft\Validator\Validator;
+use NonNamespacedForm;
 
 require __DIR__ . '/Support/Form/NonNamespacedForm.php';
 
@@ -38,8 +39,7 @@ final class FormModelTest extends TestCase
 {
     public function testAnonymousFormName(): void
     {
-        $form = new class () extends FormModel {
-        };
+        $form = new class extends FormModel {};
         $this->assertSame('', $form->getFormName());
     }
 
@@ -93,7 +93,7 @@ final class FormModelTest extends TestCase
             <input type="text" id="nestedform-letters-1" name="NestedForm[letters][1]" value>
             </div>
             HTML,
-            $result
+            $result,
         );
     }
 
@@ -167,7 +167,7 @@ final class FormModelTest extends TestCase
 
         $this->expectException(PropertyNotSupportNestedValuesException::class);
         $this->expectExceptionMessage(
-            'Property "' . FormWithNestedProperty::class . '::$key" doesn\'t support nested values.'
+            'Property "' . FormWithNestedProperty::class . '::$key" doesn\'t support nested values.',
         );
         $form->getPropertyValue('key.profile');
     }
@@ -180,7 +180,7 @@ final class FormModelTest extends TestCase
 
         $this->expectException(UndefinedObjectPropertyException::class);
         $this->expectExceptionMessage(
-            'Undefined object property: "' . FormWithNestedProperty::class . '::$coordinates::$profile".'
+            'Undefined object property: "' . FormWithNestedProperty::class . '::$coordinates::$profile".',
         );
         $form->getPropertyValue('coordinates.profile');
     }
@@ -235,7 +235,7 @@ final class FormModelTest extends TestCase
 
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage(
-            'Undefined object property: "Yiisoft\FormModel\Tests\Support\Form\LoginForm::$noExist".'
+            'Undefined object property: "Yiisoft\FormModel\Tests\Support\Form\LoginForm::$noExist".',
         );
         $form->getPropertyValue('noExist');
     }
@@ -303,8 +303,7 @@ final class FormModelTest extends TestCase
     public function testLoadFailedForm(): void
     {
         $form1 = new LoginForm();
-        $form2 = new class () extends FormModel {
-        };
+        $form2 = new class extends FormModel {};
 
         $data1 = [
             'LoginForm2' => [
@@ -327,7 +326,7 @@ final class FormModelTest extends TestCase
 
     public function testLoadWithEmptyScope(): void
     {
-        $form = new class () extends FormModel {
+        $form = new class extends FormModel {
             #[Safe]
             private int $int = 1;
             #[Safe]
@@ -397,13 +396,13 @@ final class FormModelTest extends TestCase
 
     public function testNonNamespacedFormName(): void
     {
-        $form = new \NonNamespacedForm();
+        $form = new NonNamespacedForm();
         $this->assertSame('NonNamespacedForm', $form->getFormName());
     }
 
     public function testPublicProperties(): void
     {
-        $form = new class () extends FormModel {
+        $form = new class extends FormModel {
             #[Safe]
             public int $int = 1;
         };
@@ -415,7 +414,7 @@ final class FormModelTest extends TestCase
 
     public function testHintForStaticProperty(): void
     {
-        $form = new class () extends FormModel {
+        $form = new class extends FormModel {
             public static int $number;
         };
 
@@ -453,7 +452,7 @@ final class FormModelTest extends TestCase
                 'value' => 'main-form',
                 'firstLevelForm.secondLevelForm.float' => '-7.1',
             ],
-            scope: ''
+            scope: '',
         );
 
         $this->assertFalse($isValid);
@@ -461,7 +460,7 @@ final class FormModelTest extends TestCase
             [
                 'firstLevelForm.secondLevelForm.float' => ['Float must be no less than 0.'],
             ],
-            $form->getValidationResult()->getErrorMessagesIndexedByPath()
+            $form->getValidationResult()->getErrorMessagesIndexedByPath(),
         );
     }
 
@@ -480,7 +479,7 @@ final class FormModelTest extends TestCase
                     ],
                 ],
             ],
-            scope: ''
+            scope: '',
         );
 
         $this->assertFalse($isValid);
@@ -557,8 +556,7 @@ final class FormModelTest extends TestCase
 
             public function __construct(
                 private array $rules,
-            ) {
-            }
+            ) {}
 
             public function getRules(): array
             {
@@ -585,7 +583,7 @@ final class FormModelTest extends TestCase
     {
         $validator = new Validator();
 
-        $form = new class () extends FormModel {
+        $form = new class extends FormModel {
             #[Required]
             public ?string $name = null;
         };
@@ -621,7 +619,7 @@ final class FormModelTest extends TestCase
 
     public function testOverrideNestedPropertyLabel(): void
     {
-        $object = new class () extends FormModel {
+        $object = new class extends FormModel {
             public string $name = '';
 
             public function getPropertyLabels(): array
@@ -629,7 +627,7 @@ final class FormModelTest extends TestCase
                 return ['name' => 'The Name'];
             }
         };
-        $nestedForm = new class () extends FormModel {
+        $nestedForm = new class extends FormModel {
             public object $object;
 
             public function getPropertyLabels(): array
@@ -638,7 +636,7 @@ final class FormModelTest extends TestCase
             }
         };
         $nestedForm->object = $object;
-        $form = new class () extends FormModel {
+        $form = new class extends FormModel {
             public FormModel $nested;
         };
         $form->nested = $nestedForm;
@@ -648,7 +646,7 @@ final class FormModelTest extends TestCase
 
     public function testAddError(): void
     {
-        $form = new class () extends FormModel {
+        $form = new class extends FormModel {
             #[Required]
             public string $name = '';
         };
@@ -674,7 +672,7 @@ final class FormModelTest extends TestCase
 
     public function testAddErrorWithoutValidation(): void
     {
-        $form = new class () extends FormModel {
+        $form = new class extends FormModel {
             #[Required]
             public string $name = '';
         };

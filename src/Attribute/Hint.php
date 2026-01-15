@@ -11,8 +11,7 @@ final class Hint
 {
     public function __construct(
         private readonly string $hint,
-    ) {
-    }
+    ) {}
 
     public function getHint(): string
     {

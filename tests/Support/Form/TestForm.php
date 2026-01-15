@@ -12,6 +12,8 @@ use Yiisoft\Validator\Validator;
 
 final class TestForm extends FormModel implements RulesProviderInterface
 {
+    public string $mainEmail = '';
+    public array $color2 = [];
     private string $name = '';
     private string $desc = '';
     private string $site = '';
@@ -24,11 +26,9 @@ final class TestForm extends FormModel implements RulesProviderInterface
     private ?int $age = 42;
     private ?string $key = 'x100';
     private ?string $avatar = null;
-    public string $mainEmail = '';
     private string $partyDate = '2017-06-01T08:30';
     private string $xDate = '2017-06-01T08:30';
     private string $birthday = '1996-12-19';
-    public array $color2 = [];
     private bool $blue = false;
 
     public function getRules(): array

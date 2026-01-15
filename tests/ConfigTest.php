@@ -13,6 +13,8 @@ use Yiisoft\Hydrator\HydratorInterface;
 use Yiisoft\Validator\Validator;
 use Yiisoft\Validator\ValidatorInterface;
 
+use function dirname;
+
 final class ConfigTest extends TestCase
 {
     public function testDi(): void
@@ -27,7 +29,7 @@ final class ConfigTest extends TestCase
 
         $container = new Container(
             ContainerConfig::create()
-                ->withDefinitions($definitions)
+                ->withDefinitions($definitions),
         );
 
         $formHydrator = $container->get(FormHydrator::class);

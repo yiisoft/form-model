@@ -29,7 +29,7 @@ final class NestedMixedForm extends FormModel implements RulesProviderInterface
                         [
                             'phone' => new Regex('/^\+\d{11}$/', message: 'Invalid phone.'),
                         ],
-                        skipOnEmpty: true
+                        skipOnEmpty: true,
                     ),
                 ],
             ]),

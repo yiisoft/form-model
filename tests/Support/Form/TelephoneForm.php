@@ -12,6 +12,7 @@ use Yiisoft\Validator\RulesProviderInterface;
 
 final class TelephoneForm extends FormModel implements RulesProviderInterface
 {
+    public ?int $requiredWhen = null;
     private string $number = '';
     private ?string $main = null;
     private ?string $office1 = null;
@@ -19,7 +20,6 @@ final class TelephoneForm extends FormModel implements RulesProviderInterface
     private ?string $code = null;
     private ?string $nocode = null;
     private int $age = 42;
-    public ?int $requiredWhen = null;
 
     public function getRules(): array
     {

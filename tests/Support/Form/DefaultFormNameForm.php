@@ -6,6 +6,4 @@ namespace Yiisoft\FormModel\Tests\Support\Form;
 
 use Yiisoft\FormModel\FormModel;
 
-final class DefaultFormNameForm extends FormModel
-{
-}
+final class DefaultFormNameForm extends FormModel {}

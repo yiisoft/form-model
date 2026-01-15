@@ -11,8 +11,7 @@ final class Placeholder
 {
     public function __construct(
         private readonly string $placeholder,
-    ) {
-    }
+    ) {}
 
     public function getPlaceholder(): string
     {

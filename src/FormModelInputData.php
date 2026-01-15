@@ -71,7 +71,7 @@ final class FormModelInputData implements InputDataInterface
                 $formName,
                 $this->property->prefix,
                 $this->property->name,
-                $this->property->suffix
+                $this->property->suffix,
             );
         }
 

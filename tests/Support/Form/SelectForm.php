@@ -10,9 +10,9 @@ use Yiisoft\Validator\RulesProviderInterface;
 
 final class SelectForm extends FormModel implements RulesProviderInterface
 {
-    private ?int $color = null;
     public ?int $requiredWhen = null;
     public ?int $requiredWhenNext = null;
+    private ?int $color = null;
 
     public function getRules(): array
     {

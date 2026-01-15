@@ -513,7 +513,7 @@ final class ValidationRulesEnricherTest extends TestCase
         $enricher = new ValidationRulesEnricher();
 
         $this->assertNull(
-            $enricher->process($field, new Required())
+            $enricher->process($field, new Required()),
         );
     }
 
@@ -523,7 +523,7 @@ final class ValidationRulesEnricherTest extends TestCase
         $enricher = new ValidationRulesEnricher();
 
         $this->assertNull(
-            $enricher->process($field, [])
+            $enricher->process($field, []),
         );
     }
 }

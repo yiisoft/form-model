@@ -38,7 +38,7 @@ final class FormModelInputDataTest extends TestCase
             'anonymous-form' => [
                 'age',
                 'age',
-                new class () extends FormModel {
+                new class extends FormModel {
                     public int $age = 21;
                 },
                 'age',
@@ -46,7 +46,7 @@ final class FormModelInputDataTest extends TestCase
             'unicode-property' => [
                 'ВОЗРАСТ',
                 'возраст',
-                new class () extends FormModel {
+                new class extends FormModel {
                     public int $ВОЗРАСТ = 21;
                 },
                 'ВОЗРАСТ',
@@ -65,7 +65,7 @@ final class FormModelInputDataTest extends TestCase
 
     public function testEmptyFormNameForTabularInputs(): void
     {
-        $form = new class () extends FormModel {
+        $form = new class extends FormModel {
             public array $age = [];
         };
         $inputData = new FormModelInputData($form, '[0]age');
@@ -77,7 +77,7 @@ final class FormModelInputDataTest extends TestCase
 
     public function testUnicodePropertyName(): void
     {
-        $form = new class () extends FormModel {
+        $form = new class extends FormModel {
             public array $возраст = [];
         };
         $inputData = new FormModelInputData($form, 'возраст');
@@ -87,8 +87,7 @@ final class FormModelInputDataTest extends TestCase
 
     public function testNotExistProperty(): void
     {
-        $form = new class () extends FormModel {
-        };
+        $form = new class extends FormModel {};
         $inputData = new FormModelInputData($form, 'age');
 
         $this->expectException(InvalidArgumentException::class);
@@ -98,8 +97,7 @@ final class FormModelInputDataTest extends TestCase
 
     public function testInvalidProperty(): void
     {
-        $form = new class () extends FormModel {
-        };
+        $form = new class extends FormModel {};
 
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Property name must contain word characters only.');
@@ -110,7 +108,7 @@ final class FormModelInputDataTest extends TestCase
     {
         $validator = new Validator();
 
-        $form = new class () extends FormModel {
+        $form = new class extends FormModel {
             #[Required]
             public ?string $name = null;
         };
@@ -159,7 +157,7 @@ final class FormModelInputDataTest extends TestCase
     #[DataProvider('dataGetValidationErrors')]
     public function testGetValidationErrors(string $property, array $expectedErrors): void
     {
-        $form = new class () extends FormModel {
+        $form = new class extends FormModel {
             #[Required]
             public ?string $name = null;
 
