@@ -28,7 +28,7 @@ final class FieldTest extends TestCase
             <button type="button">Show info</button>
             </div>
             HTML,
-            $result
+            $result,
         );
     }
 
@@ -50,7 +50,7 @@ final class FieldTest extends TestCase
             <button type="button">Show info</button>
             </div>
             HTML,
-            $result
+            $result,
         );
     }
 
@@ -70,7 +70,7 @@ final class FieldTest extends TestCase
             <button type="submit">Send</button>
             </div>
             HTML,
-            $result
+            $result,
         );
     }
 
@@ -99,7 +99,7 @@ final class FieldTest extends TestCase
             <button type="submit">Send</button>
             </div>
             HTML,
-            $result
+            $result,
         );
     }
 
@@ -112,7 +112,7 @@ final class FieldTest extends TestCase
             <input type="hidden" name="TestForm[blue]" value="0"><label><input type="checkbox" id="testform-blue" name="TestForm[blue]" value="1"> Blue color</label>
             </div>
             HTML,
-            $result
+            $result,
         );
     }
 
@@ -134,7 +134,7 @@ final class FieldTest extends TestCase
             <input type="hidden" name="TestForm[blue]" value="0"><label><input type="checkbox" id="testform-blue" name="TestForm[blue]" value="1"> Blue color</label>
             </div>
             HTML,
-            $result
+            $result,
         );
     }
 
@@ -201,7 +201,7 @@ final class FieldTest extends TestCase
             <input type="date" id="testform-birthday" name="TestForm[birthday]" value="1996-12-19">
             </div>
             HTML,
-            $result
+            $result,
         );
     }
 
@@ -224,7 +224,7 @@ final class FieldTest extends TestCase
             <input type="date" id="testform-birthday" name="TestForm[birthday]" value="1996-12-19">
             </div>
             HTML,
-            $result
+            $result,
         );
     }
 
@@ -238,7 +238,7 @@ final class FieldTest extends TestCase
             <input type="datetime-local" id="testform-partydate" name="TestForm[partyDate]" value="2017-06-01T08:30">
             </div>
             HTML,
-            $result
+            $result,
         );
     }
 
@@ -261,7 +261,7 @@ final class FieldTest extends TestCase
             <input type="datetime-local" id="testform-partydate" name="TestForm[partyDate]" value="2017-06-01T08:30">
             </div>
             HTML,
-            $result
+            $result,
         );
     }
 
@@ -276,7 +276,7 @@ final class FieldTest extends TestCase
             <div>Email for notifications.</div>
             </div>
             HTML,
-            $result
+            $result,
         );
     }
 
@@ -300,7 +300,7 @@ final class FieldTest extends TestCase
             <div>Email for notifications.</div>
             </div>
             HTML,
-            $result
+            $result,
         );
     }
 
@@ -402,7 +402,7 @@ final class FieldTest extends TestCase
             <input type="file" id="testform-avatar" name="TestForm[avatar]">
             </div>
             HTML,
-            $result
+            $result,
         );
     }
 
@@ -425,7 +425,7 @@ final class FieldTest extends TestCase
             <input type="file" id="testform-avatar" name="TestForm[avatar]">
             </div>
             HTML,
-            $result
+            $result,
         );
     }
 
@@ -434,7 +434,7 @@ final class FieldTest extends TestCase
         $result = Field::hidden(new TestForm(), 'key')->render();
         $this->assertSame(
             '<input type="hidden" id="testform-key" name="TestForm[key]" value="x100">',
-            $result
+            $result,
         );
     }
 
@@ -452,7 +452,7 @@ final class FieldTest extends TestCase
         $result = FieldWithTheme::hidden(new TestForm(), 'key', theme: 'B')->render();
         $this->assertSame(
             '<input type="hidden" id="testform-key" class="controlB" name="TestForm[key]" value="x100">',
-            $result
+            $result,
         );
     }
 
@@ -468,7 +468,7 @@ final class FieldTest extends TestCase
             <input type="image" src="btn.png" alt="Go">
             </div>
             HTML,
-            $result
+            $result,
         );
     }
 
@@ -493,7 +493,7 @@ final class FieldTest extends TestCase
             <input type="image" src="btn.png" alt="Go">
             </div>
             HTML,
-            $result
+            $result,
         );
     }
 
@@ -521,7 +521,7 @@ final class FieldTest extends TestCase
             <div>Full years.</div>
             </div>
             HTML,
-            $result
+            $result,
         );
     }
 
@@ -545,7 +545,7 @@ final class FieldTest extends TestCase
             <div>Full years.</div>
             </div>
             HTML,
-            $result
+            $result,
         );
     }
 
@@ -560,7 +560,7 @@ final class FieldTest extends TestCase
             <div>Enter your old password.</div>
             </div>
             HTML,
-            $result
+            $result,
         );
     }
 
@@ -584,7 +584,7 @@ final class FieldTest extends TestCase
             <div>Enter your old password.</div>
             </div>
             HTML,
-            $result
+            $result,
         );
     }
 
@@ -656,7 +656,7 @@ final class FieldTest extends TestCase
             <input type="range" id="testform-volume" name="TestForm[volume]" value="23" min="1" max="100">
             </div>
             HTML,
-            $result
+            $result,
         );
     }
 
@@ -682,7 +682,7 @@ final class FieldTest extends TestCase
             <input type="range" id="testform-volume" name="TestForm[volume]" value="23" min="1" max="100">
             </div>
             HTML,
-            $result
+            $result,
         );
     }
 
@@ -695,7 +695,7 @@ final class FieldTest extends TestCase
             <button type="reset">Reset form</button>
             </div>
             HTML,
-            $result
+            $result,
         );
     }
 
@@ -717,7 +717,7 @@ final class FieldTest extends TestCase
             <button type="reset">Reset form</button>
             </div>
             HTML,
-            $result
+            $result,
         );
     }
 
@@ -739,7 +739,7 @@ final class FieldTest extends TestCase
             </select>
             </div>
             HTML,
-            $result
+            $result,
         );
     }
 
@@ -770,7 +770,7 @@ final class FieldTest extends TestCase
             </select>
             </div>
             HTML,
-            $result
+            $result,
         );
     }
 
@@ -783,7 +783,7 @@ final class FieldTest extends TestCase
             <button type="submit">Go!</button>
             </div>
             HTML,
-            $result
+            $result,
         );
     }
 
@@ -805,7 +805,7 @@ final class FieldTest extends TestCase
             <button type="submit">Go!</button>
             </div>
             HTML,
-            $result
+            $result,
         );
     }
 
@@ -820,7 +820,7 @@ final class FieldTest extends TestCase
             <div>Enter your phone.</div>
             </div>
             HTML,
-            $result
+            $result,
         );
     }
 
@@ -844,7 +844,7 @@ final class FieldTest extends TestCase
             <div>Enter your phone.</div>
             </div>
             HTML,
-            $result
+            $result,
         );
     }
 
@@ -859,7 +859,7 @@ final class FieldTest extends TestCase
             <div>Input your full name.</div>
             </div>
             HTML,
-            $result
+            $result,
         );
     }
 
@@ -883,7 +883,7 @@ final class FieldTest extends TestCase
             <div>Input your full name.</div>
             </div>
             HTML,
-            $result
+            $result,
         );
     }
 
@@ -897,7 +897,7 @@ final class FieldTest extends TestCase
             <textarea id="testform-desc" name="TestForm[desc]"></textarea>
             </div>
             HTML,
-            $result
+            $result,
         );
     }
 
@@ -920,7 +920,7 @@ final class FieldTest extends TestCase
             <textarea id="testform-desc" name="TestForm[desc]"></textarea>
             </div>
             HTML,
-            $result
+            $result,
         );
     }
 
@@ -972,7 +972,7 @@ final class FieldTest extends TestCase
             <div>Enter your site URL.</div>
             </div>
             HTML,
-            $result
+            $result,
         );
     }
 
@@ -996,7 +996,7 @@ final class FieldTest extends TestCase
             <div>Enter your site URL.</div>
             </div>
             HTML,
-            $result
+            $result,
         );
     }
 

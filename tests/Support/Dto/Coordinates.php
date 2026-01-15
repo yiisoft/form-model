@@ -9,8 +9,7 @@ final class Coordinates
     public function __construct(
         private readonly string $latitude = '',
         private readonly string $longitude = '',
-    ) {
-    }
+    ) {}
 
     public function getLatitude(): string
     {

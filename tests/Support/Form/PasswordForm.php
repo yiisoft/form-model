@@ -12,6 +12,7 @@ use Yiisoft\Validator\RulesProviderInterface;
 
 final class PasswordForm extends FormModel implements RulesProviderInterface
 {
+    public ?int $requiredWhen = null;
     private string $old = '';
     private ?string $post = null;
     private int $age = 42;
@@ -19,7 +20,6 @@ final class PasswordForm extends FormModel implements RulesProviderInterface
     private ?string $entry2 = null;
     private ?string $code = null;
     private ?string $nocode = null;
-    public ?int $requiredWhen = null;
 
     public function getRules(): array
     {

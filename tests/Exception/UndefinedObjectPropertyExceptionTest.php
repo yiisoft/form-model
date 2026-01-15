@@ -15,7 +15,7 @@ final class UndefinedObjectPropertyExceptionTest extends TestCase
 
         $this->assertSame(
             'Undefined object property: "test".',
-            $exception->getMessage()
+            $exception->getMessage(),
         );
     }
 }

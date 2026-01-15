@@ -11,11 +11,11 @@ use Yiisoft\Validator\RulesProviderInterface;
 
 final class TextareaForm extends FormModel implements RulesProviderInterface
 {
+    public ?int $requiredWhen = null;
     private string $desc = '';
     private string $bio = '';
     private string $shortdesc = '';
     private int $age = 42;
-    public ?int $requiredWhen = null;
 
     public function getRules(): array
     {

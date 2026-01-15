@@ -30,8 +30,7 @@ final class FormHydrator
     public function __construct(
         private readonly HydratorInterface $hydrator,
         private readonly ValidatorInterface $validator,
-    ) {
-    }
+    ) {}
 
     /**
      * Fill the model with the data.
@@ -55,7 +54,7 @@ final class FormHydrator
         mixed $data,
         ?array $map = null,
         ?bool $strict = null,
-        ?string $scope = null
+        ?string $scope = null,
     ): bool {
         if (!is_array($data)) {
             return false;
@@ -76,8 +75,8 @@ final class FormHydrator
             new ArrayData(
                 $hydrateData,
                 $this->createMap($model, $map, $strict),
-                $strict ?? true
-            )
+                $strict ?? true,
+            ),
         );
 
         return true;
@@ -117,7 +116,7 @@ final class FormHydrator
         mixed $data,
         ?array $map = null,
         ?bool $strict = null,
-        ?string $scope = null
+        ?string $scope = null,
     ): bool {
         if (!$this->populate($model, $data, $map, $strict, $scope)) {
             return false;
@@ -147,7 +146,7 @@ final class FormHydrator
         ServerRequestInterface $request,
         ?array $map = null,
         ?bool $strict = null,
-        ?string $scope = null
+        ?string $scope = null,
     ): bool {
         if ($request->getMethod() !== 'GET') {
             return false;
@@ -176,7 +175,7 @@ final class FormHydrator
         ServerRequestInterface $request,
         ?array $map = null,
         ?bool $strict = null,
-        ?string $scope = null
+        ?string $scope = null,
     ): bool {
         if ($request->getMethod() !== 'POST') {
             /** @infection-ignore-all */
@@ -207,7 +206,7 @@ final class FormHydrator
         ServerRequestInterface $request,
         ?array $map = null,
         ?bool $strict = null,
-        ?string $scope = null
+        ?string $scope = null,
     ): bool {
         if ($request->getMethod() !== 'GET') {
             return false;
@@ -238,7 +237,7 @@ final class FormHydrator
         ServerRequestInterface $request,
         ?array $map = null,
         ?bool $strict = null,
-        ?string $scope = null
+        ?string $scope = null,
     ): bool {
         if ($request->getMethod() !== 'POST') {
             /** @infection-ignore-all */

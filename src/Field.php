@@ -189,7 +189,7 @@ class Field
             $widget = $widget->errors(
                 $formModel->isValidated()
                     ? $formModel->getValidationResult()->getErrorMessagesIndexedByProperty()
-                    : []
+                    : [],
             );
         }
         return $widget;

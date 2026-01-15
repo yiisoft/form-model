@@ -9,6 +9,4 @@ use InvalidArgumentException;
 /**
  * Thrown when value isn't found.
  */
-abstract class ValueNotFoundException extends InvalidArgumentException
-{
-}
+abstract class ValueNotFoundException extends InvalidArgumentException {}

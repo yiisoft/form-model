@@ -23,15 +23,15 @@ final class ErrorSummaryForm extends FormModel implements RulesProviderInterface
             'name' => [new Required()],
             'age' => [
                 new Callback(
-                    static fn () => (new Result())->addError('<b>Very</b> old.')
+                    static fn() => (new Result())->addError('<b>Very</b> old.'),
                 ),
             ],
             'year' => [
                 new Callback(
-                    static fn () => (new Result())->addError('Bad year.')
+                    static fn() => (new Result())->addError('Bad year.'),
                 ),
                 new Callback(
-                    static fn () => (new Result())->addError('Very Bad year.')
+                    static fn() => (new Result())->addError('Very Bad year.'),
                 ),
             ],
         ];
