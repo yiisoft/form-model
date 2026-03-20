@@ -2,7 +2,7 @@
 
 ## 1.1.1 under development
 
-- no changes in this release.
+- Enh #89: Add support for `yiisoft/html` version `^4.0` (@vjik)
 
 ## 1.1.0 December 23, 2025
 
