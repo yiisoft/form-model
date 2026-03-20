@@ -108,7 +108,7 @@ final class FieldFactoryTest extends TestCase
         $this->assertSame(
             <<<HTML
             <div>
-            <input type="hidden" name="TestForm[blue]" value="0"><label><input type="checkbox" id="testform-blue" name="TestForm[blue]" value="1"> Blue color</label>
+            <input type="hidden" name="TestForm[blue]" value="0"><label><input name="TestForm[blue]" value="1" id="testform-blue" type="checkbox"> Blue color</label>
             </div>
             HTML,
             $result,
@@ -130,7 +130,7 @@ final class FieldFactoryTest extends TestCase
         $this->assertSame(
             <<<HTML
             <div class="green">
-            <input type="hidden" name="TestForm[blue]" value="0"><label><input type="checkbox" id="testform-blue" name="TestForm[blue]" value="1"> Blue color</label>
+            <input type="hidden" name="TestForm[blue]" value="0"><label><input name="TestForm[blue]" value="1" id="testform-blue" type="checkbox"> Blue color</label>
             </div>
             HTML,
             $result,
@@ -150,8 +150,8 @@ final class FieldFactoryTest extends TestCase
         <div>
         <label>Select one or more colors</label>
         <div>
-        <label><input type="checkbox" name="TestForm[color2][]" value="red"> Red</label>
-        <label><input type="checkbox" name="TestForm[color2][]" value="blue"> Blue</label>
+        <label><input name="TestForm[color2][]" value="red" type="checkbox"> Red</label>
+        <label><input name="TestForm[color2][]" value="blue" type="checkbox"> Blue</label>
         </div>
         </div>
         HTML;
@@ -181,8 +181,8 @@ final class FieldFactoryTest extends TestCase
         <div class="green">
         <label>Select one or more colors</label>
         <div>
-        <label><input type="checkbox" name="TestForm[color2][]" value="red"> Red</label>
-        <label><input type="checkbox" name="TestForm[color2][]" value="blue"> Blue</label>
+        <label><input name="TestForm[color2][]" value="red" type="checkbox"> Red</label>
+        <label><input name="TestForm[color2][]" value="blue" type="checkbox"> Blue</label>
         </div>
         </div>
         HTML;
@@ -197,7 +197,7 @@ final class FieldFactoryTest extends TestCase
             <<<HTML
             <div>
             <label for="testform-birthday">Birthday</label>
-            <input type="date" id="testform-birthday" name="TestForm[birthday]" value="1996-12-19">
+            <input type="date" name="TestForm[birthday]" value="1996-12-19" id="testform-birthday">
             </div>
             HTML,
             $result,
@@ -220,7 +220,7 @@ final class FieldFactoryTest extends TestCase
             <<<HTML
             <div class="green">
             <label for="testform-birthday">Birthday</label>
-            <input type="date" id="testform-birthday" name="TestForm[birthday]" value="1996-12-19">
+            <input type="date" name="TestForm[birthday]" value="1996-12-19" id="testform-birthday">
             </div>
             HTML,
             $result,
@@ -234,7 +234,7 @@ final class FieldFactoryTest extends TestCase
             <<<HTML
             <div>
             <label for="testform-partydate">Date of party</label>
-            <input type="datetime-local" id="testform-partydate" name="TestForm[partyDate]" value="2017-06-01T08:30">
+            <input type="datetime-local" name="TestForm[partyDate]" value="2017-06-01T08:30" id="testform-partydate">
             </div>
             HTML,
             $result,
@@ -257,7 +257,7 @@ final class FieldFactoryTest extends TestCase
             <<<HTML
             <div class="green">
             <label for="testform-partydate">Date of party</label>
-            <input type="datetime-local" id="testform-partydate" name="TestForm[partyDate]" value="2017-06-01T08:30">
+            <input type="datetime-local" name="TestForm[partyDate]" value="2017-06-01T08:30" id="testform-partydate">
             </div>
             HTML,
             $result,
@@ -271,7 +271,7 @@ final class FieldFactoryTest extends TestCase
             <<<HTML
             <div>
             <label for="testform-mainemail">Main email</label>
-            <input type="email" id="testform-mainemail" name="TestForm[mainEmail]" value>
+            <input type="email" name="TestForm[mainEmail]" value id="testform-mainemail">
             <div>Email for notifications.</div>
             </div>
             HTML,
@@ -295,7 +295,7 @@ final class FieldFactoryTest extends TestCase
             <<<HTML
             <div class="green">
             <label for="testform-mainemail">Main email</label>
-            <input type="email" id="testform-mainemail" name="TestForm[mainEmail]" value>
+            <input type="email" name="TestForm[mainEmail]" value id="testform-mainemail">
             <div>Email for notifications.</div>
             </div>
             HTML,
@@ -398,7 +398,7 @@ final class FieldFactoryTest extends TestCase
             <<<HTML
             <div>
             <label for="testform-avatar">Avatar</label>
-            <input type="file" id="testform-avatar" name="TestForm[avatar]">
+            <input name="TestForm[avatar]" id="testform-avatar" type="file">
             </div>
             HTML,
             $result,
@@ -421,7 +421,7 @@ final class FieldFactoryTest extends TestCase
             <<<HTML
             <div class="green">
             <label for="testform-avatar">Avatar</label>
-            <input type="file" id="testform-avatar" name="TestForm[avatar]">
+            <input name="TestForm[avatar]" id="testform-avatar" type="file">
             </div>
             HTML,
             $result,
@@ -432,7 +432,7 @@ final class FieldFactoryTest extends TestCase
     {
         $result = (new FieldFactory())->hidden(new TestForm(), 'key')->render();
         $this->assertSame(
-            '<input type="hidden" id="testform-key" name="TestForm[key]" value="x100">',
+            '<input type="hidden" name="TestForm[key]" value="x100" id="testform-key">',
             $result,
         );
     }
@@ -450,7 +450,7 @@ final class FieldFactoryTest extends TestCase
 
         $result = (new FieldFactory('A'))->hidden(new TestForm(), 'key', theme: 'B')->render();
         $this->assertSame(
-            '<input type="hidden" id="testform-key" class="controlB" name="TestForm[key]" value="x100">',
+            '<input type="hidden" name="TestForm[key]" value="x100" class="controlB" id="testform-key">',
             $result,
         );
     }
@@ -516,7 +516,7 @@ final class FieldFactoryTest extends TestCase
             <<<HTML
             <div>
             <label for="testform-age">Your age</label>
-            <input type="number" id="testform-age" name="TestForm[age]" value="42">
+            <input type="number" name="TestForm[age]" value="42" id="testform-age">
             <div>Full years.</div>
             </div>
             HTML,
@@ -540,7 +540,7 @@ final class FieldFactoryTest extends TestCase
             <<<HTML
             <div class="green">
             <label for="testform-age">Your age</label>
-            <input type="number" id="testform-age" name="TestForm[age]" value="42">
+            <input type="number" name="TestForm[age]" value="42" id="testform-age">
             <div>Full years.</div>
             </div>
             HTML,
@@ -555,7 +555,7 @@ final class FieldFactoryTest extends TestCase
             <<<HTML
             <div>
             <label for="testform-oldpassword">Old Password</label>
-            <input type="password" id="testform-oldpassword" name="TestForm[oldPassword]" value>
+            <input type="password" name="TestForm[oldPassword]" value id="testform-oldpassword">
             <div>Enter your old password.</div>
             </div>
             HTML,
@@ -579,7 +579,7 @@ final class FieldFactoryTest extends TestCase
             <<<HTML
             <div class="green">
             <label for="testform-oldpassword">Old Password</label>
-            <input type="password" id="testform-oldpassword" name="TestForm[oldPassword]" value>
+            <input type="password" name="TestForm[oldPassword]" value id="testform-oldpassword">
             <div>Enter your old password.</div>
             </div>
             HTML,
@@ -600,8 +600,8 @@ final class FieldFactoryTest extends TestCase
         <div>
         <label>Select color</label>
         <div>
-        <label><input type="radio" name="TestForm[color]" value="red"> Red</label>
-        <label><input type="radio" name="TestForm[color]" value="blue"> Blue</label>
+        <label><input name="TestForm[color]" value="red" type="radio"> Red</label>
+        <label><input name="TestForm[color]" value="blue" type="radio"> Blue</label>
         </div>
         <div>Color of box.</div>
         </div>
@@ -632,8 +632,8 @@ final class FieldFactoryTest extends TestCase
         <div class="green">
         <label>Select color</label>
         <div>
-        <label><input type="radio" name="TestForm[color]" value="red"> Red</label>
-        <label><input type="radio" name="TestForm[color]" value="blue"> Blue</label>
+        <label><input name="TestForm[color]" value="red" type="radio"> Red</label>
+        <label><input name="TestForm[color]" value="blue" type="radio"> Blue</label>
         </div>
         <div>Color of box.</div>
         </div>
@@ -652,7 +652,7 @@ final class FieldFactoryTest extends TestCase
             <<<HTML
             <div>
             <label for="testform-volume">Volume</label>
-            <input type="range" id="testform-volume" name="TestForm[volume]" value="23" min="1" max="100">
+            <input name="TestForm[volume]" value="23" min="1" max="100" id="testform-volume" type="range">
             </div>
             HTML,
             $result,
@@ -678,7 +678,7 @@ final class FieldFactoryTest extends TestCase
             <<<HTML
             <div class="green">
             <label for="testform-volume">Volume</label>
-            <input type="range" id="testform-volume" name="TestForm[volume]" value="23" min="1" max="100">
+            <input name="TestForm[volume]" value="23" min="1" max="100" id="testform-volume" type="range">
             </div>
             HTML,
             $result,
@@ -815,7 +815,7 @@ final class FieldFactoryTest extends TestCase
             <<<HTML
             <div>
             <label for="testform-number">Phone</label>
-            <input type="tel" id="testform-number" name="TestForm[number]" value>
+            <input type="tel" name="TestForm[number]" value id="testform-number">
             <div>Enter your phone.</div>
             </div>
             HTML,
@@ -839,7 +839,7 @@ final class FieldFactoryTest extends TestCase
             <<<HTML
             <div class="green">
             <label for="testform-number">Phone</label>
-            <input type="tel" id="testform-number" name="TestForm[number]" value>
+            <input type="tel" name="TestForm[number]" value id="testform-number">
             <div>Enter your phone.</div>
             </div>
             HTML,
@@ -854,7 +854,7 @@ final class FieldFactoryTest extends TestCase
             <<<HTML
             <div>
             <label for="testform-name">Name</label>
-            <input type="text" id="testform-name" name="TestForm[name]" value>
+            <input type="text" name="TestForm[name]" value id="testform-name">
             <div>Input your full name.</div>
             </div>
             HTML,
@@ -878,7 +878,7 @@ final class FieldFactoryTest extends TestCase
             <<<HTML
             <div class="green">
             <label for="testform-name">Name</label>
-            <input type="text" id="testform-name" name="TestForm[name]" value>
+            <input type="text" name="TestForm[name]" value id="testform-name">
             <div>Input your full name.</div>
             </div>
             HTML,
@@ -893,7 +893,7 @@ final class FieldFactoryTest extends TestCase
             <<<HTML
             <div>
             <label for="testform-desc">Description</label>
-            <textarea id="testform-desc" name="TestForm[desc]"></textarea>
+            <textarea name="TestForm[desc]" id="testform-desc"></textarea>
             </div>
             HTML,
             $result,
@@ -916,7 +916,7 @@ final class FieldFactoryTest extends TestCase
             <<<HTML
             <div class="green">
             <label for="testform-desc">Description</label>
-            <textarea id="testform-desc" name="TestForm[desc]"></textarea>
+            <textarea name="TestForm[desc]" id="testform-desc"></textarea>
             </div>
             HTML,
             $result,
@@ -930,7 +930,7 @@ final class FieldFactoryTest extends TestCase
         $expected = <<<HTML
             <div>
             <label for="testform-starttime">Start Time</label>
-            <input type="time" id="testform-starttime" name="TestForm[startTime]" value="14:00:23">
+            <input type="time" name="TestForm[startTime]" value="14:00:23" id="testform-starttime">
             </div>
             HTML;
 
@@ -953,7 +953,7 @@ final class FieldFactoryTest extends TestCase
         $expected = <<<HTML
             <div class="green">
             <label for="testform-starttime">Start Time</label>
-            <input type="time" id="testform-starttime" name="TestForm[startTime]" value="14:00:23">
+            <input type="time" name="TestForm[startTime]" value="14:00:23" id="testform-starttime">
             </div>
             HTML;
 
@@ -967,7 +967,7 @@ final class FieldFactoryTest extends TestCase
             <<<HTML
             <div>
             <label for="testform-site">Your site</label>
-            <input type="url" id="testform-site" name="TestForm[site]" value>
+            <input type="url" name="TestForm[site]" value id="testform-site">
             <div>Enter your site URL.</div>
             </div>
             HTML,
@@ -991,7 +991,7 @@ final class FieldFactoryTest extends TestCase
             <<<HTML
             <div class="green">
             <label for="testform-site">Your site</label>
-            <input type="url" id="testform-site" name="TestForm[site]" value>
+            <input type="url" name="TestForm[site]" value id="testform-site">
             <div>Enter your site URL.</div>
             </div>
             HTML,
