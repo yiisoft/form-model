@@ -1,6 +1,6 @@
 # Yii Form Model Change Log
 
-## 1.1.1 under development
+## 1.1.1 March 21, 2026
 
 - Enh #89: Add support for `yiisoft/html` version `^4.0` (@vjik)
 
