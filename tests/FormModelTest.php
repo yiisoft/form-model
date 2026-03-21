@@ -60,7 +60,7 @@ final class FormModelTest extends TestCase
         $expected = <<<'HTML'
         <div>
         <label for="nestedform-letters-0">Letters 0</label>
-        <input type="text" id="nestedform-letters-0" name="NestedForm[letters][0]" value="A">
+        <input type="text" name="NestedForm[letters][0]" value="A" id="nestedform-letters-0">
         </div>
         HTML;
 
@@ -90,7 +90,7 @@ final class FormModelTest extends TestCase
             <<<HTML
             <div>
             <label for="nestedform-letters-1">Letters 1</label>
-            <input type="text" id="nestedform-letters-1" name="NestedForm[letters][1]" value>
+            <input type="text" name="NestedForm[letters][1]" value id="nestedform-letters-1">
             </div>
             HTML,
             $result,
@@ -102,7 +102,7 @@ final class FormModelTest extends TestCase
         $expected = <<<'HTML'
         <div>
         <label for="nestedform-object-numbers-1">Object Numbers 1</label>
-        <input type="text" id="nestedform-object-numbers-1" name="NestedForm[object][numbers][1]" value="42">
+        <input type="text" name="NestedForm[object][numbers][1]" value="42" id="nestedform-object-numbers-1">
         </div>
         HTML;
 

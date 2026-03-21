@@ -52,43 +52,43 @@ final class ValidationRulesEnricherTest extends TestCase
     {
         return [
             'required' => [
-                '<input type="url" id="urlform-company" name="UrlForm[company]" value required>',
+                '<input type="url" name="UrlForm[company]" value required id="urlform-company">',
                 'company',
             ],
             'required-with-when' => [
-                '<input type="url" id="urlform-requiredwhen" name="UrlForm[requiredWhen]" minlength="7">',
+                '<input type="url" name="UrlForm[requiredWhen]" minlength="7" id="urlform-requiredwhen">',
                 'requiredWhen',
             ],
             'has-length' => [
-                '<input type="url" id="urlform-home" name="UrlForm[home]" value maxlength="199" minlength="50">',
+                '<input type="url" name="UrlForm[home]" value minlength="50" maxlength="199" id="urlform-home">',
                 'home',
             ],
             'regex' => [
-                '<input type="url" id="urlform-code" name="UrlForm[code]" value pattern="\w+">',
+                '<input type="url" name="UrlForm[code]" value pattern="\w+" id="urlform-code">',
                 'code',
             ],
             'regex-not' => [
-                '<input type="url" id="urlform-nocode" name="UrlForm[nocode]" value>',
+                '<input type="url" name="UrlForm[nocode]" value id="urlform-nocode">',
                 'nocode',
             ],
             'url' => [
-                '<input type="url" id="urlform-shop" name="UrlForm[shop]" value pattern="^((?i)http|https):\/\/(([a-zA-Z0-9][a-zA-Z0-9_-]*)(\.[a-zA-Z0-9][a-zA-Z0-9_-]*)+)(?::\d{1,5})?([?\/#].*$|$)">',
+                '<input type="url" name="UrlForm[shop]" value pattern="^((?i)http|https):\/\/(([a-zA-Z0-9][a-zA-Z0-9_-]*)(\.[a-zA-Z0-9][a-zA-Z0-9_-]*)+)(?::\d{1,5})?([?\/#].*$|$)" id="urlform-shop">',
                 'shop',
             ],
             'url-regex' => [
-                '<input type="url" id="urlform-beach" name="UrlForm[beach]" value pattern="^((?i)http|https):\/\/(([a-zA-Z0-9][a-zA-Z0-9_-]*)(\.[a-zA-Z0-9][a-zA-Z0-9_-]*)+)(?::\d{1,5})?([?\/#].*$|$)">',
+                '<input type="url" name="UrlForm[beach]" value pattern="^((?i)http|https):\/\/(([a-zA-Z0-9][a-zA-Z0-9_-]*)(\.[a-zA-Z0-9][a-zA-Z0-9_-]*)+)(?::\d{1,5})?([?\/#].*$|$)" id="urlform-beach">',
                 'beach',
             ],
             'regex-url' => [
-                '<input type="url" id="urlform-beach2" name="UrlForm[beach2]" value pattern="^((?i)http|https):\/\/(([a-zA-Z0-9][a-zA-Z0-9_-]*)(\.[a-zA-Z0-9][a-zA-Z0-9_-]*)+)(?::\d{1,5})?([?\/#].*$|$)">',
+                '<input type="url" name="UrlForm[beach2]" value pattern="^((?i)http|https):\/\/(([a-zA-Z0-9][a-zA-Z0-9_-]*)(\.[a-zA-Z0-9][a-zA-Z0-9_-]*)+)(?::\d{1,5})?([?\/#].*$|$)" id="urlform-beach2">',
                 'beach2',
             ],
             'url-with-idn' => [
-                '<input type="url" id="urlform-urlwithidn" name="UrlForm[urlWithIdn]" value>',
+                '<input type="url" name="UrlForm[urlWithIdn]" value id="urlform-urlwithidn">',
                 'urlWithIdn',
             ],
             'regex-and-url-with-idn' => [
-                '<input type="url" id="urlform-regexandurlwithidn" name="UrlForm[regexAndUrlWithIdn]" value pattern="\w+">',
+                '<input type="url" name="UrlForm[regexAndUrlWithIdn]" value pattern="\w+" id="urlform-regexandurlwithidn">',
                 'regexAndUrlWithIdn',
             ],
         ];
@@ -109,23 +109,23 @@ final class ValidationRulesEnricherTest extends TestCase
     {
         return [
             'required' => [
-                '<input type="text" id="textform-company" name="TextForm[company]" value required>',
+                '<input type="text" name="TextForm[company]" value required id="textform-company">',
                 'company',
             ],
             'has-length' => [
-                '<input type="text" id="textform-shortdesc" name="TextForm[shortdesc]" value maxlength="199" minlength="10">',
+                '<input type="text" name="TextForm[shortdesc]" value minlength="10" maxlength="199" id="textform-shortdesc">',
                 'shortdesc',
             ],
             'regex' => [
-                '<input type="text" id="textform-code" name="TextForm[code]" value pattern="\w+">',
+                '<input type="text" name="TextForm[code]" value pattern="\w+" id="textform-code">',
                 'code',
             ],
             'regex-not' => [
-                '<input type="text" id="textform-nocode" name="TextForm[nocode]" value>',
+                '<input type="text" name="TextForm[nocode]" value id="textform-nocode">',
                 'nocode',
             ],
             'required-with-when' => [
-                '<input type="text" id="textform-requiredwhen" name="TextForm[requiredWhen]" minlength="7">',
+                '<input type="text" name="TextForm[requiredWhen]" minlength="7" id="textform-requiredwhen">',
                 'requiredWhen',
             ],
         ];
@@ -148,15 +148,15 @@ final class ValidationRulesEnricherTest extends TestCase
     {
         return [
             'required' => [
-                '<textarea id="textareaform-bio" name="TextareaForm[bio]" required></textarea>',
+                '<textarea name="TextareaForm[bio]" required id="textareaform-bio"></textarea>',
                 'bio',
             ],
             'has-length' => [
-                '<textarea id="textareaform-shortdesc" name="TextareaForm[shortdesc]" maxlength="199" minlength="10"></textarea>',
+                '<textarea name="TextareaForm[shortdesc]" minlength="10" maxlength="199" id="textareaform-shortdesc"></textarea>',
                 'shortdesc',
             ],
             'required-with-when' => [
-                '<textarea id="textareaform-requiredwhen" name="TextareaForm[requiredWhen]" minlength="7"></textarea>',
+                '<textarea name="TextareaForm[requiredWhen]" minlength="7" id="textareaform-requiredwhen"></textarea>',
                 'requiredWhen',
             ],
         ];
@@ -178,23 +178,23 @@ final class ValidationRulesEnricherTest extends TestCase
     {
         return [
             'required' => [
-                '<input type="tel" id="telephoneform-office1" name="TelephoneForm[office1]" required>',
+                '<input type="tel" name="TelephoneForm[office1]" required id="telephoneform-office1">',
                 'office1',
             ],
             'has-length' => [
-                '<input type="tel" id="telephoneform-office2" name="TelephoneForm[office2]" maxlength="199" minlength="10">',
+                '<input type="tel" name="TelephoneForm[office2]" minlength="10" maxlength="199" id="telephoneform-office2">',
                 'office2',
             ],
             'regex' => [
-                '<input type="tel" id="telephoneform-code" name="TelephoneForm[code]" pattern="\w+">',
+                '<input type="tel" name="TelephoneForm[code]" pattern="\w+" id="telephoneform-code">',
                 'code',
             ],
             'regex-not' => [
-                '<input type="tel" id="telephoneform-nocode" name="TelephoneForm[nocode]">',
+                '<input type="tel" name="TelephoneForm[nocode]" id="telephoneform-nocode">',
                 'nocode',
             ],
             'required-with-when' => [
-                '<input type="tel" id="telephoneform-requiredwhen" name="TelephoneForm[requiredWhen]" minlength="7">',
+                '<input type="tel" name="TelephoneForm[requiredWhen]" minlength="7" id="telephoneform-requiredwhen">',
                 'requiredWhen',
             ],
         ];
@@ -223,7 +223,7 @@ final class ValidationRulesEnricherTest extends TestCase
             ->render();
 
         $expected = <<<HTML
-            <select id="selectform-color" name="SelectForm[color]" required>
+            <select required id="selectform-color" name="SelectForm[color]">
             <option value="red">Red</option>
             </select>
             HTML;
@@ -261,7 +261,7 @@ final class ValidationRulesEnricherTest extends TestCase
             ->render();
 
         $expected = <<<HTML
-            <select id="selectform-requiredwhennext" name="SelectForm[requiredWhenNext]" required>
+            <select required id="selectform-requiredwhennext" name="SelectForm[requiredWhenNext]">
             <option value="red">Red</option>
             </select>
             HTML;
@@ -273,23 +273,23 @@ final class ValidationRulesEnricherTest extends TestCase
     {
         return [
             'required' => [
-                '<input type="password" id="passwordform-entry1" name="PasswordForm[entry1]" required>',
+                '<input type="password" name="PasswordForm[entry1]" required id="passwordform-entry1">',
                 'entry1',
             ],
             'has-length' => [
-                '<input type="password" id="passwordform-entry2" name="PasswordForm[entry2]" maxlength="199" minlength="10">',
+                '<input type="password" name="PasswordForm[entry2]" minlength="10" maxlength="199" id="passwordform-entry2">',
                 'entry2',
             ],
             'regex' => [
-                '<input type="password" id="passwordform-code" name="PasswordForm[code]" pattern="\w+">',
+                '<input type="password" name="PasswordForm[code]" pattern="\w+" id="passwordform-code">',
                 'code',
             ],
             'regex-not' => [
-                '<input type="password" id="passwordform-nocode" name="PasswordForm[nocode]">',
+                '<input type="password" name="PasswordForm[nocode]" id="passwordform-nocode">',
                 'nocode',
             ],
             'required-with-when' => [
-                '<input type="password" id="passwordform-requiredwhen" name="PasswordForm[requiredWhen]" minlength="7">',
+                '<input type="password" name="PasswordForm[requiredWhen]" minlength="7" id="passwordform-requiredwhen">',
                 'requiredWhen',
             ],
         ];
@@ -317,7 +317,7 @@ final class ValidationRulesEnricherTest extends TestCase
 
         $expected = <<<HTML
             <div>
-            <input type="file" id="fileform-image" name="FileForm[image]" required>
+            <input name="FileForm[image]" required id="fileform-image" type="file">
             </div>
             HTML;
 
@@ -334,7 +334,7 @@ final class ValidationRulesEnricherTest extends TestCase
 
         $expected = <<<HTML
             <div>
-            <input type="file" id="fileform-photo" name="FileForm[photo]">
+            <input name="FileForm[photo]" id="fileform-photo" type="file">
             </div>
             HTML;
 
@@ -351,7 +351,7 @@ final class ValidationRulesEnricherTest extends TestCase
 
         $expected = <<<HTML
             <div>
-            <input type="file" id="fileform-video" name="FileForm[video]" required>
+            <input name="FileForm[video]" required id="fileform-video" type="file">
             </div>
             HTML;
 
@@ -368,7 +368,7 @@ final class ValidationRulesEnricherTest extends TestCase
 
         $expected = <<<HTML
             <div>
-            <input type="datetime" id="dateform-main" name="DateForm[main]" required>
+            <input type="datetime" name="DateForm[main]" required id="dateform-main">
             </div>
             HTML;
 
@@ -385,7 +385,7 @@ final class ValidationRulesEnricherTest extends TestCase
 
         $expected = <<<HTML
             <div>
-            <input type="datetime" id="dateform-second" name="DateForm[second]">
+            <input type="datetime" name="DateForm[second]" id="dateform-second">
             </div>
             HTML;
 
@@ -402,7 +402,7 @@ final class ValidationRulesEnricherTest extends TestCase
 
         $expected = <<<HTML
             <div>
-            <input type="datetime" id="dateform-three" name="DateForm[three]" required>
+            <input type="datetime" name="DateForm[three]" required id="dateform-three">
             </div>
             HTML;
 
@@ -413,23 +413,23 @@ final class ValidationRulesEnricherTest extends TestCase
     {
         return [
             'required' => [
-                '<input type="email" id="emailform-cto" name="EmailForm[cto]" required>',
+                '<input type="email" name="EmailForm[cto]" required id="emailform-cto">',
                 'cto',
             ],
             'has-length' => [
-                '<input type="email" id="emailform-teamlead" name="EmailForm[teamlead]" maxlength="199" minlength="10">',
+                '<input type="email" name="EmailForm[teamlead]" minlength="10" maxlength="199" id="emailform-teamlead">',
                 'teamlead',
             ],
             'regex' => [
-                '<input type="email" id="emailform-code" name="EmailForm[code]" pattern="\w+@\w+">',
+                '<input type="email" name="EmailForm[code]" pattern="\w+@\w+" id="emailform-code">',
                 'code',
             ],
             'regex-not' => [
-                '<input type="email" id="emailform-nocode" name="EmailForm[nocode]">',
+                '<input type="email" name="EmailForm[nocode]" id="emailform-nocode">',
                 'nocode',
             ],
             'required-with-when' => [
-                '<input type="email" id="emailform-requiredwhen" name="EmailForm[requiredWhen]" minlength="7">',
+                '<input type="email" name="EmailForm[requiredWhen]" minlength="7" id="emailform-requiredwhen">',
                 'requiredWhen',
             ],
         ];
@@ -451,15 +451,15 @@ final class ValidationRulesEnricherTest extends TestCase
     {
         return [
             'required' => [
-                '<input type="number" id="numberform-weight" name="NumberForm[weight]" required>',
+                '<input type="number" name="NumberForm[weight]" required id="numberform-weight">',
                 'weight',
             ],
             'number' => [
-                '<input type="number" id="numberform-step" name="NumberForm[step]" min="5" max="95">',
+                '<input type="number" name="NumberForm[step]" min="5" max="95" id="numberform-step">',
                 'step',
             ],
             'required-with-when' => [
-                '<input type="number" id="numberform-requiredwhen" name="NumberForm[requiredWhen]" min="5">',
+                '<input type="number" name="NumberForm[requiredWhen]" min="5" id="numberform-requiredwhen">',
                 'requiredWhen',
             ],
         ];
@@ -481,15 +481,15 @@ final class ValidationRulesEnricherTest extends TestCase
     {
         return [
             'required' => [
-                '<input type="range" id="rangeform-volume" name="RangeForm[volume]" value="23" required>',
+                '<input name="RangeForm[volume]" value="23" required id="rangeform-volume" type="range">',
                 'volume',
             ],
             'number' => [
-                '<input type="range" id="rangeform-count" name="RangeForm[count]" min="1" max="9">',
+                '<input name="RangeForm[count]" min="1" max="9" id="rangeform-count" type="range">',
                 'count',
             ],
             'required-with-when' => [
-                '<input type="range" id="rangeform-requiredwhen" name="RangeForm[requiredWhen]" min="1">',
+                '<input name="RangeForm[requiredWhen]" min="1" id="rangeform-requiredwhen" type="range">',
                 'requiredWhen',
             ],
         ];
