@@ -8,6 +8,7 @@ use Yiisoft\Form\Field\Button;
 use Yiisoft\Form\Field\ButtonGroup;
 use Yiisoft\Form\Field\Checkbox;
 use Yiisoft\Form\Field\CheckboxList;
+use Yiisoft\Form\Field\Color;
 use Yiisoft\Form\Field\Date;
 use Yiisoft\Form\Field\DateTimeLocal;
 use Yiisoft\Form\Field\Email;
@@ -111,6 +112,25 @@ class Field
         ?string $theme = null,
     ): CheckboxList {
         return CheckboxList::widget(config: $config, theme: $theme ?? static::DEFAULT_THEME)
+            ->inputData(new FormModelInputData($formModel, $property));
+    }
+
+    /**
+     * Create a color field.
+     *
+     * @param FormModelInterface $formModel Model to take value from.
+     * @param string $property Model property name to take value from.
+     * @param array $config Widget config.
+     * @param string|null $theme Theme to use. If not specified, default theme is used.
+     * @return Color
+     */
+    final public static function color(
+        FormModelInterface $formModel,
+        string $property,
+        array $config = [],
+        ?string $theme = null,
+    ): Color {
+        return Color::widget(config: $config, theme: $theme ?? static::DEFAULT_THEME)
             ->inputData(new FormModelInputData($formModel, $property));
     }
 
