@@ -2,7 +2,7 @@
 
 ## 1.1.2 under development
 
-- Enh #91: Add `color()` method to `Field` and `FieldFactory` for HTML5 input color support
+- New #91: Add `color()` method to `Field` and `FieldFactory` for HTML5 input color support (@Mister-42)
 
 ## 1.1.1 March 21, 2026
 
