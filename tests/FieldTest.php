@@ -191,6 +191,45 @@ final class FieldTest extends TestCase
         $this->assertSame($expected, $result);
     }
 
+    public function testColor(): void
+    {
+        $result = Field::color(new TestForm(), 'color')->render();
+        $this->assertSame(
+            <<<HTML
+            <div>
+            <label for="testform-color">Select color</label>
+            <input type="color" name="TestForm[color]" id="testform-color">
+            <div>Color of box.</div>
+            </div>
+            HTML,
+            $result,
+        );
+    }
+
+    public function testColorWithTheme(): void
+    {
+        ThemeContainer::initialize([
+            'A' => [
+                'containerClass' => 'red',
+            ],
+            'B' => [
+                'containerClass' => 'green',
+            ],
+        ]);
+
+        $result = FieldWithTheme::color(new TestForm(), 'color', theme: 'B')->render();
+        $this->assertSame(
+            <<<HTML
+            <div class="green">
+            <label for="testform-color">Select color</label>
+            <input type="color" name="TestForm[color]" id="testform-color">
+            <div>Color of box.</div>
+            </div>
+            HTML,
+            $result,
+        );
+    }
+
     public function testDate(): void
     {
         $result = Field::date(new TestForm(), 'birthday')->render();
