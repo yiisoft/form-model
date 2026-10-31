@@ -354,9 +354,7 @@ abstract class FormModel implements FormModelInterface
 
     private function getInflector(): Inflector
     {
-        if (self::$inflector === null) {
-            self::$inflector = new Inflector();
-        }
+        self::$inflector ??= new Inflector();
         return self::$inflector;
     }
 }
