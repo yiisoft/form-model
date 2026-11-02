@@ -13,6 +13,7 @@ use Yiisoft\Form\Field\Password;
 use Yiisoft\Form\Field\Range;
 use Yiisoft\Form\Field\Select;
 use Yiisoft\Form\Field\Telephone;
+use Yiisoft\Form\Field\Text;
 use Yiisoft\Form\Field\Textarea;
 use Yiisoft\Form\Theme\ThemeContainer;
 use Yiisoft\FormModel\Field;
@@ -31,6 +32,7 @@ use Yiisoft\FormModel\Tests\Support\Form\UrlForm;
 use Yiisoft\FormModel\Tests\Support\StubDateTimeInputField;
 use Yiisoft\FormModel\Tests\Support\StubField;
 use Yiisoft\FormModel\ValidationRulesEnricher;
+use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Required;
 
 final class ValidationRulesEnricherTest extends TestCase
@@ -514,6 +516,23 @@ final class ValidationRulesEnricherTest extends TestCase
 
         $this->assertNull(
             $enricher->process($field, new Required()),
+        );
+    }
+
+    public function testRuleWithoutWhen(): void
+    {
+        $field = Text::widget();
+        $enricher = new ValidationRulesEnricher();
+
+        $this->assertSame(
+            ['inputAttributes' => ['required' => true]],
+            $enricher->process(
+                $field,
+                [
+                    static fn(): Result => new Result(),
+                    new Required(),
+                ],
+            ),
         );
     }
 
