@@ -288,7 +288,7 @@ abstract class FormModel implements FormModelInterface
      * Convert array property path to its string representation.
      *
      * @param array $keys Property path as an array.     *
-     * @psalm-param array<array-key, array{0:int|string, 1:mixed}> $keys
+     * @psalm-param array<array-key, array{0:string, 1:mixed}> $keys
      * @return string Property path as string.
      */
     private function makePropertyPathString(array $keys): string
@@ -302,7 +302,7 @@ abstract class FormModel implements FormModelInterface
                     $path .= '[' . $key[0] . ']';
                 }
             } else {
-                $path = (string) $key[0];
+                $path = $key[0];
             }
         }
         return $path;

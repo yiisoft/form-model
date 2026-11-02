@@ -3,6 +3,7 @@
 ## 1.1.2 under development
 
 - New #91: Add `color()` method to `Field` and `FieldFactory` for HTML5 input color support (@Mister-42)
+- Enh #100: Remove redundant string cast in `FormModel` (@vjik)
 
 ## 1.1.1 March 21, 2026
 

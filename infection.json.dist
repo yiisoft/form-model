@@ -12,6 +12,11 @@
     },
     "mutators": {
         "@default": true,
+        "AssignCoalesce": {
+            "ignoreSourceCodeByRegex": [
+                "self::\\$inflector \\?\\?= new Inflector\\(\\);"
+            ]
+        },
         "FunctionCallRemoval": {
             "ignoreSourceCodeByRegex": [
                 "array_pop\\(\\$keys\\);"
