@@ -261,12 +261,12 @@ final class PostForm extends FormModel
 ```
 
 ```php
-use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Yiisoft\FormModel\FormHydrator;
 
 /** 
  * @var FormHydrator $formHydrator
- * @var RequestInterface $request 
+ * @var ServerRequestInterface $request 
  */
 
 $formModel = new PostForm();
@@ -289,14 +289,14 @@ A shortcut to execute [`populateFromPostWithFiles()`](#populatefrompostwithfiles
 consecutively.
 
 ```php
-use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Yiisoft\FormModel\FormHydrator;
 use Yiisoft\FormModel\FormModel;
 
 /** 
  * @var FormHydrator $formHydrator
  * @var FormModel $formModel
- * @var RequestInterface $request 
+ * @var ServerRequestInterface $request 
  */
 
 $isValid = $formHydrator->populateFromPostWithFilesAndValidate($formModel, $request);
