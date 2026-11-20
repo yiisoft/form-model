@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\FormModel;
 
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\UploadedFileInterface;
 use Yiisoft\Hydrator\ArrayData;
 use Yiisoft\Hydrator\HydratorInterface;
 use Yiisoft\Validator\Helper\ObjectParser;
@@ -13,8 +14,11 @@ use Yiisoft\Validator\RulesProviderInterface;
 use Yiisoft\Validator\ValidatorInterface;
 
 use function array_merge;
+use function array_replace_recursive;
 use function is_array;
 use function is_string;
+
+use const UPLOAD_ERR_NO_FILE;
 
 /**
  * Form hydrator fills model with the data and optionally checks the data validity.
@@ -245,6 +249,116 @@ final class FormHydrator
         }
 
         return $this->populateAndValidate($model, $request->getParsedBody(), $map, $strict, $scope);
+    }
+
+    /**
+     * Fill the model with the data parsed from request body merged with uploaded files.
+     *
+     * Uploaded files with `UPLOAD_ERR_NO_FILE` error (file inputs left empty) are skipped. Files with other errors
+     * are kept, so they could be checked by validation rules.
+     *
+     * @param FormModelInterface $model Model to fill.
+     * @param ServerRequestInterface $request Request to get parsed data and uploaded files from.
+     * @param array|null $map Map of object property names to keys in the data array to use for hydration.
+     * If not provided, it may be generated automatically based on presence of property validation rules and a `strict`
+     * setting.
+     * @psalm-param MapType $map
+     * @param bool|null $strict If `false`, fills everything that is in the data. If `null`, fills data that is either
+     * defined in a map explicitly or allowed via validation rules. If `true`, fills only data defined explicitly
+     * in a map or only data allowed via validation rules but not both.
+     * @param string|null $scope Key to use in the data array as a source of data. Usually used when there are multiple
+     * forms at the same page. If not set, it equals to {@see FormModelInterface::getFormName()}.
+     *
+     * @return bool Whether model is filled with data.
+     */
+    public function populateFromPostWithFiles(
+        FormModelInterface $model,
+        ServerRequestInterface $request,
+        ?array $map = null,
+        ?bool $strict = null,
+        ?string $scope = null,
+    ): bool {
+        if ($request->getMethod() !== 'POST') {
+            return false;
+        }
+
+        return $this->populate($model, $this->getPostDataWithFiles($request), $map, $strict, $scope);
+    }
+
+    /**
+     * Fill the model with the data parsed from request body merged with uploaded files and validate it.
+     *
+     * Uploaded files with `UPLOAD_ERR_NO_FILE` error (file inputs left empty) are skipped. Files with other errors
+     * are kept, so they could be checked by validation rules.
+     *
+     * @param FormModelInterface $model Model to fill.
+     * @param ServerRequestInterface $request Request to get parsed data and uploaded files from.
+     * @param array|null $map Map of object property names to keys in the data array to use for hydration.
+     * If not provided, it may be generated automatically based on presence of property validation rules and a `strict`
+     * setting.
+     * @psalm-param MapType $map
+     * @param bool|null $strict If `false`, fills everything that is in the data. If `null`, fills data that is either
+     * defined in a map explicitly or allowed via validation rules. If `true`, fills only data defined explicitly
+     * in a map or only data allowed via validation rules but not both.
+     * @param string|null $scope Key to use in the data array as a source of data. Usually used when there are multiple
+     * forms at the same page. If not set, it equals to {@see FormModelInterface::getFormName()}.
+     *
+     * @return bool Whether model is filled with data and is valid.
+     */
+    public function populateFromPostWithFilesAndValidate(
+        FormModelInterface $model,
+        ServerRequestInterface $request,
+        ?array $map = null,
+        ?bool $strict = null,
+        ?string $scope = null,
+    ): bool {
+        if ($request->getMethod() !== 'POST') {
+            return false;
+        }
+
+        return $this->populateAndValidate($model, $this->getPostDataWithFiles($request), $map, $strict, $scope);
+    }
+
+    /**
+     * Get the data parsed from request body merged with uploaded files.
+     *
+     * @return array The merged data. Uploaded files take precedence over body values with the same keys.
+     */
+    private function getPostDataWithFiles(ServerRequestInterface $request): array
+    {
+        $body = $request->getParsedBody();
+
+        return array_replace_recursive(
+            is_array($body) ? $body : [],
+            $this->filterUploadedFiles($request->getUploadedFiles()),
+        );
+    }
+
+    /**
+     * Remove uploaded files with `UPLOAD_ERR_NO_FILE` error and arrays that became empty after that.
+     *
+     * @param array $files Uploaded files tree.
+     *
+     * @return array Filtered uploaded files tree.
+     */
+    private function filterUploadedFiles(array $files): array
+    {
+        $result = [];
+        /** @var mixed $value */
+        foreach ($files as $key => $value) {
+            if (is_array($value)) {
+                $value = $this->filterUploadedFiles($value);
+                if ($value === []) {
+                    continue;
+                }
+            } elseif ($value instanceof UploadedFileInterface && $value->getError() === UPLOAD_ERR_NO_FILE) {
+                continue;
+            }
+
+            $result[$key] = $value;
+        }
+
+        return $result;
     }
 
     /**
