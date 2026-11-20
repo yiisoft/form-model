@@ -234,6 +234,78 @@ $result = $formModel->getValidationResult();
 The parameters are the same as in [`populate()`](#populate). But, unlike [`validate()`](#validate), the method returns
 just whether the validation was successful. Validation result is still available via form's dedicated method though.
 
+### `populateFromPostWithFiles()`
+
+A shortcut, hydrates form model similar to [`populateFromPost()`](#populatefrompost) but request's parsed body is
+merged with request's uploaded files. It works for nested forms and collections as well.
+
+- Uploaded files with `UPLOAD_ERR_NO_FILE` error (file inputs left empty) are skipped, so the corresponding properties
+keep their values. Files with other errors are kept to be checked by validation rules.
+- When the same key is present both in parsed body and in uploaded files, uploaded file is used.
+
+```php
+use Psr\Http\Message\UploadedFileInterface;
+use Yiisoft\FormModel\FormModel;
+use Yiisoft\Validator\Rule\Image\Image;
+use Yiisoft\Validator\Rule\Required;
+
+final class PostForm extends FormModel
+{
+    #[Required]
+    public string $title = '';
+
+    #[Required]
+    #[Image]
+    public ?UploadedFileInterface $image = null;
+}
+```
+
+```php
+use Psr\Http\Message\ServerRequestInterface;
+use Yiisoft\FormModel\FormHydrator;
+
+/** 
+ * @var FormHydrator $formHydrator
+ * @var ServerRequestInterface $request 
+ */
+
+$formModel = new PostForm();
+$isPopulated = $formHydrator->populateFromPostWithFiles($formModel, $request);
+```
+
+Note that:
+
+- With default strict mode, only properties having validation rules (or defined in a map explicitly) are filled,
+so file properties need rules too.
+- `Required` rule doesn't check upload errors: a file with `UPLOAD_ERR_INI_SIZE` error isn't empty. Use rules that
+check them, such as `Image`.
+- Type file properties as `?UploadedFileInterface`, so a string sent in the body under the same key is not filled.
+- Uploaded files can be sent under any key, including elements of array properties. Validate the elements of array
+properties (for example, with `Each`) if your code expects them to be strings.
+
+### `populateFromPostWithFilesAndValidate()`
+
+A shortcut to execute [`populateFromPostWithFiles()`](#populatefrompostwithfiles), then [`validate()`](#validate)
+consecutively.
+
+```php
+use Psr\Http\Message\ServerRequestInterface;
+use Yiisoft\FormModel\FormHydrator;
+use Yiisoft\FormModel\FormModel;
+
+/** 
+ * @var FormHydrator $formHydrator
+ * @var FormModel $formModel
+ * @var ServerRequestInterface $request 
+ */
+
+$isValid = $formHydrator->populateFromPostWithFilesAndValidate($formModel, $request);
+$result = $formModel->getValidationResult();
+```
+
+The parameters are the same as in [`populate()`](#populate). But, unlike [`validate()`](#validate), the method returns
+just whether the validation was successful. Validation result is still available via form's dedicated method though.
+
 ## Hydrator extensions
 
 This package provides some extensions for hydrator you can use:
