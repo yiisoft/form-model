@@ -414,6 +414,22 @@ final class FormHydratorTest extends TestCase
         $this->assertSame($picture, $form->picture);
     }
 
+    public function testPopulateFromPostWithFilesKeepsNonFileValuesOfUploadedFiles(): void
+    {
+        $form = new UploadForm();
+        $picture = self::createUploadedFile();
+        $request = $this->createStub(ServerRequestInterface::class);
+        $request->method('getMethod')->willReturn('POST');
+        $request->method('getParsedBody')->willReturn(null);
+        $request->method('getUploadedFiles')->willReturn(['UploadForm' => ['title' => 'Holiday', 'picture' => $picture]]);
+
+        $result = TestHelper::createFormHydrator()->populateFromPostWithFiles($form, $request);
+
+        $this->assertTrue($result);
+        $this->assertSame('Holiday', $form->title);
+        $this->assertSame($picture, $form->picture);
+    }
+
     public function testPopulateFromPostWithFilesIgnoresBodyStringForNotUploadedFile(): void
     {
         $form = new UploadForm();
